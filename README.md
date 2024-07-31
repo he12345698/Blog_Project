@@ -1,16 +1,16 @@
 # 簡易部落格網頁專案(黑客論壇)
 工作成員
-Ryan：Html/CSS
-Steven：Java
-Johnson：Javascript
-Erica：SQL
-Paul：Product Manager/Test
+Ryan：Html/CSS  
+Steven：Java  
+Johnson：Javascript  
+Erica：SQL  
+Paul：Product Manager/Test  
 
-版本號：MAJOR.MINOR.PATCH (初始版：1.0.0)
+版本號：MAJOR.MINOR.PATCH (初始版：1.0.0)  
 
-主版號(MAJOR)：當你做了不相容的 API 修改，
-次版號(MINOR)：當你做了向下相容的功能性新增，
-修訂號(PATCH)：當你做了向下相容的問題修正。
+主版號(MAJOR)：當你做了不相容的 API 修改  
+次版號(MINOR)：當你做了向下相容的功能性新增  
+修訂號(PATCH)：當你做了向下相容的問題修正  
 
 ## 1.用戶註冊登入
 
