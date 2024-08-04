@@ -12,13 +12,19 @@
         <div class="top-container">
             <div class="logo">xxx部落格</div>
             <nav class="navigation">
-                <a href="#">首頁</a>
+                <a href="index.html">首頁</a>
                 <a href="#">文章</a>
                 <a href="#">關於我們</a>
                 <a href="#">聯絡我們</a>
             </nav>
-            <div class="login-btn">
-                <button>登入</button>
+            <div class="user-login-container">
+                <div class="user-info">
+                    <img src="/Image/IMG_20240701_124913.JPG" width="50" height="50" alt="使用者頭像" class="user-avatar">
+                    <span class="username">虎斑貓</span>
+                </div>
+                <div class="login-btn">
+                    <button onclick="location.href='login.html'">登入</button>
+                </div>
             </div>
         </div>
     </header>
@@ -40,7 +46,7 @@
                     <label for="password">密碼</label>
                     <input type="password" id="password" name="password" required>
                 </div>
-                <button class="button" type="submit">註冊</button>
+                <button type="submit">註冊</button>
             </form>
         </div>
     </main>
