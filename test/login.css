@@ -1,0 +1,147 @@
+/* 設置整體頁面的字體和背景顏色 */
+body {
+    font-family: Arial, sans-serif; /* 設定字體 */
+    margin: 0; /* 去掉預設的邊距 */
+    padding: 0; /* 去掉預設的內邊距 */
+    background-color: #f4f4f4; /* 設定背景顏色 */
+}
+
+/* 設置頂部功能列樣式 */
+header.top-bar {
+    background-color: #333; /* 設定背景顏色 */
+    color: #fff; /* 設定字體顏色 */
+    padding: 10px 0; /* 設定內邊距 */
+}
+
+/* 設置頂部容器的樣式 */
+.top-container {
+    display: flex; /* 使用 Flexbox 排版 */
+    justify-content: space-between; /* 使元素在主軸上分佈 */
+    align-items: center; /* 垂直對齊元素 */
+    max-width: 1200px; /* 設定最大寬度 */
+    margin: 0 auto; /* 使容器居中 */
+    padding: 0 20px; /* 設定內邊距 */
+}
+
+/* 設置 logo 樣式 */
+.logo {
+    font-size: 24px; /* 設定字體大小 */
+}
+
+/* 設置導航連結樣式 */
+.navigation a {
+    color: #fff; /* 設定字體顏色 */
+    text-decoration: none; /* 去掉下劃線 */
+    margin: 0 10px; /* 設定邊距 */
+}
+
+/* 設置導航連結的懸停樣式 */
+.navigation a:hover {
+    text-decoration: underline; /* 懸停時顯示下劃線 */
+}
+
+/* 設置使用者登入容器樣式 */
+.user-login-container {
+    display: flex; /* 使用 Flexbox 排版 */
+    align-items: center; /* 垂直對齊元素 */
+}
+
+/* 設置使用者資訊樣式 */
+.user-info {
+    display: flex; /* 使用 Flexbox 排版 */
+    align-items: center; /* 垂直對齊元素 */
+    margin-right: 20px; /* 設定右邊距 */
+}
+
+/* 設置使用者頭像樣式 */
+.user-avatar {
+    border-radius: 50%; /* 設定圓形邊框 */
+    margin-right: 10px; /* 設定右邊距 */
+}
+
+/* 設置登入按鈕樣式 */
+.login-btn button {
+    background-color: #ff6600; /* 設定背景顏色 */
+    color: #fff; /* 設定字體顏色 */
+    border: none; /* 去掉邊框 */
+    padding: 8px 16px; /* 設定內邊距 */
+    border-radius: 4px; /* 設定圓角邊框 */
+    cursor: pointer; /* 設定鼠標指針樣式 */
+}
+
+/* 設置登入按鈕懸停樣式 */
+.login-btn button:hover {
+    background-color: #e55b00; /* 懸停時變更背景顏色 */
+}
+
+/* 設置登入註冊容器樣式 */
+.login-register-container {
+    display: flex; /* 使用 Flexbox 排版 */
+    justify-content: center; /* 垂直和水平方向都居中 */
+    align-items: center; /* 垂直對齊元素 */
+    height: calc(100vh - 80px); /* 設定高度為視口高度減去頂部功能列高度 */
+}
+
+/* 設置表單容器的樣式 */
+.login-register-container {
+    display: flex;
+    justify-content: center; /* 水平置中 */
+    align-items: center; /* 垂直置中 */
+    height: calc(100vh - 80px); /* 設定容器高度，減去頭部高度 */
+    background-color: #f4f4f4; /* 設定背景顏色 */
+}
+
+.form-container {
+    background-color: #fff; /* 設定背景顏色 */
+    border-radius: 8px; /* 設定圓角邊框 */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 設定陰影效果 */
+    padding: 20px; /* 設定內邊距 */
+    width: 300px; /* 設定寬度 */
+    box-sizing: border-box; /* 包含邊框和內邊距在內部寬度 */
+}
+
+/* 設置表單標籤和輸入框樣式 */
+.form-group {
+    margin-bottom: 15px; /* 設定下邊距 */
+}
+
+.form-group label {
+    display: block; /* 設定為區塊元素 */
+    margin-bottom: 5px; /* 設定下邊距 */
+}
+
+.form-group input {
+    width: 100%; /* 設定寬度為 100% */
+    padding: 8px; /* 設定內邊距 */
+    border: 1px solid #ddd; /* 設定邊框 */
+    border-radius: 4px; /* 設定圓角邊框 */
+    box-sizing: border-box; /* 包含邊框和內邊距在內部寬度 */
+}
+
+
+/* 設置提交按鈕樣式 */
+form button {
+    background-color: #007bff; /* 設定背景顏色 */
+    color: #fff; /* 設定字體顏色 */
+    border: none; /* 去掉邊框 */
+    padding: 10px 15px; /* 設定內邊距 */
+    border-radius: 4px; /* 設定圓角邊框 */
+    cursor: pointer; /* 設定鼠標指針樣式 */
+    width: 100%; /* 設定寬度為 100% */
+}
+
+/* 設置提交按鈕懸停樣式 */
+form button:hover {
+    background-color: #0056b3; /* 懸停時變更背景顏色 */
+}
+
+/* 設置頁腳樣式 */
+.footer {
+    background-color: #333; /* 背景顏色 */
+    color: white; /* 文字顏色 */
+    text-align: center; /* 文字置中 */
+    padding: 10px; /* 上下內邊距 */
+    width: 100%; /* 寬度 100% */
+    bottom: 0; /* 緊貼底部 */
+    position: fixed; /* 設定固定定位 */
+}
