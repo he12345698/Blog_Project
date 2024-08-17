@@ -1,29 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import logo from './logo.svg';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Index from './index0';
+import LoginPage from './LoginPage';
+import Register from './Register';
+import Test1 from './Test1';
+
 import './App.css';
 
-function App() {
-
-    const [data, setData] = useState(null);
-
-    useEffect(() => {
-        fetch('http://localhost:8080/blog-0.0.1-SNAPSHOT/api/data')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => setData(data))
-            .catch(error => console.error('There was a problem with your fetch operation:', error));
-    }, []);
-
-    return (
-        <div>
-            <h1>Data from Spring Boot:</h1>
-            {data ? <p>{data.message}</p> : <p>Loading...</p>}
-        </div>
-    );
-}
+const App = () => {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Index />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/test1" element={<Test1 />} />
+        {/* 你可以在这里添加更多的路由 */}
+      </Routes>
+    </Router>
+  );
+};
 
 export default App;
