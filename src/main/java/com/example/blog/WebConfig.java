@@ -11,7 +11,8 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://niceblog.myvnc.com:81")
+                // .allowedOrigins("http://niceblog.myvnc.com:81")
+                .allowedOrigins("http://localhost:3000")
                 .allowedMethods("*")
                 .allowCredentials(true);
     }
