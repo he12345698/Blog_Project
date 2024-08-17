@@ -19,10 +19,10 @@ const Header = ({ username, userImage }) => {
                 src={userImage || '/Image/default-avatar.jpg'} // 默認頭像
                 width="50"
                 height="50"
-                alt="使用者頭像"
+                alt=""
                 className="user-avatar"
               />
-              <span className="username">{username}</span>
+              <span className="username">使用者：{username}</span>
             </div>
           ) : (
             <div className="login-btn">
