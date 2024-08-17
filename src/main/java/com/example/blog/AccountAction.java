@@ -19,7 +19,6 @@ import org.springframework.ui.Model;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
-@SpringBootApplication
 @CrossOrigin(origins = "http://niceblog.myvnc.com:81")
 @RestController
 @RequestMapping("/ac")
@@ -57,23 +56,27 @@ public class AccountAction {
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody AccountVo vo, HttpSession session) {
         try {
-            // 查询用户的密码
+            // 查詢用戶名是否存在
+            String checkUserSql = "SELECT COUNT(*) FROM test WHERE username = ?";
+            Integer userCount = jdbcTemplate.queryForObject(checkUserSql, new Object[]{vo.getUsername()}, Integer.class);
+
+            // 如果用戶名不存在，返回 404 狀態碼
+            if (userCount == null || userCount == 0) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("用戶名不存在");
+            }
+
+            // 查詢用戶的密碼
             String sql = "SELECT password FROM test WHERE username = ?";
             String storedPassword = jdbcTemplate.queryForObject(sql, new Object[]{vo.getUsername()}, String.class);
 
-            // 如果用户不存在，返回 401 状态码
-            if (storedPassword == null) {
+            // 如果用戶存在但密碼不匹配，返回 401 狀態碼
+            if (storedPassword == null || !storedPassword.equals(vo.getPassword())) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("用戶名或密碼不正確");
             }
 
-            // 比较提供的密码和存储的密码（未加密）
-            // 如果需要加密，请将以下代码替换为密码加密验证
-            if (storedPassword.equals(vo.getPassword())) {
-                session.setAttribute("username", vo.getUsername());
-                return ResponseEntity.ok("登入成功");
-            } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("用戶名或密碼不正確");
-            }
+            // 密碼匹配，設置會話屬性
+            session.setAttribute("username", vo.getUsername());
+            return ResponseEntity.ok("登入成功");
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("伺服器錯誤：" + e.getMessage());
