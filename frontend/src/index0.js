@@ -16,7 +16,8 @@ const Index = () => {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const response = await fetch('http://114.32.14.238:8080/demo/ac/session', {
+        // const response = await fetch('http://114.32.14.238:8080/demo/ac/session', {
+          const response = await fetch('http://localhost:8080/blog-0.0.1-SNAPSHOT/ac/session', {
           method: 'GET',
           credentials: 'include', // 確保請求攜帶 Session
           headers: {

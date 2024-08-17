@@ -66,7 +66,8 @@ const handleSubmit = async (event) => {
     password,
   };
   try {
-    const response = await fetch('http://114.32.14.238:8080/demo/ac/register', {
+    // const response = await fetch('http://114.32.14.238:8080/demo/ac/register', {
+      const response = await fetch('http://localhost:8080/blog-0.0.1-SNAPSHOT/ac/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
