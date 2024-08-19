@@ -1,5 +1,5 @@
 import React from 'react';
-import './components/login/Header.css';
+import '../styles/components/Header.css';
 
 const Header = ({ username, userImage }) => {
   return (
