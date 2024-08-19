@@ -45,5 +45,4 @@ frontend/*
 
 mvnw
 mvnw.cmd
-
 src/main/resources/application.properties
