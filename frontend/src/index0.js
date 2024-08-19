@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import './components/Index.css';
-import Header from './Header';
-import Footer from './Footer';
+import './styles/pages/Index.css';
+import Header from './components/Header';
+import Footer from './components/Footer';
 
 const Index = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -53,7 +53,7 @@ const Index = () => {
             <input type="text" placeholder="搜尋..." aria-label="搜尋" />
             <button type="button">搜尋</button>
           </div>
-          <div className="hashtag">財金/政治/體育/國際/美食/遊戲</div>
+          <div className="hashtag">財金/政治/體育/國際/美食/遊戲//</div>
           <div className="hashtag">
             <a className="hash">熱搜標籤 :</a>
             <span>財金</span>
