@@ -33,6 +33,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 @RestController
 @RequestMapping("/ac")
 public class AccountAction {
+	
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -71,6 +72,7 @@ public class AccountAction {
             Integer userCount = jdbcTemplate.queryForObject(checkUserSql, new Object[]{vo.getUsername()}, Integer.class);
 
             if (userCount == null || userCount == 0) {
+            	System.out.println("未知的使用者名稱：" + vo.getUsername() + " 於 " + new Date(System.currentTimeMillis()) + " 嘗試登入");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "使用者不存在"));
             }
 
@@ -106,7 +108,7 @@ public class AccountAction {
                 }
 
                 // 打印错误信息
-                System.out.println("使用者：" + vo.getUsername() + " 使用密碼：" + vo.getPassword() + " 嘗試登入，已錯誤 " + loginAttempts + " 次");
+                System.out.println("使用者：" + vo.getUsername() + " 於 " + new Date(System.currentTimeMillis()) + " 嘗試登入，已錯誤 " + loginAttempts + " 次");
                 
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonMap("message", "密碼不正確，已錯誤 " + loginAttempts + " 次"));
             }

@@ -1,23 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import './LoginPage.css';
 import { useNavigate } from 'react-router-dom';
+import './LoginPage.css';
+
+
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [animationKey, setAnimationKey] = useState(Date.now());
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (errorMessage) {
-      setAnimationKey(Date.now()); // 更新 key 强制 React 重新渲染
-    }
-  }, [errorMessage]);
+  const [count, setCount] = useState(0);
+  const [animationKey, setAnimationKey] = useState(Date.now());
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setAnimationKey(Date.now()); 
     try {
       const response = await fetch('http://114.32.14.238:8080/blog/ac/login', {
         method: 'POST',
@@ -32,14 +29,13 @@ const LoginPage = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('Token from response body:', data.token); // 从响应体中获取 token
+        console.log('Token from response body:', data.token);
         localStorage.setItem('token', data.token);
         const token = response.headers.get('Authorization')?.split(' ')[1];
         if (token) {
-            localStorage.setItem('token', token);
+          localStorage.setItem('token', token);
         }
         navigate('/');
-        setErrorMessage('');
       } else {
         const error = await response.json();
         setErrorMessage(error.message || '登入失敗，請重試。');
@@ -51,7 +47,7 @@ const LoginPage = () => {
   };
 
   return (
-    <main className="login-register-container" >
+    <div className="login-container">
       <div className="form-container">
         <h2>登入</h2>
         <form onSubmit={handleSubmit}>
@@ -77,16 +73,18 @@ const LoginPage = () => {
               required
             />
           </div>
-          <button type="submit">登入</button>
-          {errorMessage && (
+          <button type="submit" onClick={() => setCount(count + 1)}>登入</button>
+          <div className="error-placeholder">
+            {errorMessage && (
             <p key={animationKey} className="error-message shake" style={{ whiteSpace: 'pre-line' }}>
               {errorMessage}
             </p>
           )}
+          </div>
         </form>
         <p>還沒有帳號嗎？<a href="/register">註冊一個吧</a></p>
       </div>
-    </main>
+    </div>
   );
 };
 

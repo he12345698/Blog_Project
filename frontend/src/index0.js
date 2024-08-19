@@ -58,6 +58,7 @@ const Index = () => {
           if (response.ok) {
               const data = await response.json();
               console.log('geust is ' + data.username)
+              console.log('userimage ' + data.userImage)
               setUsername(data.username || '訪客1');
               setUserImage(data.userImage || '/Image/GG'); // 默认头像
           } else {
