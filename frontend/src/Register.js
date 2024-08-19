@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './components/Register.css';
 import Header from './Header';
 import Footer from './Footer';
@@ -10,6 +10,7 @@ const Register = () => {
   const [rePassword, setRePassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const errorRef = useRef(null);
 
   const handlePasswordChange = (e) => {
     const newPassword = e.target.value;
@@ -46,6 +47,16 @@ const checkPasswordsMatch = (password, rePassword) => {
     }, 750); // 設定 1 秒的延遲
 };
 
+useEffect(() => {
+  if (errorMessage) {
+    const ref = errorRef.current;
+    if (ref) {
+      ref.classList.remove('shake');
+      // 使用 setTimeout 來強制重新應用動畫
+      setTimeout(() => ref.classList.add('shake'), 0);
+    }
+  }
+}, [errorMessage]);
 
 const handleSubmit = async (event) => {
   event.preventDefault();
@@ -66,7 +77,7 @@ const handleSubmit = async (event) => {
     password,
   };
   try {
-    const response = await fetch('http://114.32.14.238:8080/demo/ac/register', {
+    const response = await fetch('http://114.32.14.238:8080/blog/ac/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -85,6 +96,7 @@ const handleSubmit = async (event) => {
     }
   } catch (error) {
       console.error('Error:', error);
+      setSuccessMessage('');
       setErrorMessage('註冊失敗2，請重試。'); // 顯示錯誤訊息
     }
 };
@@ -135,7 +147,7 @@ const handleSubmit = async (event) => {
           </form>
           <div className="message-container">
           {errorMessage && (
-            <div key={errorMessage} className="error-message">{errorMessage}</div>
+            <div ref={errorRef} className="error-message shake">{errorMessage}</div>
           )}          
             <div className="succ-message">{successMessage}</div>
           </div>

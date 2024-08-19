@@ -1,5 +1,11 @@
 package com.example.blog;
 
+import java.io.IOException;
+import java.security.Principal;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
@@ -11,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.ui.Model;
@@ -19,7 +26,7 @@ import org.springframework.ui.Model;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
-@SpringBootApplication
+
 @CrossOrigin(origins = "http://niceblog.myvnc.com:81")
 @RestController
 @RequestMapping("/ac")
@@ -31,6 +38,20 @@ public class AccountAction {
     @GetMapping("/register")
     public String getRegistrationPage() {
         return "Registration API - Use POST method to register.";
+    }
+    
+    @GetMapping("/session")
+    public ResponseEntity<Map<String, String>> getSessionUsername(HttpSession session) {
+        String username = (String) session.getAttribute("username");
+        System.out.println(username);
+        if (username != null) {
+            Map<String, String> response = new HashMap<>();
+            response.put("username", username);
+            response.put("userImage", "/path/to/default-image.jpg"); // 添加用户头像 URL
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonMap("error", "未登入"));
+        }
     }
 
     @PostMapping("/register")
@@ -55,31 +76,42 @@ public class AccountAction {
     }
     
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody AccountVo vo, HttpSession session) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody AccountVo vo, HttpServletResponse response) {
         try {
-            // 查询用户的密码
+            // 查詢用戶名是否存在
+            String checkUserSql = "SELECT COUNT(*) FROM test WHERE username = ?";
+            Integer userCount = jdbcTemplate.queryForObject(checkUserSql, new Object[]{vo.getUsername()}, Integer.class);
+
+            if (userCount == null || userCount == 0) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "使用者不存在"));
+            }
+
+            // 查詢用戶的密碼
             String sql = "SELECT password FROM test WHERE username = ?";
             String storedPassword = jdbcTemplate.queryForObject(sql, new Object[]{vo.getUsername()}, String.class);
 
-            // 如果用户不存在，返回 401 状态码
-            if (storedPassword == null) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("用戶名或密碼不正確");
+            if (storedPassword == null || !storedPassword.equals(vo.getPassword())) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonMap("message", "使用者或密碼不正確"));
             }
 
-            // 比较提供的密码和存储的密码（未加密）
-            // 如果需要加密，请将以下代码替换为密码加密验证
-            if (storedPassword.equals(vo.getPassword())) {
-                session.setAttribute("username", vo.getUsername());
-                return ResponseEntity.ok("登入成功");
-            } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("用戶名或密碼不正確");
-            }
+            // 密碼匹配，生成 JWT
+            String token = JwtUtil.generateToken(vo.getUsername());
+            System.out.println(token);
+            // 将 JWT 添加到响应头中
+            response.setHeader("Authorization", "Bearer " + token);
+            System.out.println(response.getHeader("Authorization"));
+            // 返回 JSON 对象
+            Map<String, String> responseBody = new HashMap<>();
+            responseBody.put("message", "登入成功");
+            responseBody.put("token", token); // 如果需要返回 token，也可以包含在响应中
+            //responseBody.put("username", vo.getUsername());
+
+            return ResponseEntity.ok(responseBody);
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("伺服器錯誤：" + e.getMessage());
+        	e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.singletonMap("message", "伺服器錯誤：" + e.getMessage()));
         }
     }
-
 
     public boolean checkId(String id) {
         String sql = "SELECT COUNT(*) FROM test WHERE username = ?";
@@ -99,16 +131,7 @@ public class AccountAction {
         return rowsAffected > 0;
     }
     
-    @GetMapping("/session")
-    public ResponseEntity<String> getSessionUsername(HttpSession session) {
-        String username = (String) session.getAttribute("username");
-        System.out.println(username);
-        if (username != null) {
-            return ResponseEntity.ok(username);
-        } else {
-            return ResponseEntity.status(401).body("未登入");
-        }
-    }
+    
     
     public boolean authenticateUser(String username, String password) {
         // 查詢用戶的密碼

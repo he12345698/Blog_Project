@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import './components/login/LoginPage.css';
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
@@ -12,21 +12,30 @@ const LoginPage = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://114.32.14.238:8080/demo/ac/login', {
+      const response = await fetch('http://114.32.14.238:8080/blog/ac/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({
+          username: username,
+          password: password,
+        }),
       });
 
       if (response.ok) {
-        // 成功登入處理，例如重定向到主頁
+        const data = await response.json();
+        console.log('Token from response body:', data.token); // 从响应体中获取 token
+        localStorage.setItem('token', data.token);
+        const token = response.headers.get('Authorization')?.split(' ')[1];
+        if (token) {
+            localStorage.setItem('token', token);
+        }
+        navigate('/');
         setErrorMessage('');
-        navigate('/'); // 重定向到主頁
       } else {
-        const error = await response.text();
-        setErrorMessage(error || '登入失敗，請重試。');
+        const error = await response.json();
+        setErrorMessage(error.message || '登入失敗，請重試。');
       }
     } catch (error) {
       console.error('Error:', error);
@@ -40,7 +49,7 @@ const LoginPage = () => {
         <h2>登入</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="username">用戶名</label>
+            <label htmlFor="username">使用者名稱</label>
             <input
               type="text"
               id="username"

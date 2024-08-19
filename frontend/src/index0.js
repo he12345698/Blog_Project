@@ -11,37 +11,41 @@ const Index = () => {
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-
+  
   // 獲取用戶信息
   useEffect(() => {
     const fetchUserInfo = async () => {
-      try {
-        const response = await fetch('http://114.32.14.238:8080/demo/ac/session', {
-          method: 'GET',
-          credentials: 'include', // 確保請求攜帶 Session
-          headers: {
-            'Content-Type': 'application/json',
-        },
-        });
+      const token = localStorage.getItem('token');
+      console.log('Request Headers:', {
+        'Authorization': `Bearer ${token}`
+      });
+        try {
+            const response = await fetch('http://114.32.14.238:8080/blog/api/protected-endpoint', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
 
-        if (response.ok) {
-          const data = await response.text();
-          setUsername(data.username || 'Guest1');
-          setUserImage(data.userImage || '/Image/default-avatar.jpg'); // 默認頭像
-        } else {
-          console.log(response)
-          setUsername('Guest2');
-          setUserImage('/Image/default-avatar.jpg');
+            if (response.ok) {
+                const data = await response.json();
+                console.log(data)
+                setUsername(data.username || 'Guest1');
+                setUserImage(data.userImage || '/Image/default-avatar.jpg'); // 默认头像
+            } else {
+                console.log('Response error:', response);
+                setUsername('Guest2');
+                setUserImage('/Image/default-avatar.jpg'); // 默认头像
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            setUsername('Error');
+            setUserImage('/Image/default-avatar.jpg'); // 默认头像
         }
-      } catch (error) {
-        console.error('Error:', error);
-        setUsername('Error');
-        setUserImage('/Image/default-avatar.jpg');
-      }
     };
 
     fetchUserInfo();
-  }, []);
+}, []);
 
   return (
     <div className="wrapper">
