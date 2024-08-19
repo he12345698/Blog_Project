@@ -1,0 +1,281 @@
+/* 重置一些默認樣式 */
+body, h1, p, a {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    font-family: Arial, sans-serif;
+}
+
+/* 確保頁面佔滿整個視窗 */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+/* 外部容器樣式，使用 Flexbox 進行排版 */
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* 頂部功能列樣式 */
+.top-bar {
+    background-color: #333; /* 背景顏色 */
+    color: white; /* 文字顏色 */
+    padding: 10px 0; /* 上下內邊距 */
+}
+
+/* 容器樣式，對齊 header 中的元素 */
+.top-container {
+    width: 90%; /* 容器寬度 */
+    margin: 0 auto; /* 垂直居中 */
+    display: flex; /* 使用 Flexbox 排版 */
+    align-items: center; /* 垂直居中對齊內容 */
+    justify-content: space-between; /* 水平分配空間 */
+}
+
+/* logo 樣式 */
+.logo {
+    font-size: 24px; /* 字體大小 */
+}
+
+/* 導航列樣式 */
+.navigation {
+    display: flex; /* 使用 Flexbox 排版 */
+    gap: 15px; /* 項目之間的間距 */
+}
+
+.navigation a {
+    color: white; /* 文字顏色 */
+    padding: 5px 10px; /* 內邊距 */
+    transition: background-color 0.3s; /* 背景顏色過渡效果 */
+}
+
+.navigation a:hover {
+    background-color: #555; /* 鼠標懸停時背景顏色 */
+}
+
+/* 登入按鈕樣式 */
+.login-btn button {
+    background-color: #555; /* 按鈕背景顏色 */
+    color: white; /* 按鈕文字顏色 */
+    border: none; /* 去掉邊框 */
+    padding: 5px 10px; /* 按鈕內邊距 */
+    cursor: pointer; /* 鼠標懸停時顯示手形光標 */
+    transition: background-color 0.3s; /* 背景顏色過渡效果 */
+    border-radius: 4px; /* 邊角圓潤 */
+}
+
+.login-btn button:hover {
+    background-color: #777; /* 鼠標懸停時背景顏色 */
+}
+/*  main樣式 */
+.content {
+    padding: 20px 0; /* 上下內邊距 */
+    background-color: #f4f4f4; /* 背景顏色 */
+    width: 100%; /* 寬度 100% */
+    display: flex; /* 使用 Flexbox 排版 */
+    flex-direction: column; /* 垂直排列內容 */
+    align-items: center; /* 水平居中對齊內容 */
+    
+}
+/* 搜尋跟標籤容器樣式 */
+.container {
+    width: 100%; /* 寬度 100% */
+    display: flex; /* 使用 Flexbox 排版 */
+    flex-direction: column; /* 垂直排列內容 */
+    align-items: center; /* 水平居中對齊內容 */
+}
+
+/* 搜尋列樣式 */
+.search-bar {
+    display: flex; /* 使用 Flexbox 排版 */
+    width: 100%; /* 寬度 100% */
+    max-width: 600px; /* 最大寬度 */
+    margin-bottom: 20px; /* 下邊距 */
+}
+
+.search-bar input[type="text"] {
+    flex: 1; /* 輸入框佔據剩餘空間 */
+    padding: 10px; /* 內邊距 */
+    border: 1px solid #ddd; /* 邊框顏色 */
+    border-radius: 0px; /* 邊角圓潤 */
+    font-size: 16px; /* 字體大小 */
+}
+
+.search-bar button {
+    padding: 10px 20px; /* 內邊距 */
+    margin-left: 10px; /* 左邊距 */
+    border: none; /* 去掉邊框 */
+    background-color: #333; /* 背景顏色 */
+    color: white; /* 文字顏色 */
+    cursor: pointer; /* 鼠標懸停時顯示手形光標 */
+    border-radius: 4px; /* 邊角圓潤 */
+    transition: background-color 0.3s; /* 背景顏色過渡效果 */
+}
+
+.search-bar button:hover {
+    background-color: #555; /* 鼠標懸停時背景顏色 */
+}
+/* 標籤列的樣式 */
+.hashtag {
+    width: 80%; /* 寬度 80% */
+    background-color: white; /* 背景顏色 */
+    margin: 10px 0; /* 上下外邊距 */
+    padding: 15px; /* 內邊距 */
+    border: 1px solid #ddd; /* 邊框顏色 */
+    border-radius: 0; /* 圓角邊框 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 陰影效果 */
+    display: flex; /* 使用 Flexbox 排版 */
+    flex-wrap: wrap; /* 避免標籤超出容器範圍 */
+    gap: 10px; /* 標籤間距 */
+}
+
+/* 單個標籤的樣式 */
+.hashtag span {
+    background-color: #f4f4f4; /* 標籤背景顏色 */
+    color: #333; /* 標籤文字顏色 */
+    padding: 5px 10px; /* 內邊距 */
+    border-radius: 0px; /* 圓角邊框 */
+    border: 1px solid #ccc; /* 邊框顏色 */
+    transition: background-color 0.3s, color 0.3s; /* 背景顏色和文字顏色過渡效果 */
+}
+
+.hashtag span:hover {
+    background-color: #ddd; /* 鼠標懸停時背景顏色 */
+    color: black; /* 鼠標懸停時文字顏色 */
+}
+
+/* 文章容器樣式 */
+.post-container {
+    width: 100%; /* 寬度 100% */
+    display: flex; /* 使用 Flexbox 排版 */
+    flex-direction: column; /* 垂直排列內容 */
+    align-items: center; /* 水平居中對齊內容 */
+}
+
+/* 每篇文章的樣式 */
+.post {
+    width: 80%; /* 寬度 80% */
+    background-color: white; /* 背景顏色 */
+    margin: 10px 0; /* 上下外邊距 */
+    padding: 20px; /* 內邊距 */
+    border: 1px solid #ddd; /* 邊框顏色 */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 陰影效果 */
+}
+
+/* 分頁導航樣式 */
+.pagination {
+    margin: 20px 0; /* 上下外邊距 */
+    display: flex; /* 使用 Flexbox 排版 */
+    gap: 5px; /* 項目之間的間距 */
+}
+
+.pagination a {
+    padding: 5px 10px; /* 內邊距 */
+    border: 1px solid #ddd; /* 邊框顏色 */
+    background-color: white; /* 背景顏色 */
+    color: #333; /* 文字顏色 */
+    transition: background-color 0.3s, color 0.3s; /* 背景顏色和文字顏色過渡效果 */
+}
+
+.pagination a:hover {
+    background-color: #ddd; /* 鼠標懸停時背景顏色 */
+    color: black; /* 鼠標懸停時文字顏色 */
+}
+
+/* 頁腳樣式 */
+.footer {
+    background-color: #333; /* 背景顏色 */
+    color: white; /* 文字顏色 */
+    text-align: center; /* 文字置中 */
+    padding: 10px 0; /* 上下內邊距 */
+    width: 100%; /* 寬度 100% */
+    bottom: 0; /* 緊貼底部 */
+    position: fixed; /* 固定定位 */
+}
+
+.modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  width: 80%;
+  max-width: 500px;
+  position: relative;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.close {
+    color: #333;
+    float: right;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close:hover {
+    color: red;
+  }
+  
+.close:focus {
+    color: #000;
+}
+
+.modal h2 {
+    margin-top: 0;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.modal form {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal label {
+    margin-top: 10px;
+    font-size: 1em;
+}
+
+.modal input {
+    margin-top: 5px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1em;
+    width: calc(100% - 22px); /* Adjust width to fit padding */
+}
+
+.modal button {
+    margin-top: 20px;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #333;
+    color: #fff;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.modal button:hover {
+    background-color: #555;
+}
