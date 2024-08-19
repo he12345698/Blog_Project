@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import './components/Index.css';
-import Header from './Header';
-import Footer from './Footer';
+import './styles/pages/Index.css';
+import Header from './components/Header';
+import Footer from './components/Footer';
 
 const Index = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -15,17 +15,15 @@ const Index = () => {
   // 獲取用戶信息
   useEffect(() => {
     const fetchUserInfo = async () => {
-      const token = localStorage.getItem('token');
-      console.log('Request Headers:', {
-        'Authorization': `Bearer ${token}`
-      });
-        try {
-            const response = await fetch('http://114.32.14.238:8080/blog/api/protected-endpoint', {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
+      try {
+        // const response = await fetch('http://114.32.14.238:8080/demo/ac/session', {
+          const response = await fetch('http://localhost:8080/blog-0.0.1-SNAPSHOT/ac/session', {
+          method: 'GET',
+          credentials: 'include', // 確保請求攜帶 Session
+          headers: {
+            'Content-Type': 'application/json',
+        },
+        });
 
             if (response.ok) {
                 const data = await response.json();
@@ -56,7 +54,7 @@ const Index = () => {
             <input type="text" placeholder="搜尋..." aria-label="搜尋" />
             <button type="button">搜尋</button>
           </div>
-          <div className="hashtag">財金/政治/體育/國際/美食/遊戲</div>
+          <div className="hashtag">財金/政治/體育/國際/美食/遊戲//</div>
           <div className="hashtag">
             <a className="hash">熱搜標籤 :</a>
             <span>財金</span>

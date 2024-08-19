@@ -1,11 +1,11 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Index from './index0';
-import LoginPage from './LoginPage';
-import Register from './Register';
+import LoginPage from './pages/LoginPage';
+import Register from './pages/Register';
 import Test1 from './Test1';
 
-import './App.css';
+import './styles/App.css';
 
 const App = () => {
   return (

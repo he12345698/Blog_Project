@@ -9,10 +9,10 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
+                // .allowedOrigins("http://niceblog.myvnc.com:81")
                 .allowedOrigins("http://localhost:3000")
-                .allowedMethods("*") // 允許的方法
-                .allowCredentials(true)
-                .allowedHeaders("Authorization", "*");
+                .allowedMethods("*")
+                .allowCredentials(true);
     }
 
 
