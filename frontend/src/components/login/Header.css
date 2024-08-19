@@ -63,3 +63,17 @@ html, body {
 .login-btn button:hover {
     background-color: #777;
 }
+
+.logout-btn {
+    margin-left: 10px;
+    padding: 5px 10px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .logout-btn:hover {
+    background-color: #d32f2f;
+  }

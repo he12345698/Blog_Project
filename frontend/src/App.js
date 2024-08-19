@@ -1,10 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Index from './index0';
-import LoginPage from './LoginPage';
+import LoginPage from './components/login/LoginPage';
 import Register from './Register';
 import Test1 from './Test1';
-
 import './App.css';
 
 const App = () => {

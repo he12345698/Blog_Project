@@ -1,12 +1,19 @@
-import React, { useState } from 'react';
-import './components/login/LoginPage.css';
+import React, { useState, useEffect } from 'react';
+import './LoginPage.css';
 import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [animationKey, setAnimationKey] = useState(Date.now());
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (errorMessage) {
+      setAnimationKey(Date.now()); // 更新 key 强制 React 重新渲染
+    }
+  }, [errorMessage]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -44,7 +51,7 @@ const LoginPage = () => {
   };
 
   return (
-    <main className="login-register-container">
+    <main className="login-register-container" >
       <div className="form-container">
         <h2>登入</h2>
         <form onSubmit={handleSubmit}>
@@ -71,7 +78,11 @@ const LoginPage = () => {
             />
           </div>
           <button type="submit">登入</button>
-          {errorMessage && <p className="error-message">{errorMessage}</p>}
+          {errorMessage && (
+            <p key={animationKey} className="error-message shake" style={{ whiteSpace: 'pre-line' }}>
+              {errorMessage}
+            </p>
+          )}
         </form>
         <p>還沒有帳號嗎？<a href="/register">註冊一個吧</a></p>
       </div>

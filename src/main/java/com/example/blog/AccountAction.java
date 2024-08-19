@@ -5,7 +5,9 @@ import java.security.Principal;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Date;
 
+import org.hibernate.grammars.hql.HqlParser.DateContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
@@ -39,20 +41,6 @@ public class AccountAction {
     public String getRegistrationPage() {
         return "Registration API - Use POST method to register.";
     }
-    
-    @GetMapping("/session")
-    public ResponseEntity<Map<String, String>> getSessionUsername(HttpSession session) {
-        String username = (String) session.getAttribute("username");
-        System.out.println(username);
-        if (username != null) {
-            Map<String, String> response = new HashMap<>();
-            response.put("username", username);
-            response.put("userImage", "/path/to/default-image.jpg"); // 添加用户头像 URL
-            return ResponseEntity.ok(response);
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonMap("error", "未登入"));
-        }
-    }
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody AccountVo vo) {
@@ -78,7 +66,7 @@ public class AccountAction {
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody AccountVo vo, HttpServletResponse response) {
         try {
-            // 查詢用戶名是否存在
+            // 查询用户名是否存在
             String checkUserSql = "SELECT COUNT(*) FROM test WHERE username = ?";
             Integer userCount = jdbcTemplate.queryForObject(checkUserSql, new Object[]{vo.getUsername()}, Integer.class);
 
@@ -86,31 +74,76 @@ public class AccountAction {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "使用者不存在"));
             }
 
-            // 查詢用戶的密碼
-            String sql = "SELECT password FROM test WHERE username = ?";
-            String storedPassword = jdbcTemplate.queryForObject(sql, new Object[]{vo.getUsername()}, String.class);
+            // 查询用户的密码、图片链接、登录尝试次数和帐户锁定状态
+            String sql = "SELECT password, imagelink, login_attempts, account_locked FROM test WHERE username = ?";
+            Map<String, Object> userDetails = jdbcTemplate.queryForMap(sql, new Object[]{vo.getUsername()});
 
-            if (storedPassword == null || !storedPassword.equals(vo.getPassword())) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonMap("message", "使用者或密碼不正確"));
+            String storedPassword = (String) userDetails.get("password");
+            String imageLink = (String) userDetails.get("imagelink");
+            Integer loginAttempts = (Integer) userDetails.get("login_attempts");
+            Boolean accountLocked = (Boolean) userDetails.get("account_locked");
+
+            if (Boolean.TRUE.equals(accountLocked)) {
+                // 帐户已被锁定
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonMap("message", "帳戶已被鎖定，請聯繫管理員"));
             }
 
-            // 密碼匹配，生成 JWT
-            String token = JwtUtil.generateToken(vo.getUsername());
-            System.out.println(token);
+            if (storedPassword == null || !storedPassword.equals(vo.getPassword())) {
+                // 密码错误时增加登录尝试次数
+                loginAttempts += 1;
+
+                if (loginAttempts >= 3) {
+                    // 锁定帐户
+                    String lockAccountSql = "UPDATE test SET account_locked = TRUE, login_attempts = 0 WHERE username = ?";
+                    jdbcTemplate.update(lockAccountSql, vo.getUsername());
+                    System.out.println("使用者：" + vo.getUsername() + " 帳戶已被鎖定，由於多次登錄失敗。");
+                    
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonMap("message", "帳戶已被鎖定，請聯繫管理員"));
+                } else {
+                    // 更新登录尝试次数
+                    String updateAttemptsSql = "UPDATE test SET login_attempts = ? WHERE username = ?";
+                    jdbcTemplate.update(updateAttemptsSql, loginAttempts, vo.getUsername());
+                }
+
+                // 打印错误信息
+                System.out.println("使用者：" + vo.getUsername() + " 使用密碼：" + vo.getPassword() + " 嘗試登入，已錯誤 " + loginAttempts + " 次");
+                
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonMap("message", "密碼不正確，已錯誤 " + loginAttempts + " 次"));
+            }
+
+            // 密码匹配，重置登录尝试次数并解除锁定
+            String resetAttemptsSql = "UPDATE test SET login_attempts = 0, account_locked = FALSE WHERE username = ?";
+            jdbcTemplate.update(resetAttemptsSql, vo.getUsername());
+
+            // 生成 JWT
+            String token = JwtUtil.generateToken(vo.getUsername(), imageLink);
+            System.out.println("使用者：" + vo.getUsername() + " 於 " + new Date(System.currentTimeMillis()) + " 登入，token：" + token);
+
             // 将 JWT 添加到响应头中
             response.setHeader("Authorization", "Bearer " + token);
-            System.out.println(response.getHeader("Authorization"));
+
             // 返回 JSON 对象
             Map<String, String> responseBody = new HashMap<>();
             responseBody.put("message", "登入成功");
             responseBody.put("token", token); // 如果需要返回 token，也可以包含在响应中
-            //responseBody.put("username", vo.getUsername());
 
             return ResponseEntity.ok(responseBody);
         } catch (Exception e) {
-        	e.printStackTrace();
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.singletonMap("message", "伺服器錯誤：" + e.getMessage()));
         }
+    }
+
+
+    
+    @PostMapping("/logout-notify")
+    public ResponseEntity<String> notifyLogout(@RequestBody Map<String, String> payload) {
+        String username = payload.get("username");
+
+        // 处理登出通知，比如保存到数据库或记录日志
+        System.out.println("使用者：" + username + " 於 " + new Date(System.currentTimeMillis()) + " 登出");
+
+        return ResponseEntity.ok("登出通知接收成功");
     }
 
     public boolean checkId(String id) {

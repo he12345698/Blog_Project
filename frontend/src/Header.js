@@ -1,7 +1,7 @@
 import React from 'react';
 import './components/login/Header.css';
 
-const Header = ({ username, userImage }) => {
+const Header = ({ username, userImage, onLogout }) => {
   return (
     <header className="top-bar">
       <div className="top-container">
@@ -16,13 +16,14 @@ const Header = ({ username, userImage }) => {
           {username ? (
             <div className="user-info">
               <img
-                src={userImage || '/Image/default-avatar.jpg'} // 默認頭像
+                src={userImage} // 默認頭像
                 width="50"
                 height="50"
                 alt=""
                 className="user-avatar"
               />
               <span className="username">使用者：{username}</span>
+              <button onClick={onLogout} className="logout-btn">登出</button>
             </div>
           ) : (
             <div className="login-btn">

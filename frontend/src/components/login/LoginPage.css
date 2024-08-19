@@ -3,9 +3,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 80vh;
-    padding: 20px;
-}
+    height: 100vh;
+    /*background-image: url('./assets/images/12345.jpg'); /* 替换为你的背景图片路径 */
+    background-size: cover; /* 使背景图片覆盖整个容器 */
+    background-position: center; /* 背景图片居中对齐 */
+    background-repeat: no-repeat; /* 防止背景图片重复 */
+  }
 
 .form-container {
     max-width: 400px;
@@ -53,4 +56,21 @@ button[type="submit"] {
 
 button[type="submit"]:hover {
     background-color: #555;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    50% { transform: translateX(10px); }
+    75% { transform: translateX(-10px); }
+    100% { transform: translateX(0); }
+}
+  
+.error-message.shake {
+  animation: shake 0.5s;
+}
+
+.error-message {
+    /* 其他样式 */
+    transition: transform 0.5s;
 }
