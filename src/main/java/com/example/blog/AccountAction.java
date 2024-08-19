@@ -27,7 +27,7 @@ import org.springframework.ui.Model;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 
-@CrossOrigin(origins = "http://niceblog.myvnc.com:81")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/ac")
 public class AccountAction {

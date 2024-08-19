@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import jakarta.servlet.http.HttpServletRequest;
-@CrossOrigin(origins = "http://niceblog.myvnc.com:81")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api")
 public class UserController {
