@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import '../styles/pages/Register.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
