@@ -20,7 +20,7 @@ html, body {
 .top-bar {
     background-color: #333;
     color: white;
-    padding: 10px 0;
+    padding: 10px;
 }
 
 .top-container {
@@ -29,6 +29,7 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    height: 50px;
 }
 
 .logo {

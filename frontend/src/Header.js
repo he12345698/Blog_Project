@@ -2,6 +2,7 @@ import React from 'react';
 import './components/login/Header.css';
 
 const Header = ({ username, userImage, onLogout }) => {
+
   return (
     <header className="top-bar">
       <div className="top-container">
@@ -16,7 +17,7 @@ const Header = ({ username, userImage, onLogout }) => {
           {username ? (
             <div className="user-info">
               <img
-                src={userImage} // 默認頭像
+                src={userImage}
                 width="50"
                 height="50"
                 alt=""

@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import './LoginPage.css';
-
-
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
-  const [count, setCount] = useState(0);
   const [animationKey, setAnimationKey] = useState(Date.now());
+  const [searchParams] = useSearchParams();
 
+  // 用於處理登入邏輯
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setAnimationKey(Date.now()); 
+    setAnimationKey(Date.now());
     try {
       const response = await fetch('http://114.32.14.238:8080/blog/ac/login', {
         method: 'POST',
@@ -29,12 +28,7 @@ const LoginPage = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('Token from response body:', data.token);
         localStorage.setItem('token', data.token);
-        const token = response.headers.get('Authorization')?.split(' ')[1];
-        if (token) {
-          localStorage.setItem('token', token);
-        }
         navigate('/');
       } else {
         const error = await response.json();
@@ -45,6 +39,37 @@ const LoginPage = () => {
       setErrorMessage('伺服器發生錯誤，請稍後重試。');
     }
   };
+
+  useEffect(() => {
+    const initialUsername = searchParams.get('username');
+    const initialPassword = searchParams.get('password');
+  
+    if (initialUsername && initialPassword) {
+      fetch('http://114.32.14.238:8080/blog/ac/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: initialUsername,
+          password: initialPassword,
+        }),
+      })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error('Login failed');
+      })
+      .then(data => {
+        localStorage.setItem('token', data.token);
+        navigate('/');
+      })
+      .catch(error => {
+        setErrorMessage(error.message || '登入失敗，請重試。');
+      });
+    }
+  }, [searchParams, navigate]);
 
   return (
     <div className="login-container">
@@ -73,13 +98,13 @@ const LoginPage = () => {
               required
             />
           </div>
-          <button type="submit" onClick={() => setCount(count + 1)}>登入</button>
+          <button type="submit">登入</button>
           <div className="error-placeholder">
             {errorMessage && (
-            <p key={animationKey} className="error-message shake" style={{ whiteSpace: 'pre-line' }}>
-              {errorMessage}
-            </p>
-          )}
+              <p key={animationKey} className="error-message shake" style={{ whiteSpace: 'pre-line' }}>
+                {errorMessage}
+              </p>
+            )}
           </div>
         </form>
         <p>還沒有帳號嗎？<a href="/register">註冊一個吧</a></p>

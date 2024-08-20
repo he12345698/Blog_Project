@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import './components/Index.css';
 import Header from './Header';
 import Footer from './Footer';
+import './components/Index.css';
 
 const Index = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const [username, setUsername] = useState('');
   const [userImage, setUserImage] = useState('');
-
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
 
   const notifyLogout = async () => {
     try {
@@ -43,9 +40,9 @@ const Index = () => {
   useEffect(() => {
     const fetchUserInfo = async () => {
       const token = localStorage.getItem('token');
-      console.log('Request Headers:', {
-        'Authorization': `Bearer ${token}`
-      });
+      // console.log('Request Headers:', {
+      //   'Authorization': `Bearer ${token}` 
+      // });
       if(token) {
         try {
           const response = await fetch('http://114.32.14.238:8080/blog/api/protected-endpoint', {
@@ -76,7 +73,7 @@ const Index = () => {
     };
 
     fetchUserInfo();
-}, []);
+  }, []);
 
   return (
     <div className="wrapper">
@@ -118,33 +115,7 @@ const Index = () => {
           </Link>
         </div>
       </main>
-
-      <footer className="footer">
-        <div className="footer-container">
-          <p>&copy; 2024 xxx部落格 版權所有.</p>
-        </div>
-      </footer>
-
-      {/* Modal */}
-      {isModalOpen && (
-        <div id="loginModal" className="modal" onClick={closeModal}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <span className="close" onClick={closeModal}>&times;</span>
-            <h2>登入</h2>
-            <form id="loginForm">
-              <label htmlFor="username">使用者名稱:</label>
-              <input type="text" id="username" name="username" required /><br />
-              <label htmlFor="password">密碼:</label>
-              <input type="password" id="password" name="password" required /><br />
-              <button type="submit">登入</button>
-            </form>
-            <a>還沒有帳號?</a>
-            <Link to="/register">
-              <a>註冊</a>
-            </Link>
-          </div>
-        </div>
-      )}
+      <Footer />
     </div>
   );
 };

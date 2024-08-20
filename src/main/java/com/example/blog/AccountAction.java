@@ -50,10 +50,10 @@ public class AccountAction {
 
         // 檢查 ID 是否已存在
         if (checkId(vo.getUsername())) {
-            return ResponseEntity.badRequest().body("此用戶名已被使用!"); // 用户 ID 已被占用
+            return ResponseEntity.badRequest().body("該用戶名已被使用!"); // 用户 ID 已被占用
         }
         if (checkEmail(vo.getEmail())) {
-            return ResponseEntity.badRequest().body("此電子信箱已被使用!"); // 邮件地址已被占用
+            return ResponseEntity.badRequest().body("該電子信箱已被使用!"); // 邮件地址已被占用
         }
 
         // 插入新用戶資料到資料庫
