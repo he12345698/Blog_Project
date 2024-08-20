@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import './LoginPage.css';
+import Maintenanceheader from '../../Maintenanceheader';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
@@ -73,7 +74,8 @@ const LoginPage = () => {
 
   return (
     <div className="login-container">
-      <div className="form-container">
+      <Maintenanceheader />{/* 系統維護中跑馬燈 */}
+      <div className="loginform-container">
         <h2>登入</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -107,7 +109,12 @@ const LoginPage = () => {
             )}
           </div>
         </form>
-        <p>還沒有帳號嗎？<a href="/register">註冊一個吧</a></p>
+        <div className="login-footer">
+          <p>
+            還沒有帳號嗎？<a href="/register">註冊一個吧！</a>
+          </p>
+          <a href="/forgot-password" className="forgot-password">忘記密碼？</a>
+        </div>
       </div>
     </div>
   );

@@ -1,8 +1,13 @@
 package com.example.blog;
 
 
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+@Entity
 public class AccountVo {
-	
+	@Id
 	String username;
 	String password;
 	String email;

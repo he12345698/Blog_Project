@@ -3,21 +3,22 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    background-image: url('./images/IMG_20240701_124913.JPG'); /*替换为你的背景图片路径*/ 
-    background-size:auto; /* 使背景图片覆盖整个容器 */
-    background-position: center; /* 背景图片居中对齐 */
-    background-repeat: no-repeat; /* 防止背景图片重复 */
-  }
+    height: 100vh; /* 確保容器高度為視口高度 */
+    background-image: url('./images/istockphoto-184948373-1024x1024.jpg'); /* 背景圖片 */
+    background-size: cover; /* 使背景圖片完全覆蓋容器，保持圖片比例 */
+    background-position: center; /* 背景圖片居中對齊 */
+    background-repeat: no-repeat; /* 防止背景圖片重複 */
+    background-attachment: fixed; /* 背景圖片固定在視口上，滾動時不移動 */
+  }  
 
-.form-container {
+.loginform-container {
     max-width: 400px;
     width: 100%;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    background-color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.74)
 }
 
 h2 {
@@ -70,7 +71,7 @@ button[type="submit"]:hover {
   .error-message {
     color: red;
     font-weight: bold;
-    margin-top: 10px;
+
     transition: all 0.5s ease;
     /* 其他样式 */
   }
@@ -85,3 +86,76 @@ button[type="submit"]:hover {
     display: flex;
     align-items: center;
   }
+/* 跑馬燈 */
+.marquee-container {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 50px; /* 调整高度 */
+    background-size: contain; /* 完全覆盖容器 */
+    background-position: center; /* 图片居中 */
+    background-color: #ffffff88;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
+    z-index: 1000; /* 确保跑马灯在最上层 */
+    overflow: hidden;
+}
+
+.marquee {
+    display: flex;
+    align-items: center;
+    height: 100%; /* 让跑马灯内容填满容器 */
+    overflow: hidden;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+
+.marquee-content {
+    display: inline-block;
+    padding-left: 100%;
+    animation: marquee 10s linear infinite;
+}
+
+.marquee-content span {
+    font-family: 'PopGothicCjkTc-Bold', sans-serif;
+    display: inline-block;
+    padding-right: 20px;
+    padding-left: 20px; /* 控制每个内容之间的间距 */
+    line-height: 50px; /* 与容器高度相同，使文字居中 */
+    vertical-align: middle; /* 垂直居中 */
+    font-size: 24px; /* 调整文字大小 */
+}
+
+.marquee-content img {
+    vertical-align: middle; /* 确保图片与文本保持一致 */
+}
+
+@keyframes marquee {
+    0% { transform: translateX(0); } /* 从初始位置开始 */
+    100% { transform: translateX(-100%); } /* 向左滚动并循环 */
+}
+
+@font-face {
+    font-family: 'PopGothicCjkTc-Bold';
+    src: url('./fonts/PopGothicCjkTc-Bold.ttf') format('truetype');
+}
+
+.login-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+   
+}
+
+.login-footer p {
+    margin: 0;
+}
+
+.login-footer a {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+}
+
+.login-footer .forgot-password {
+    margin-left: 1rem;
+}

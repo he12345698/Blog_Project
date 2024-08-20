@@ -5,11 +5,13 @@ import java.security.Principal;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.Date;
 
 import org.hibernate.grammars.hql.HqlParser.DateContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -27,7 +29,9 @@ import org.springframework.ui.Model;
 
 
 import org.springframework.jdbc.core.JdbcTemplate;
-
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Service;
 
 @CrossOrigin(origins = "http://niceblog.myvnc.com:81")
 @RestController
@@ -135,8 +139,25 @@ public class AccountAction {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.singletonMap("message", "伺服器錯誤：" + e.getMessage()));
         }
     }
-
-
+    
+    @PostMapping("/forgot-password")
+    public ResponseEntity<String> forgotPassword(@RequestBody AccountVo vo) {
+        String email = vo.getEmail();
+        String user = findEmail(email);
+        System.out.println(email);
+        
+        if (user == null) {
+            return ResponseEntity.badRequest().body("電子郵件不存在");
+        }
+        String token = UUID.randomUUID().toString();
+        System.out.println(token);
+        EmailService emailService = new EmailService();
+		// Save the token and its expiration date in the database
+        //passwordResetTokenRepository.save(new PasswordResetToken(vo, token));
+        // Send email with reset link (token in the link)
+        emailService.sendResetPasswordEmail(vo, token);
+        return ResponseEntity.ok("請檢查您的電子郵件以重設密碼");
+    }
     
     @PostMapping("/logout-notify")
     public ResponseEntity<String> notifyLogout(@RequestBody Map<String, String> payload) {
@@ -158,6 +179,17 @@ public class AccountAction {
         String sql = "SELECT COUNT(*) FROM test WHERE email = ?";
         Integer count = jdbcTemplate.queryForObject(sql, new Object[]{email}, Integer.class);
         return count != null && count > 0;
+    }
+    
+    public String findEmail(String email) {
+        String sql = "SELECT email FROM test WHERE email = ?";
+        try {
+            // 使用 queryForObject 查詢 email 地址，並指定返回類型為 String
+            return jdbcTemplate.queryForObject(sql, new Object[]{email}, String.class);
+        } catch (EmptyResultDataAccessException e) {
+            // 如果結果為空，則返回 null 或者處理不存在的情況
+            return null;
+        }
     }
 
     public boolean insertUser(AccountVo vo) {

@@ -5,6 +5,7 @@ import LoginPage from './components/login/LoginPage';
 import Register from './Register';
 import Test1 from './Test1';
 import './App.css';
+import ForgotPasswordPage from './ForgotPasswordPage';
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<Register />} />
         <Route path="/test1" element={<Test1 />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         {/* 你可以在这里添加更多的路由 */}
       </Routes>
     </Router>
