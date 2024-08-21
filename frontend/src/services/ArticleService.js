@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-const BACKEND_URL = 'http://localhost:8080';
+const BACKEND_URL = 'http://localhost:8080';//後端網址
 
-const API_BASE_URL = '/api/articles';
+const API_BASE_URL = 'http://localhost:8080/blog-0.0.1-SNAPSHOT/api/articles';
 
 const getArticleById = async (id) => {
     const response = await axios.get(`${API_BASE_URL}/${id}`);
