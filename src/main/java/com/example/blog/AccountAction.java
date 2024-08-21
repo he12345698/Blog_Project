@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.blog.Vo.AccountVo;
+
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
@@ -25,8 +27,6 @@ import org.springframework.ui.Model;
 
 
 import org.springframework.jdbc.core.JdbcTemplate;
-
-// @SpringBootApplication
 // @CrossOrigin(origins = "http://niceblog.myvnc.com:81")
 @CrossOrigin(origins = "localhost:3000")
 @RestController
