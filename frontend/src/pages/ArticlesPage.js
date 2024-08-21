@@ -1,31 +1,57 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import '../styles/pages/LoginPage.css'
+import '../styles/pages/ArticlesPage.css';
 
 const ArticlesPage = () => {
+  const [articles, setArticles] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+
+  useEffect(() => {
+    fetch(`http://localhost:8080/blog/api/articles?page=${currentPage}&size=10`)
+      .then(response => response.json())
+      .then(data => {
+        setArticles(data.content);
+        setTotalPages(data.totalPages);
+      });
+  }, [currentPage]);
+  
+
+  const handlePageChange = (page) => {
+    if (page >= 0 && page < totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
   return (
     <main className="content">
       <section className="article-list">
         <div className="post-container">
-          <article className="post">
-            <Link to="/single-article">奧運射擊比賽亞軍是土耳其殺手?! | 作者 : abc | 更新於 : 2024/08/02</Link>
-          </article>
-          <article className="post">
-            <Link to="/single-article">奧運射擊比賽亞軍是土耳其殺手?! | 作者 : abc | 更新於 : 2024/08/02</Link>
-          </article>
-          {/* 可以繼續添加更多文章 */}
+          {articles.map(article => (
+            <article className="post" key={article.id}>
+              <Link to={`/single-article/${article.id}`}>
+                {article.title} | 作者 : {article.author} | 更新於 : {new Date(article.updatedDate).toLocaleDateString()}
+              </Link>
+            </article>
+          ))}
         </div>
 
         {/* 分頁導航 */}
         <nav className="pagination">
-          <Link to="#">首頁</Link>
-          <Link to="#">1</Link>
-          <Link to="#">2</Link>
-          <Link to="#">3</Link>
-          <Link to="#">4</Link>
-          <Link to="#">5</Link>
-          <Link to="#">尾頁</Link>
+          <Link to="#" onClick={() => handlePageChange(0)} className={currentPage === 0 ? 'active' : ''}>首頁</Link>
+          {Array.from({ length: totalPages }).map((_, index) => (
+            <Link
+              key={index}
+              to="#"
+              onClick={() => handlePageChange(index)}
+              className={index === currentPage ? 'active' : ''}
+            >
+              {index + 1}
+            </Link>
+          ))}
+          <Link to="#" onClick={() => handlePageChange(totalPages - 1)} className={currentPage === totalPages - 1 ? 'active' : ''}>尾頁</Link>
         </nav>
+
       </section>
 
       {/* 置頂按鈕 */}
