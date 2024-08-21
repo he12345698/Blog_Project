@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+
 import '../styles/components/Header.css';
 
 const Header = ({ username, userImage }) => {
@@ -7,10 +9,12 @@ const Header = ({ username, userImage }) => {
       <div className="top-container">
         <div className="logo">xxx部落格</div>
         <nav className="navigation">
-          <a href="/">首頁</a>
-          <a href="#">文章</a>
-          <a href="#">關於我們</a>
-          <a href="#">聯絡我們</a>
+          <Link to="/allArticles">所有文章</Link>
+          <Link to="/edit-article">編輯文章</Link>
+          <Link to="/publish-article">發表文章</Link>
+          <Link to="/about">關於我們</Link>
+          <Link to="/account">帳戶管理</Link>
+          <Link to="/">首頁</Link>
         </nav>
         <div className="user-login-container">
           {username ? (
