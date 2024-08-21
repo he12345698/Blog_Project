@@ -3,13 +3,14 @@ import { Link } from 'react-router-dom';
 
 import '../styles/components/Header.css';
 
+
 const Header = ({ username, userImage }) => {
   return (
     <header className="top-bar">
       <div className="top-container">
         <div className="logo">xxx部落格</div>
         <nav className="navigation">
-          <Link to="/allArticles">所有文章</Link>
+          <Link to="/articlesPage">所有文章</Link>
           <Link to="/edit-article">編輯文章</Link>
           <Link to="/publish-article">發表文章</Link>
           <Link to="/about">關於我們</Link>
