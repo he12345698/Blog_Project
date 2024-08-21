@@ -1,6 +1,5 @@
 package com.example.blog;
 
-
 public class AccountVo {
 	
 	String username;

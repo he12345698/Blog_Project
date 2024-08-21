@@ -86,12 +86,6 @@ const Index = () => {
         </div>
       </main>
 
-      <footer className="footer">
-        <div className="footer-container">
-          <p>&copy; 2024 xxx部落格 版權所有.</p>
-        </div>
-      </footer>
-
       {/* Modal */}
       {isModalOpen && (
         <div id="loginModal" className="modal" onClick={closeModal}>
