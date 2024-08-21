@@ -18,15 +18,19 @@ public class ArticleService {
         return articleRepository.findAll();
     }
 
-    public Optional<ArticleVo> getArticleById(Long id) {
-        return articleRepository.findById(id);
+    public Optional<ArticleVo> getArticleById(Long article_id) {
+        return articleRepository.findById(article_id);
+    }
+
+    public List<ArticleVo> searchArticleByTitle(String title) {
+        return articleRepository.findByTitleContaining(title);
     }
 
     public ArticleVo createOrUpdateArticle(ArticleVo article) {
         return articleRepository.save(article);
     }
 
-    public void deleteArticle(Long id) {
-        articleRepository.deleteById(id);
+    public void deleteArticle(Long article_id) {
+        articleRepository.deleteById(article_id);
     }
 }
