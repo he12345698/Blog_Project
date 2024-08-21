@@ -1,6 +1,6 @@
 package com.example.blog.service;
 
-import com.example.blog.Vo.ArticleVo;
+import com.example.blog.Model.ArticleVo;
 import com.example.blog.repository.ArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

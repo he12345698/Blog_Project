@@ -1,6 +1,6 @@
 package com.example.blog.controller;
 
-import com.example.blog.Vo.ArticleVo;
+import com.example.blog.Model.ArticleVo;
 import com.example.blog.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
