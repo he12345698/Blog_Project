@@ -1,14 +1,16 @@
 package com.example.blog;
 
 
-
+import org.springframework.context.annotation.Bean;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
 public class AccountVo {
+	
 	@Id
 	String username;
+	
 	String password;
 	String email;
 	String imagelink;
@@ -28,7 +30,7 @@ public class AccountVo {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
+	
 	public String getEmail() {
 		return email;
 	}

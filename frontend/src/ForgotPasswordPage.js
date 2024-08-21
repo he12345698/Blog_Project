@@ -25,12 +25,12 @@ const ForgotPasswordPage = () => {
         const data = await response.text();
         console.log(data)
         setErrorMessage('');
-        setSuccessMessage('密码重置链接已发送到您的邮箱。');
+        setSuccessMessage('密碼重置信件已寄送至您的信箱，請於1小時內使用連結(信件寄送會有約2分鐘延遲...)。');
       } else {
         const error = await response.text();
         console.log(error)
         setSuccessMessage('');
-        setErrorMessage(error || '登入失敗，請重試。');
+        setErrorMessage(error || '密碼重置申請失敗，請稍後再試。');
       }
     } catch (error) {
       console.error('Error:', error);
@@ -67,6 +67,9 @@ const ForgotPasswordPage = () => {
                 <p>{successMessage}</p>
               </div>
             )}
+            </div>
+            <div className="login-footer">
+                <a href="/login" className="forgot-password">返回登入</a>
             </div>
         </form>
       </div>

@@ -2,6 +2,7 @@ package com.example.blog;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -72,7 +74,7 @@ public class AccountAction {
     public ResponseEntity<Map<String, String>> login(@RequestBody AccountVo vo, HttpServletResponse response) {
         try {
             // 查询用户名是否存在
-            String checkUserSql = "SELECT COUNT(*) FROM test WHERE username = ?";
+            String checkUserSql = "SELECT COUNT(*) FROM account_vo WHERE username = ?";
             Integer userCount = jdbcTemplate.queryForObject(checkUserSql, new Object[]{vo.getUsername()}, Integer.class);
 
             if (userCount == null || userCount == 0) {
@@ -81,7 +83,7 @@ public class AccountAction {
             }
 
             // 查询用户的密码、图片链接、登录尝试次数和帐户锁定状态
-            String sql = "SELECT password, imagelink, login_attempts, account_locked FROM test WHERE username = ?";
+            String sql = "SELECT password, imagelink, login_attempts, account_locked FROM account_vo WHERE username = ?";
             Map<String, Object> userDetails = jdbcTemplate.queryForMap(sql, new Object[]{vo.getUsername()});
 
             String storedPassword = (String) userDetails.get("password");
@@ -100,14 +102,14 @@ public class AccountAction {
 
                 if (loginAttempts >= 3) {
                     // 锁定帐户
-                    String lockAccountSql = "UPDATE test SET account_locked = TRUE, login_attempts = 0 WHERE username = ?";
+                    String lockAccountSql = "UPDATE account_vo SET account_locked = TRUE, login_attempts = 0 WHERE username = ?";
                     jdbcTemplate.update(lockAccountSql, vo.getUsername());
                     System.out.println("使用者：" + vo.getUsername() + " 帳戶已被鎖定，由於多次登錄失敗。");
                     
                     return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonMap("message", "帳戶已被鎖定，請聯繫管理員"));
                 } else {
                     // 更新登录尝试次数
-                    String updateAttemptsSql = "UPDATE test SET login_attempts = ? WHERE username = ?";
+                    String updateAttemptsSql = "UPDATE account_vo SET login_attempts = ? WHERE username = ?";
                     jdbcTemplate.update(updateAttemptsSql, loginAttempts, vo.getUsername());
                 }
 
@@ -118,7 +120,7 @@ public class AccountAction {
             }
 
             // 密码匹配，重置登录尝试次数并解除锁定
-            String resetAttemptsSql = "UPDATE test SET login_attempts = 0, account_locked = FALSE WHERE username = ?";
+            String resetAttemptsSql = "UPDATE account_vo SET login_attempts = 0, account_locked = FALSE WHERE username = ?";
             jdbcTemplate.update(resetAttemptsSql, vo.getUsername());
 
             // 生成 JWT
@@ -140,25 +142,73 @@ public class AccountAction {
         }
     }
     
+    @Autowired
+    private EmailService emailService;
+    @Autowired
+    private PasswordResetTokenService prts;
+    @Autowired
+    private PasswordResetTokenRepository tokenRepository;
+    
     @PostMapping("/forgot-password")
     public ResponseEntity<String> forgotPassword(@RequestBody AccountVo vo) {
         String email = vo.getEmail();
-        String user = findEmail(email);
-        System.out.println(email);
-        
-        if (user == null) {
+        // 查找是否存在 AccountVo
+        AccountVo existingVo = findAccountVoByEmail(email);
+        //PasswordResetToken resetToken = tokenService.createPasswordResetTokenForUser(vo);
+
+        if (existingVo == null) {
             return ResponseEntity.badRequest().body("電子郵件不存在");
         }
-        String token = UUID.randomUUID().toString();
-        System.out.println(token);
-        EmailService emailService = new EmailService();
-		// Save the token and its expiration date in the database
-        //passwordResetTokenRepository.save(new PasswordResetToken(vo, token));
-        // Send email with reset link (token in the link)
-        emailService.sendResetPasswordEmail(vo, token);
+        
+        // 生成随机 token
+//        String token = UUID.randomUUID().toString();
+//        LocalDateTime expiryDate = LocalDateTime.now().plusHours(1);
+//
+//        // 使用已存在的 AccountVo 创建 PasswordResetToken
+//        PasswordResetToken resetToken = new PasswordResetToken(token, existingVo, expiryDate);
+//        tokenRepository.save(resetToken);
+     // 创建密码重置令牌并获取生成的令牌
+        String token = prts.createPasswordResetTokenForUser(existingVo);
+        // 调用 emailService 的方法来发送邮件
+        emailService.sendResetPasswordEmail(existingVo, token);
+
         return ResponseEntity.ok("請檢查您的電子郵件以重設密碼");
     }
+
+
+	private final PasswordResetTokenService tokenService;
+    //private final UserService userService;
+
+    public AccountAction(PasswordResetTokenService tokenService) {
+        this.tokenService = tokenService;
+        //this.userService = userService;
+    }
     
+    @PostMapping("/reset-password")
+    public String resetPassword(@RequestParam("token") String token, @RequestParam("newPassword") String newPassword) {
+        PasswordResetToken resetToken = tokenService.validatePasswordResetToken(token);
+        if (resetToken == null) {
+            return "Invalid or expired token";
+        }
+        AccountVo vo = resetToken.getVo();
+        changePassword(vo, newPassword);
+        System.out.println("new passord is " + newPassword);
+        return "Password reset successfully";
+    }
+    
+    public void changePassword(AccountVo vo, String newPassword) {
+        // 更新密码的 SQL 语句
+        String sql = "UPDATE account_vo SET password = ? WHERE username = ?";
+
+        // 执行更新操作
+        int rowsAffected = jdbcTemplate.update(sql, newPassword, vo.getUsername());
+
+        // 检查是否成功更新
+        if (rowsAffected == 0) {
+            throw new RuntimeException("用户不存在或更新失败");
+        }
+    }
+
     @PostMapping("/logout-notify")
     public ResponseEntity<String> notifyLogout(@RequestBody Map<String, String> payload) {
         String username = payload.get("username");
@@ -168,37 +218,44 @@ public class AccountAction {
 
         return ResponseEntity.ok("登出通知接收成功");
     }
+    
+    
 
     public boolean checkId(String id) {
-        String sql = "SELECT COUNT(*) FROM test WHERE username = ?";
+        String sql = "SELECT COUNT(*) FROM account_vo WHERE username = ?";
         Integer count = jdbcTemplate.queryForObject(sql, new Object[]{id}, Integer.class);
         return count != null && count > 0;
     }
     
     public boolean checkEmail(String email) {
-        String sql = "SELECT COUNT(*) FROM test WHERE email = ?";
+        String sql = "SELECT COUNT(*) FROM account_vo WHERE email = ?";
         Integer count = jdbcTemplate.queryForObject(sql, new Object[]{email}, Integer.class);
         return count != null && count > 0;
     }
     
-    public String findEmail(String email) {
-        String sql = "SELECT email FROM test WHERE email = ?";
+    public AccountVo findAccountVoByEmail(String email) {
+        String sql = "SELECT * FROM account_vo WHERE email = ?";
         try {
-            // 使用 queryForObject 查詢 email 地址，並指定返回類型為 String
-            return jdbcTemplate.queryForObject(sql, new Object[]{email}, String.class);
+            return jdbcTemplate.queryForObject(sql, new Object[]{email}, (rs, rowNum) -> {
+                AccountVo accountVo = new AccountVo();
+                accountVo.setUsername(rs.getString("username"));
+                accountVo.setPassword(rs.getString("password"));
+                accountVo.setEmail(rs.getString("email"));
+                accountVo.setImagelink(rs.getString("imagelink"));
+                return accountVo;
+            });
         } catch (EmptyResultDataAccessException e) {
             // 如果結果為空，則返回 null 或者處理不存在的情況
             return null;
         }
     }
 
+
     public boolean insertUser(AccountVo vo) {
-        String sql = "INSERT INTO test (username, password, email) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO account_vo (username, password, email) VALUES (?, ?, ?)";
         int rowsAffected = jdbcTemplate.update(sql, vo.getUsername(), vo.getPassword(), vo.getEmail());
         return rowsAffected > 0;
     }
-    
-    
     
     public boolean authenticateUser(String username, String password) {
         // 查詢用戶的密碼

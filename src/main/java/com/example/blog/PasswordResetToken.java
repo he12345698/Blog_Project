@@ -2,6 +2,7 @@ package com.example.blog;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,17 +19,21 @@ public class PasswordResetToken {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private AccountVo vo;
-
+    
+    @Column(nullable = false, unique = true)
     private String token;
-
+    
+    @Column(nullable = false)
     private LocalDateTime expiryDate;
 
-    public PasswordResetToken() {}
+    public PasswordResetToken() {
+    	
+    }
 
-    public PasswordResetToken(AccountVo vo, String token) {
-        this.vo = vo;
+    public PasswordResetToken(String token, AccountVo vo, LocalDateTime expiryDate) {
         this.token = token;
-        this.expiryDate = LocalDateTime.now().plusHours(1); // Token expires in 1 hour
+        this.vo = vo;
+        this.expiryDate = expiryDate;
     }
 
 	public Long getId() {
@@ -62,6 +67,14 @@ public class PasswordResetToken {
 	public void setExpiryDate(LocalDateTime expiryDate) {
 		this.expiryDate = expiryDate;
 	}
+	
+	@Override
+    public String toString() {
+        return "PasswordResetToken{" +
+                "token='" + token + '\'' +
+                ", expiryDate=" + expiryDate +
+                '}';
+    }
     
 }
 
