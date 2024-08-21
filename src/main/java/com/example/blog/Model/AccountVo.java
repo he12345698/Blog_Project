@@ -1,4 +1,4 @@
-package com.example.blog.Vo;
+package com.example.blog.Model;
 
 
 public class AccountVo {
