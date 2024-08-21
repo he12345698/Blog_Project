@@ -14,12 +14,12 @@ public class ArticleController {
     
     @Autowired
     private ArticleService articleService;
-
+    //直接用get方法 取得全部文章的列表
     @GetMapping
     public List<ArticleVo> getAllArticles() {
         return articleService.getAllArticles();
     }
-
+    
     @GetMapping("/{id}")
     public ResponseEntity<ArticleVo> getArticleById(@PathVariable Long id) {
         return articleService.getArticleById(id)
