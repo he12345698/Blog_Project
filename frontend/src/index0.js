@@ -80,17 +80,11 @@ const Index = () => {
           <a href="#">3</a>
           <a href="#">4</a>
           <a href="#">5</a>
-          <Link to="/register">
+          <Link to="/">
             <a>尾頁</a>
           </Link>
         </div>
       </main>
-
-      <footer className="footer">
-        <div className="footer-container">
-          <p>&copy; 2024 xxx部落格 版權所有.</p>
-        </div>
-      </footer>
 
       {/* Modal */}
       {isModalOpen && (

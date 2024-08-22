@@ -3,6 +3,7 @@ package com.example.blog.service;
 import com.example.blog.Model.ArticleVo;
 import com.example.blog.repository.ArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,12 +14,12 @@ public class ArticleService {
 
     @Autowired
     private ArticleRepository articleRepository;
-    //取得全部文章 可用於文章列表
-    public List<ArticleVo> getAllArticles() {
-        return articleRepository.findAll();
-    }
-    //透過ID查詢文章
+    //取得全部文章 可用於文章列表//先讓Controller跳過Service直接和Repo對接
+    // public Page getAllArticles(Page pageable) {
+    //     return articleRepository.findAll(pageable);
+    // }
 
+    //透過ID查詢文章
     public Optional<ArticleVo> getArticleById(Long article_id) {
         return articleRepository.findById(article_id);
     }

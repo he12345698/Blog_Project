@@ -1,6 +1,5 @@
 package com.example.blog.Model;
 
-
 public class AccountVo {
 	
 	String username;
