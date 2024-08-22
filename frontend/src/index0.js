@@ -11,7 +11,7 @@ const Index = () => {
 
   const notifyLogout = async () => {
     try {
-      await fetch('http://114.32.14.238:8080/blog/ac/logout-notify', {
+      await fetch('http://192.168.50.38:8080/blog/ac/logout-notify', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -45,7 +45,7 @@ const Index = () => {
       // });
       if(token) {
         try {
-          const response = await fetch('http://114.32.14.238:8080/blog/api/protected-endpoint', {
+          const response = await fetch('http://192.168.50.38:8080/blog/api/protected-endpoint', {
               method: 'GET',
               headers: {
                   'Authorization': `Bearer ${token}`

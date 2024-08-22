@@ -218,8 +218,6 @@ public class AccountAction {
 
         return ResponseEntity.ok("登出通知接收成功");
     }
-    
-    
 
     public boolean checkId(String id) {
         String sql = "SELECT COUNT(*) FROM account_vo WHERE username = ?";

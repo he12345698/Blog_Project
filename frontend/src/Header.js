@@ -5,6 +5,7 @@ const Header = ({ username, userImage, onLogout }) => {
 
   return (
     <header className="top-bar">
+      <link rel="icon" type="image/gif" href="./favicon.gif"></link>
       <div className="top-container">
         <div className="logo">xxx部落格</div>
         <nav className="navigation">

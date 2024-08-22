@@ -16,7 +16,7 @@ const LoginPage = () => {
     e.preventDefault();
     setAnimationKey(Date.now());
     try {
-      const response = await fetch('http://114.32.14.238:8080/blog/ac/login', {
+      const response = await fetch('http://192.168.50.38:8080/blog/ac/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -46,7 +46,7 @@ const LoginPage = () => {
     const initialPassword = searchParams.get('password');
   
     if (initialUsername && initialPassword) {
-      fetch('http://114.32.14.238:8080/blog/ac/login', {
+      fetch('http://192.168.50.38:8080/blog/ac/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
