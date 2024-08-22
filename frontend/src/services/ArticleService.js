@@ -4,8 +4,21 @@ const BACKEND_URL = 'http://localhost:8080';//後端網址
 
 const API_BASE_URL = 'http://localhost:8080/blog-0.0.1-SNAPSHOT/api/articles';
 
-const getArticleById = async (id) => {
-    const response = await axios.get(`${API_BASE_URL}/${id}`);
+const getAllArticles = async () => {
+    const response = await axios.get(`${API_BASE_URL}`);
+    return response.data;
+};
+
+const getArticleById = async (article_id) => {
+    const response = await axios.get(`${API_BASE_URL}/${article_id}`);
+    return response.data;
+};
+
+const getArticleByTitle = async (title) => {
+    // 修正這裡的 URL，使用查詢參數
+    const response = await axios.get(`${API_BASE_URL}/search`, {
+        params: { title: title } // 使用 params 來傳遞 title 查詢參數
+    });
     return response.data;
 };
 
@@ -14,15 +27,17 @@ const createArticle = async (articleData) => {
     return response.data;
 };
 
-const updateArticle = async (id, articleData) => {
-    const response = await axios.put(`${API_BASE_URL}/${id}`, articleData);
+const updateArticle = async (article_id, articleData) => {
+    const response = await axios.put(`${API_BASE_URL}/${article_id}`, articleData);
     return response.data;
 };
-
+//可加入其他請求API的方法
 const articleService = {
+    getAllArticles,
     getArticleById,
-    createArticle,
+    getArticleByTitle,
     updateArticle,
+    createArticle,
 };
 
 export default articleService;

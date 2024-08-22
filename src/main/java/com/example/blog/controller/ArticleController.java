@@ -21,10 +21,15 @@ public class ArticleController {
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<ArticleVo> getArticleById(@PathVariable Long id) {
-        return articleService.getArticleById(id)
+    public ResponseEntity<ArticleVo> getArticleById(@PathVariable Long article_id) {
+        return articleService.getArticleById(article_id)
                 .map(article -> ResponseEntity.ok(article))
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/search")
+    public List<ArticleVo> getArticleByTitle(@PathVariable String title) {
+        return articleService.searchArticleByTitle(title);
     }
 
     @PostMapping
@@ -33,12 +38,14 @@ public class ArticleController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ArticleVo> updateArticle(@PathVariable Long id, @RequestBody ArticleVo article) {
-        return articleService.getArticleById(id)
+    public ResponseEntity<ArticleVo> updateArticle(@PathVariable Long article_id, @RequestBody ArticleVo article) {
+        return articleService.getArticleById(article_id)
                 .map(existingArticle -> {
+                    existingArticle.setAuthor_id(article.getAuthor_id());
                     existingArticle.setTitle(article.getTitle());
-                    existingArticle.setCategory(article.getCategory());
-                    existingArticle.setContent(article.getContent());
+                    existingArticle.setContentTEXT(article.getContentTEXT());
+                    existingArticle.setPublished_at(article.getPublished_at());
+                    existingArticle.setLast_edited_at(article.getLast_edited_at());
                     ArticleVo updatedArticle = articleService.createOrUpdateArticle(existingArticle);
                     return ResponseEntity.ok(updatedArticle);
                 })
@@ -46,10 +53,10 @@ public class ArticleController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteArticle(@PathVariable Long id) {
-        return articleService.getArticleById(id)
+    public ResponseEntity<Void> deleteArticle(@PathVariable Long article_id) {
+        return articleService.getArticleById(article_id)
                 .map(article -> {
-                    articleService.deleteArticle(id);
+                    articleService.deleteArticle(article_id);
                     return ResponseEntity.ok().<Void>build();
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());

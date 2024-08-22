@@ -1,23 +1,43 @@
 package com.example.blog.Model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
 @Entity
+@EntityListeners(AuditingEntityListener.class)// 啟用審計功能
 public class ArticleVo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long article_id;
+    private Long author_id;
     private String title;
-    private String category;
-    private String content;
-    public Long getId() {
-        return id;
+    private String contentTEXT;
+    @CreatedDate
+    @Column(updatable = false)
+    private LocalDateTime published_at;
+    @LastModifiedDate
+    private LocalDateTime last_edited_at;
+    // Getters and setters
+    public Long getArticle_id() {
+        return article_id;
     }
-    public void setId(Long id) {
-        this.id = id;
+    public void setArticle_id(Long article_id) {
+        this.article_id = article_id;
+    }
+    public Long getAuthor_id() {
+        return author_id;
+    }
+    public void setAuthor_id(Long author_id) {
+        this.author_id = author_id;
     }
     public String getTitle() {
         return title;
@@ -25,24 +45,29 @@ public class ArticleVo {
     public void setTitle(String title) {
         this.title = title;
     }
-    public String getCategory() {
-        return category;
+    public String getContentTEXT() {
+        return contentTEXT;
     }
-    public void setCategory(String category) {
-        this.category = category;
+    public void setContentTEXT(String contentTEXT) {
+        this.contentTEXT = contentTEXT;
     }
-    public String getContent() {
-        return content;
+    public LocalDateTime getPublished_at() {
+        return published_at;
     }
-    public void setContent(String content) {
-        this.content = content;
+    public void setPublished_at(LocalDateTime published_at) {
+        this.published_at = published_at;
+    }
+    public LocalDateTime getLast_edited_at() {
+        return last_edited_at;
+    }
+    public void setLast_edited_at(LocalDateTime last_edited_at) {
+        this.last_edited_at = last_edited_at;
     }
     @Override
     public String toString() {
-        return "ArticleVo [id=" + id + ", title=" + title + ", category=" + category + ", content=" + content + "]";
+        return "ArticleVo [article_id=" + article_id + ", author_id=" + author_id + ", title=" + title
+                + ", contentTEXT=" + contentTEXT + ", published_at=" + published_at + ", last_edited_at="
+                + last_edited_at + "]";
     }
-
-
     
-    // Getters and setters
 }
