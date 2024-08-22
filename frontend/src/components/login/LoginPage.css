@@ -159,3 +159,56 @@ button[type="submit"]:hover {
 .login-footer .forgot-password {
     margin-left: 1rem;
 }
+
+.captcha-group {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* 添加间距 */
+  }
+  
+  .captcha-container {
+    display: flex;
+    align-items: center;
+    margin-top: 11PX;
+  }
+  /*
+  .captcha-image {
+    width: 150px; /* 设置验证码图片的宽度 
+    height: auto;
+    /*cursor: pointer; /* 鼠标悬停时显示为指针 
+    cursor: url('/public/UserImages/2717379.ico'), auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+*/
+    body {
+        /*cursor: none; */
+    }
+  .custom-cursor {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: url('/public/UserImages/122.gif') no-repeat center center;
+    background-size: contain;
+    pointer-events: none; /* 使光標不可點擊 */
+    }
+
+    
+  
+  .refresh-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px; /* 添加左边距 */
+    transition: transform 0.3s ease; /* 添加过渡效果 */
+  }
+  
+  .refresh-button:hover {
+    transform: rotate(180deg); /* 鼠标悬停时旋转效果 */
+  }
+  
+  .refresh-button svg {
+    width: 24px; /* 设置图标宽度 */
+    height: 24px; /* 设置图标高度 */
+  }
+  

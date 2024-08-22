@@ -12,7 +12,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins("http://niceblog.myvnc.com:81")
                 .allowedMethods("*") // 允許的方法
                 .allowCredentials(true)
-                .allowedHeaders("Authorization", "*");
+                .allowedHeaders("Authorization", "*", "captcha");
     }
 
 

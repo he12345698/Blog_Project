@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
@@ -71,14 +72,32 @@ public class AccountAction {
     }
     
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody AccountVo vo, HttpServletResponse response) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody AccountVo vo, HttpServletRequest request, HttpServletResponse response) {
         try {
+            // 从请求中获取用户提交的验证码
+            String inputCaptcha = vo.getCaptcha(); // 确保 AccountVo 包含 captcha 字段
+            System.out.println("user input captcha is " + inputCaptcha);
+            // 从 session 中获取生成的验证码
+            HttpSession session = request.getSession();
+            
+            String sessionCaptcha = (String) session.getAttribute("captcha");
+            System.out.println("captcha in session is " + sessionCaptcha);
+            System.out.println("Session ID for login: " + session.getId());
+
+            // 检查验证码是否匹配
+            if (sessionCaptcha == null || !sessionCaptcha.equalsIgnoreCase(inputCaptcha)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonMap("message", "驗證碼不正確"));
+            }
+
+            // 验证通过后清除 session 中的验证码
+            session.removeAttribute("captcha");
+
             // 查询用户名是否存在
             String checkUserSql = "SELECT COUNT(*) FROM account_vo WHERE username = ?";
             Integer userCount = jdbcTemplate.queryForObject(checkUserSql, new Object[]{vo.getUsername()}, Integer.class);
 
             if (userCount == null || userCount == 0) {
-            	System.out.println("未知的使用者名稱：" + vo.getUsername() + " 於 " + new Date(System.currentTimeMillis()) + " 嘗試登入");
+                System.out.println("未知的使用者名稱：" + vo.getUsername() + " 於 " + new Date(System.currentTimeMillis()) + " 嘗試登入");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "使用者不存在"));
             }
 
@@ -92,30 +111,23 @@ public class AccountAction {
             Boolean accountLocked = (Boolean) userDetails.get("account_locked");
 
             if (Boolean.TRUE.equals(accountLocked)) {
-                // 帐户已被锁定
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonMap("message", "帳戶已被鎖定，請聯繫管理員"));
             }
 
             if (storedPassword == null || !storedPassword.equals(vo.getPassword())) {
-                // 密码错误时增加登录尝试次数
                 loginAttempts += 1;
 
                 if (loginAttempts >= 3) {
-                    // 锁定帐户
                     String lockAccountSql = "UPDATE account_vo SET account_locked = TRUE, login_attempts = 0 WHERE username = ?";
                     jdbcTemplate.update(lockAccountSql, vo.getUsername());
                     System.out.println("使用者：" + vo.getUsername() + " 帳戶已被鎖定，由於多次登錄失敗。");
-                    
                     return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonMap("message", "帳戶已被鎖定，請聯繫管理員"));
                 } else {
-                    // 更新登录尝试次数
                     String updateAttemptsSql = "UPDATE account_vo SET login_attempts = ? WHERE username = ?";
                     jdbcTemplate.update(updateAttemptsSql, loginAttempts, vo.getUsername());
                 }
 
-                // 打印错误信息
                 System.out.println("使用者：" + vo.getUsername() + " 於 " + new Date(System.currentTimeMillis()) + " 嘗試登入，已錯誤 " + loginAttempts + " 次");
-                
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonMap("message", "密碼不正確，已錯誤 " + loginAttempts + " 次"));
             }
 
@@ -133,7 +145,7 @@ public class AccountAction {
             // 返回 JSON 对象
             Map<String, String> responseBody = new HashMap<>();
             responseBody.put("message", "登入成功");
-            responseBody.put("token", token); // 如果需要返回 token，也可以包含在响应中
+            responseBody.put("token", token);
 
             return ResponseEntity.ok(responseBody);
         } catch (Exception e) {
@@ -141,6 +153,7 @@ public class AccountAction {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.singletonMap("message", "伺服器錯誤：" + e.getMessage()));
         }
     }
+
     
     @Autowired
     private EmailService emailService;
