@@ -1,0 +1,92 @@
+h1 {
+    font-size: 2em;
+    /* 增加標題的字體大小 */
+    margin-bottom: 5px;
+    /* 增加標題與下方內容的間距 */
+    text-align: center;
+    font-weight: bold;
+}
+
+p {
+    font-size: 1em;
+    /* 段落的字體大小 */
+    margin-bottom: 15px;
+    /* 增加段落與下方內容的間距 */
+}
+
+
+/* 外部容器樣式，使用 Flexbox 進行排版 */
+.wrapper {
+    display: flex;
+    /* 使用 Flexbox 進行排版 */
+    justify-content: center;
+    /* 垂直居中 */
+    flex-direction: column;
+    /* 垂直排列內容 */
+    height: 100%;
+    /* 設置高度為 100% */
+    min-height: 100vh;
+    /* 確保外部容器最小高度為視窗高度 */
+}
+
+/* 主要內容區域樣式 */
+.profile_wrapper {
+    justify-content: space-between;
+    /* 使區塊間距均勻 */
+    margin-bottom: 30px;
+    /* 增加與下方內容的間距 */
+    display: flex;
+    /* 使用 Flexbox 進行排版 */
+    justify-content: center;
+    /* 水平居中對齊內容 */
+    align-items: center;
+    /* 垂直居中對齊內容 */
+    padding: 20px;
+    /* 內邊距 */
+}
+
+.profile_container {
+    max-width: 50%;
+    /* 最大寬度 */
+    width: 100%;
+    /* 寬度 100% */
+    padding: 30px;
+    /* 內邊距 */
+    border: 1px solid #ccc;
+    /* 邊框顏色 */
+    border-radius: 5px;
+    /* 邊角圓潤 */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* 陰影效果 */
+    background-color: #ffffff;
+    /* 背景顏色 */
+}
+
+.grid_container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    /* 兩列的網格布局 */
+    grid-template-rows: auto auto;
+    /* 兩行的網格布局 */
+    gap: 10px;
+    /* 網格間距 */
+    max-width: 800px;
+    /* 最大寬度 */
+    margin: 0 auto;
+    /* 使容器居中 */
+    padding: 10px;
+    /* 內邊距 */
+}
+
+.full_width {
+    grid-column: span 2;
+    /* 佔據兩列 */
+}
+
+.avatar {
+    margin: auto;
+}
+
+.profile {
+    text-align: left;
+}

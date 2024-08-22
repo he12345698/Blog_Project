@@ -1,0 +1,22 @@
+.profile_button {
+    font-weight: bold;
+    font-size: 18px;
+    width: 20%;
+    height: 2em;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+label {
+    font-weight: bold;
+    margin: 5px 0px 5px 0px;
+}
+
+.text_area{
+    width: 70%;
+    height: 2em;
+    margin: 0px 5px 5px 5px;
+}
