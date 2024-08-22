@@ -1,8 +1,13 @@
 package com.example.blog.controller;
 
 import com.example.blog.Model.ArticleVo;
+import com.example.blog.repository.ArticleRepository;
 import com.example.blog.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,15 +19,24 @@ public class ArticleController {
     
     @Autowired
     private ArticleService articleService;
+    @Autowired
+    private ArticleRepository articleRepository;
+
     //直接用get方法 取得全部文章的列表
     @GetMapping
-    public List<ArticleVo> getAllArticles() {
-        return articleService.getAllArticles();
+    public Page<ArticleVo> getArticleVo(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy) {
+        
+        // 使用 Sort 進行排序
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).descending());
+        return articleRepository.findAll(pageable);
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<ArticleVo> getArticleById(@PathVariable Long article_id) {
-        return articleService.getArticleById(article_id)
+    public ResponseEntity<ArticleVo> getArticleById(@PathVariable Long id) {
+        return articleService.getArticleById(id)
                 .map(article -> ResponseEntity.ok(article))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
