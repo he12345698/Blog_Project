@@ -23,8 +23,9 @@ const App = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<Register />} />
         <Route path="/test1" element={<Test1 />} />
-        <Route path='/edit' element={<ArticleEditor />} />
+        <Route path='/publish-article' element={<ArticleEditor />} />
         <Route path="/articlesPage" element={<ArticlesPage />} />
+        <Route path="/edit-article/:articleId" element={<ArticleEditor />} />
         {/* 你可以在这里添加更多的路由 */}
       </Routes>
     </main>
