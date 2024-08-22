@@ -107,13 +107,13 @@ const LoginPage = () => {
         const error = await response.json();
         setErrorMessage(error.message || '登入失敗，請重試。');
         // 失敗後刷新驗證碼
-        //loadCaptcha();
+        loadCaptcha();
       }
     } catch (error) {
       console.error('Error:', error);
       setErrorMessage('伺服器發生錯誤，請稍後重試。');
       // 伺服器錯誤時刷新驗證碼
-      //loadCaptcha();
+      loadCaptcha();
     }
   };
 
