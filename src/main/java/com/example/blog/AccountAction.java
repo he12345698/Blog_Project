@@ -23,6 +23,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.blog.PasswordReset.PasswordResetToken;
+import com.example.blog.PasswordReset.PasswordResetTokenRepository;
+import com.example.blog.PasswordReset.PasswordResetTokenService;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -44,6 +48,8 @@ public class AccountAction {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Autowired 
+    private AccountService accountService;
 
     @GetMapping("/register")
     public String getRegistrationPage() {
@@ -52,53 +58,32 @@ public class AccountAction {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody AccountVo vo) {
-        System.out.println(vo);
-        System.out.println(vo.getUsername());
 
-        // 檢查 ID 是否已存在
-        if (checkId(vo.getUsername())) {
-            return ResponseEntity.badRequest().body("該用戶名已被使用!"); // 用户 ID 已被占用
-        }
-        if (checkEmail(vo.getEmail())) {
-            return ResponseEntity.badRequest().body("該電子信箱已被使用!"); // 邮件地址已被占用
-        }
-
-        // 插入新用戶資料到資料庫
-        if (insertUser(vo)) {
-            return ResponseEntity.ok("註冊成功!"); // 注册成功
-        } else {
-            return ResponseEntity.status(500).body("註冊失敗，請稍後重試."); // 注册失败
-        }
+    	ResponseEntity<String> response = accountService.registerUser(vo);
+        return response;
+        
     }
     
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody AccountVo vo, HttpServletRequest request, HttpServletResponse response) {
         try {
             // 从请求中获取用户提交的验证码
-            String inputCaptcha = vo.getCaptcha(); // 确保 AccountVo 包含 captcha 字段
-            System.out.println("user input captcha is " + inputCaptcha);
-            // 从 session 中获取生成的验证码
-            HttpSession session = request.getSession();
-            
+            HttpSession session = request.getSession(); // 从 session 中获取生成的验证码
             String sessionCaptcha = (String) session.getAttribute("captcha");
-            System.out.println("captcha in session is " + sessionCaptcha);
-            System.out.println("Session ID for login: " + session.getId());
+            String inputCaptcha = vo.getCaptcha(); // 确保 AccountVo 包含 captcha 字段
 
             // 检查验证码是否匹配
             if (sessionCaptcha == null || !sessionCaptcha.equalsIgnoreCase(inputCaptcha)) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonMap("message", "驗證碼不正確"));
             }
-
+            
             // 验证通过后清除 session 中的验证码
             session.removeAttribute("captcha");
 
             // 查询用户名是否存在
-            String checkUserSql = "SELECT COUNT(*) FROM account_vo WHERE username = ?";
-            Integer userCount = jdbcTemplate.queryForObject(checkUserSql, new Object[]{vo.getUsername()}, Integer.class);
-
-            if (userCount == null || userCount == 0) {
-                System.out.println("未知的使用者名稱：" + vo.getUsername() + " 於 " + new Date(System.currentTimeMillis()) + " 嘗試登入");
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "使用者不存在"));
+            if (!checkId(vo.getUsername())) {
+            	System.out.println("未知的使用者名稱：" + vo.getUsername() + " 於 " + new Date(System.currentTimeMillis()) + " 嘗試登入");
+            	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "使用者不存在"));
             }
 
             // 查询用户的密码、图片链接、登录尝试次数和帐户锁定状态
@@ -109,31 +94,32 @@ public class AccountAction {
             String imageLink = (String) userDetails.get("imagelink");
             Integer loginAttempts = (Integer) userDetails.get("login_attempts");
             Boolean accountLocked = (Boolean) userDetails.get("account_locked");
-
-            if (Boolean.TRUE.equals(accountLocked)) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonMap("message", "帳戶已被鎖定，請聯繫管理員"));
+      
+            if (accountService.checkAccountLocked(vo.getUsername())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                                     .body(Collections.singletonMap("message", "帳戶已被鎖定，請聯繫管理員"));
             }
-
-            if (storedPassword == null || !storedPassword.equals(vo.getPassword())) {
-                loginAttempts += 1;
-
-                if (loginAttempts >= 3) {
-                    String lockAccountSql = "UPDATE account_vo SET account_locked = TRUE, login_attempts = 0 WHERE username = ?";
-                    jdbcTemplate.update(lockAccountSql, vo.getUsername());
-                    System.out.println("使用者：" + vo.getUsername() + " 帳戶已被鎖定，由於多次登錄失敗。");
-                    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonMap("message", "帳戶已被鎖定，請聯繫管理員"));
-                } else {
-                    String updateAttemptsSql = "UPDATE account_vo SET login_attempts = ? WHERE username = ?";
-                    jdbcTemplate.update(updateAttemptsSql, loginAttempts, vo.getUsername());
-                }
-
-                System.out.println("使用者：" + vo.getUsername() + " 於 " + new Date(System.currentTimeMillis()) + " 嘗試登入，已錯誤 " + loginAttempts + " 次");
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonMap("message", "密碼不正確，已錯誤 " + loginAttempts + " 次"));
-            }
+            
+//            if (storedPassword == null || !storedPassword.equals(vo.getPassword())) {
+//                loginAttempts += 1;
+//
+//                if (loginAttempts >= 3) {
+//                    String lockAccountSql = "UPDATE account_vo SET account_locked = TRUE, login_attempts = 0 WHERE username = ?";
+//                    jdbcTemplate.update(lockAccountSql, vo.getUsername());
+//                    System.out.println("使用者：" + vo.getUsername() + " 帳戶已被鎖定，由於多次登錄失敗。");
+//                    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonMap("message", "帳戶已被鎖定，請聯繫管理員"));
+//                } else {
+//                    String updateAttemptsSql = "UPDATE account_vo SET login_attempts = ? WHERE username = ?";
+//                    jdbcTemplate.update(updateAttemptsSql, loginAttempts, vo.getUsername());
+//                }
+//
+//                System.out.println("使用者：" + vo.getUsername() + " 於 " + new Date(System.currentTimeMillis()) + " 嘗試登入，已錯誤 " + loginAttempts + " 次");
+//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonMap("message", "密碼不正確，已錯誤 " + loginAttempts + " 次"));
+//            }
 
             // 密码匹配，重置登录尝试次数并解除锁定
-            String resetAttemptsSql = "UPDATE account_vo SET login_attempts = 0, account_locked = FALSE WHERE username = ?";
-            jdbcTemplate.update(resetAttemptsSql, vo.getUsername());
+//            String resetAttemptsSql = "UPDATE account_vo SET login_attempts = 0, account_locked = FALSE WHERE username = ?";
+//            jdbcTemplate.update(resetAttemptsSql, vo.getUsername());
 
             // 生成 JWT
             String token = JwtUtil.generateToken(vo.getUsername(), imageLink);
@@ -155,7 +141,13 @@ public class AccountAction {
     }
 
     
-    @Autowired
+    private boolean checkAccountLocked(String username) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Autowired
     private EmailService emailService;
     @Autowired
     private PasswordResetTokenService prts;

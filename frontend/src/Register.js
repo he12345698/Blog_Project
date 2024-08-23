@@ -76,6 +76,7 @@ const Register = () => {
   
       if (response.ok) {
         const message = await response.text(); 
+        console.log(message);
         setSuccessMessage(message);
         setErrorMessage('');
   

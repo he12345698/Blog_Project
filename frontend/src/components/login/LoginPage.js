@@ -20,6 +20,9 @@ const LoginPage = () => {
     try {
       const response = await fetch('http://niceblog.myvnc.com:8080/blog/ac/captcha', {
         method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         credentials: 'include' // 包含凭证 (Cookies)
       });
   
@@ -98,7 +101,7 @@ const LoginPage = () => {
         credentials: 'include',
       });
 
-      console.log('Response Headers:', response.headers);
+      //console.log('Response Headers:', response.headers);
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem('token', data.token);

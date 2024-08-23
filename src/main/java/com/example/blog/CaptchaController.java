@@ -21,9 +21,23 @@ import jakarta.servlet.http.HttpSession;
 @RestController
 @RequestMapping("/ac")
 public class CaptchaController {
+	
+	public String getClientIp(HttpServletRequest request) {
+	    String header = request.getHeader("X-Forwarded-For");
+	    if (header == null || header.isEmpty() || "unknown".equalsIgnoreCase(header)) {
+	        header = request.getHeader("X-Real-IP");
+	    }
+	    if (header == null || header.isEmpty() || "unknown".equalsIgnoreCase(header)) {
+	        header = request.getRemoteAddr();
+	    }
+	    return header;
+	}
 
     @GetMapping("/captcha")
     public void getCaptcha(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    	
+    	String clientIpAddress = getClientIp(request);
+        System.out.println("Client IP Address: " + clientIpAddress);
     	
         int width = 160;
         int height = 40;
