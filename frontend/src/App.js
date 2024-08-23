@@ -8,13 +8,15 @@ import Test1 from './Test1';
 import UserData from './pages/UserData';
 
 import './styles/App.css';
-// import Header from './components/Header';
-// import Footer from './components/Footer';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import SearchBar from './components/SearchBar';
 
 const App = () => {
   return (
     <Router>
-    {/* <Header /> */}
+      <Header />
+      <SearchBar />
     <main>
       <Routes>
         <Route path="/" element={<Index />} />
@@ -26,7 +28,7 @@ const App = () => {
         {/* 你可以在这里添加更多的路由 */}
       </Routes>
     </main>
-    {/* <Footer /> */}
+    <Footer />
   </Router>
   );
 };
