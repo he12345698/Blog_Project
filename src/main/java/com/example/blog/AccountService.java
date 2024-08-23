@@ -1,11 +1,13 @@
 package com.example.blog;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -37,18 +39,40 @@ public class AccountService {
                                 .orElse(false);
     }
     
-//    public boolean checkUserPassword(String username, String password) {
-//        // 查找用戶
-//        Optional<AccountVo> optionalAccount = accountRepository.findByUsername(username);
-//
-//        if (optionalAccount.isPresent()) {
-//            AccountVo account = optionalAccount.get();
-//            // 比對密碼
-//            return passwordEncoder.matches(password, account.getPassword());
-//        }
-//        // 用戶不存在
-//        return false;
-//    }
+    public Optional<String> checkImageLink(String username) {
+        return accountRepository.findImageLinkByUsername(username);
+    }
+    
+    // 檢查使用者輸入密碼是否正確，錯誤則計數，滿三次鎖定帳戶
+    private static final int MAX_LOGIN_ATTEMPTS = 5;
+
+    public ResponseEntity<String> checkUserPassword(String username, String inputPassword) {
+        Optional<AccountVo> optionalUser = accountRepository.findByUsername(username);
+        
+        if (optionalUser.isPresent()) {
+            AccountVo vo = optionalUser.get();
+
+            if (vo.getPassword().equals(inputPassword)) {
+               vo.setLoginAttempts(0); // 重置登錄嘗試次數
+                accountRepository.save(vo);
+                return ResponseEntity.ok("登入成功");
+            } else {
+                int attempts = vo.getLoginAttempts() + 1;
+                vo.setLoginAttempts(attempts);
+
+                if (attempts >= MAX_LOGIN_ATTEMPTS) {
+                    vo.setAccountLocked(true);
+                    accountRepository.save(vo);
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN).body("帳戶已被鎖定，請聯繫管理員");
+                } else {
+                    accountRepository.save(vo);
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("密碼錯誤 " + attempts + " 次");
+                }
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("用戶名或密碼錯誤");
+    }
     
     // 保存帳戶信息
     public AccountVo saveAccount(AccountVo vo) {
@@ -63,7 +87,7 @@ public class AccountService {
             vo.setTokenExpiration(LocalDateTime.now().plusHours(24));
             accountRepository.save(vo);
             // 發送郵件
-            //emailService.sendRegistrationEmail(vo.getEmail(), vo.getUsername(), token);
+            emailService.sendVerificationEmail(vo, token);
             return true;
         } catch (Exception e) {
             return false;
@@ -71,7 +95,6 @@ public class AccountService {
     }
     
     public ResponseEntity<String> registerUser(AccountVo vo) {
-
         // 檢查用戶名是否已存在
         if (accountRepository.findByUsername(vo.getUsername()).isPresent()) {
             return ResponseEntity.badRequest().body("該用戶名已被使用!");
@@ -83,17 +106,13 @@ public class AccountService {
         }
 
         // 插入新用戶資料
-        try {
-        	
-           if(insertUser(vo)) {
-        	   
+        try {       	
+           if(insertUser(vo)) {        	   
         	   return ResponseEntity.ok("註冊成功! 請檢查您的電子郵件以完成註冊。");
            }
-        } catch (Exception e) {
-        	
+        } catch (Exception e) {       	
             return ResponseEntity.status(500).body("註冊失敗，請稍後重試。");
-        }
-        
+        }     
 		return null;
     }
 
@@ -132,12 +151,18 @@ public class AccountService {
         if (accountOpt.isPresent()) {
             AccountVo account = accountOpt.get();
             account.setIsVerified(true);
+            account.setCreatedDate(LocalDateTime.now());
             account.setVerificationToken(null);  // 驗證後移除 token
             saveAccount(account);
             return true;
         }
         return false;
     }
+
+	public String findImageLinkByUsername(String username) {
+		// TODO Auto-generated method stub
+		return null;
+	}
     
     
 }

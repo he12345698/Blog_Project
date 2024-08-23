@@ -50,6 +50,8 @@ public class AccountAction {
     private JdbcTemplate jdbcTemplate;
     @Autowired 
     private AccountService accountService;
+    @Autowired
+    private CaptchaController captchaController;
 
     @GetMapping("/register")
     public String getRegistrationPage() {
@@ -67,77 +69,52 @@ public class AccountAction {
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody AccountVo vo, HttpServletRequest request, HttpServletResponse response) {
         try {
-            // 从请求中获取用户提交的验证码
-            HttpSession session = request.getSession(); // 从 session 中获取生成的验证码
-            String sessionCaptcha = (String) session.getAttribute("captcha");
-            String inputCaptcha = vo.getCaptcha(); // 确保 AccountVo 包含 captcha 字段
-
-            // 检查验证码是否匹配
-            if (sessionCaptcha == null || !sessionCaptcha.equalsIgnoreCase(inputCaptcha)) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonMap("message", "驗證碼不正確"));
-            }
             
-            // 验证通过后清除 session 中的验证码
-            session.removeAttribute("captcha");
+        	ResponseEntity<Map<String, String>> captchaResponse = captchaController.validateCaptcha(vo, request);
+            // 如果验证码验证失败，直接返回错误响应
+            if (captchaResponse.getStatusCode() == HttpStatus.FORBIDDEN) {
+                return captchaResponse; // 返回包含错误信息的响应
+            }
 
             // 查询用户名是否存在
             if (!checkId(vo.getUsername())) {
-            	System.out.println("未知的使用者名稱：" + vo.getUsername() + " 於 " + new Date(System.currentTimeMillis()) + " 嘗試登入");
-            	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "使用者不存在"));
+                System.out.println("未知的使用者名稱：" + vo.getUsername() + " 於 " + new Date(System.currentTimeMillis()) + " 嘗試登入");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "使用者不存在"));
             }
 
-            // 查询用户的密码、图片链接、登录尝试次数和帐户锁定状态
-            String sql = "SELECT password, imagelink, login_attempts, account_locked FROM account_vo WHERE username = ?";
-            Map<String, Object> userDetails = jdbcTemplate.queryForMap(sql, new Object[]{vo.getUsername()});
-
-            String storedPassword = (String) userDetails.get("password");
-            String imageLink = (String) userDetails.get("imagelink");
-            Integer loginAttempts = (Integer) userDetails.get("login_attempts");
-            Boolean accountLocked = (Boolean) userDetails.get("account_locked");
-      
-            if (accountService.checkAccountLocked(vo.getUsername())) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                                     .body(Collections.singletonMap("message", "帳戶已被鎖定，請聯繫管理員"));
+            // 调用 AccountService 的 checkUserPassword 方法
+            ResponseEntity<String> checkUserPasswordResponse = accountService.checkUserPassword(vo.getUsername(), vo.getPassword());
+            if (checkUserPasswordResponse.getStatusCode() == HttpStatus.UNAUTHORIZED || checkUserPasswordResponse.getStatusCode() == HttpStatus.FORBIDDEN) {
+                // 将错误信息封装为 Map
+                Map<String, String> errorResponse = new HashMap<>();
+                errorResponse.put("message", checkUserPasswordResponse.getBody());
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
             }
-            
-//            if (storedPassword == null || !storedPassword.equals(vo.getPassword())) {
-//                loginAttempts += 1;
-//
-//                if (loginAttempts >= 3) {
-//                    String lockAccountSql = "UPDATE account_vo SET account_locked = TRUE, login_attempts = 0 WHERE username = ?";
-//                    jdbcTemplate.update(lockAccountSql, vo.getUsername());
-//                    System.out.println("使用者：" + vo.getUsername() + " 帳戶已被鎖定，由於多次登錄失敗。");
-//                    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonMap("message", "帳戶已被鎖定，請聯繫管理員"));
-//                } else {
-//                    String updateAttemptsSql = "UPDATE account_vo SET login_attempts = ? WHERE username = ?";
-//                    jdbcTemplate.update(updateAttemptsSql, loginAttempts, vo.getUsername());
-//                }
-//
-//                System.out.println("使用者：" + vo.getUsername() + " 於 " + new Date(System.currentTimeMillis()) + " 嘗試登入，已錯誤 " + loginAttempts + " 次");
-//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonMap("message", "密碼不正確，已錯誤 " + loginAttempts + " 次"));
+
+            // 如果验证成功，生成 JWT
+            if (checkUserPasswordResponse.getStatusCode() == HttpStatus.OK) {
+            	
+                String token = JwtUtil.generateToken(vo.getUsername(), accountService.findImageLinkByUsername(vo.getUsername())); 
+                // 将 JWT 添加到响应头中
+                response.setHeader("Authorization", "Bearer " + token);
+                System.out.println(token);
+                // 返回 JSON 对象
+                Map<String, String> responseBody = new HashMap<>();
+                responseBody.put("token", token);
+
+                return ResponseEntity.ok(responseBody);
+            }
+//            } else {
+//                // 返回服务层返回的错误信息
+//                Map<String, String> responseBody = Collections.singletonMap("message", serviceResponse.getBody());
+//                return new ResponseEntity<>(responseBody, serviceResponse.getStatusCode());
 //            }
-
-            // 密码匹配，重置登录尝试次数并解除锁定
-//            String resetAttemptsSql = "UPDATE account_vo SET login_attempts = 0, account_locked = FALSE WHERE username = ?";
-//            jdbcTemplate.update(resetAttemptsSql, vo.getUsername());
-
-            // 生成 JWT
-            String token = JwtUtil.generateToken(vo.getUsername(), imageLink);
-            System.out.println("使用者：" + vo.getUsername() + " 於 " + new Date(System.currentTimeMillis()) + " 登入，token：" + token);
-
-            // 将 JWT 添加到响应头中
-            response.setHeader("Authorization", "Bearer " + token);
-
-            // 返回 JSON 对象
-            Map<String, String> responseBody = new HashMap<>();
-            responseBody.put("message", "登入成功");
-            responseBody.put("token", token);
-
-            return ResponseEntity.ok(responseBody);
+//            
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.singletonMap("message", "伺服器錯誤：" + e.getMessage()));
         }
+		return null;
     }
 
     

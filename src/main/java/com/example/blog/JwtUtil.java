@@ -7,6 +7,7 @@ import io.jsonwebtoken.security.Keys;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.Optional;
 
 public class JwtUtil {
 
@@ -52,5 +53,10 @@ public class JwtUtil {
     public static boolean validateToken(String token, String username) {
         return username.equals(extractUsername(token)) && !isTokenExpired(token);
     }
+
+	public static String generateToken(String username, Optional<AccountVo> byUsername) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
 

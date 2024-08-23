@@ -13,6 +13,6 @@ public interface AccountRepository extends JpaRepository<AccountVo, String> {
     // 根據驗證 token 查詢帳戶
     Optional<AccountVo> findByVerificationToken(String verificationToken);
     
-    
+    Optional<String> findImageLinkByUsername(String username);
 }
 
