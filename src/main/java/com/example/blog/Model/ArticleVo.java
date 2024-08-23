@@ -14,32 +14,32 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 @Entity
-@Table(name = "article_vo")
+@Table(name = "articleVo")
 @EntityListeners(AuditingEntityListener.class)// 啟用審計功能
 public class ArticleVo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private Long author_id;
+    private Long articleId;
+    private Long authorId;
     private String title;
     private String contentTEXT;
     @CreatedDate
     @Column(updatable = false)
-    private LocalDateTime published_at;
+    private LocalDateTime publishedAt;
     @LastModifiedDate
-    private LocalDateTime last_edited_at;
+    private LocalDateTime lastEditedAt;
     // Getters and setters
-    public Long getid() {
-        return id;
+    public Long getArticleId() {
+        return articleId;
     }
-    public void setid(Long id) {
-        this.id = id;
+    public void setArticleid(Long articleId) {
+        this.articleId = articleId;
     }
-    public Long getAuthor_id() {
-        return author_id;
+    public Long getAuthorId() {
+        return authorId;
     }
-    public void setAuthor_id(Long author_id) {
-        this.author_id = author_id;
+    public void setAuthorId(Long authorId) {
+        this.authorId = authorId;
     }
     public String getTitle() {
         return title;
@@ -53,23 +53,23 @@ public class ArticleVo {
     public void setContentTEXT(String contentTEXT) {
         this.contentTEXT = contentTEXT;
     }
-    public LocalDateTime getPublished_at() {
-        return published_at;
+    public LocalDateTime getPublishedAt() {
+        return publishedAt;
     }
-    public void setPublished_at(LocalDateTime published_at) {
-        this.published_at = published_at;
+    public void setPublishedAt(LocalDateTime publishedAt) {
+        this.publishedAt = publishedAt;
     }
-    public LocalDateTime getLast_edited_at() {
-        return last_edited_at;
+    public LocalDateTime getLastEditedAt() {
+        return lastEditedAt;
     }
-    public void setLast_edited_at(LocalDateTime last_edited_at) {
-        this.last_edited_at = last_edited_at;
+    public void setLastEditedAt(LocalDateTime lastEditedAt) {
+        this.lastEditedAt = lastEditedAt;
     }
     @Override
     public String toString() {
-        return "ArticleVo [article_id=" + id + ", author_id=" + author_id + ", title=" + title
-                + ", contentTEXT=" + contentTEXT + ", published_at=" + published_at + ", last_edited_at="
-                + last_edited_at + "]";
+        return "ArticleVo [articleId=" + articleId + ", authorId=" + authorId + ", title=" + title
+                + ", contentTEXT=" + contentTEXT + ", publishedAt=" + publishedAt + ", lastEditedAt="
+                + lastEditedAt + "]";
     }
     
 }

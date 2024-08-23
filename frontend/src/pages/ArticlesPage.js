@@ -29,10 +29,10 @@ const ArticlesPage = () => {
         <div className="post-container">
           {articleVo && articleVo.length > 0 ? (
             articleVo.map(article => (
-              <article className="post" key={article.id}>
-                <Link to={`/edit-article/${article.id}`}>
+              <article className="post" key={article.articleId}>
+                <Link to={`/edit-article/${article.articleId}`}>
                   <div>
-                    {article.title} | 作者 : {article.author_id} | 更新於 : {new Date(article.last_edited_at).toLocaleDateString()}
+                    {article.title} | 作者 : {article.authorId} | 更新於 : {new Date(article.lastEditedAt).toLocaleDateString()}
                   </div>
                 </Link>
               </article>

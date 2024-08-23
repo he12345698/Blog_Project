@@ -5,12 +5,13 @@ const BACKEND_URL = 'http://localhost:8080';//後端網址
 const API_BASE_URL = 'http://localhost:8080/blog-0.0.1-SNAPSHOT/api/articles';
 
 const getAllArticles = async () => {
+    console.log("try to get all...");
     const response = await axios.get(`${API_BASE_URL}`);
     return response.data;
 };
 
-const getArticleById = async (article_id) => {
-    const response = await axios.get(`${API_BASE_URL}/${article_id}`);
+const getArticleById = async (articleId) => {
+    const response = await axios.get(`${API_BASE_URL}/${articleId}`);
     return response.data;
 };
 
@@ -27,8 +28,9 @@ const createArticle = async (articleData) => {
     return response.data;
 };
 
-const updateArticle = async (article_id, articleData) => {
-    const response = await axios.put(`${API_BASE_URL}/${article_id}`, articleData);
+const updateArticle = async (articleId, articleData) => {
+    const response = await axios.put(`${API_BASE_URL}/${articleId}`, articleData);
+    console.log("try fetch...");
     return response.data;
 };
 //可加入其他請求API的方法
