@@ -81,7 +81,6 @@ const UserProfile = () => {
         <div class='row'>
             <label for="username">用戶名：</label><br />
             <div class={styles.inline}>
-                {editing.username ? (
                     <input
                         type="text"
                         id="username"
@@ -91,9 +90,6 @@ const UserProfile = () => {
                         onChange={handleInputChange}
                         disabled={!editing.username} //根據編輯狀態關閉或開啟
                     />
-                ) : (
-                    <span className={styles.normal_text}>{userData.username}</span>
-                )}
                 {editing.username ? (
                     <button
                         type='button'
@@ -114,19 +110,15 @@ const UserProfile = () => {
                 <br />
 
                 <label for="email">電子郵件：</label><br />
-                {editing.email ? (
                     <input
                         type="email"
                         id="email"
                         name="email"
-                        value="accountEmail"
+                        value={userData.email}
                         class={`form-control ${styles.text_area}`}
                         onChange={handleInputChange}
                         disabled={!editing.email}
                     />
-                ) : (
-                    <span>{userData.email}</span>
-                )}
                 {editing.email ? (
                     <button
                         type='button'
@@ -149,19 +141,15 @@ const UserProfile = () => {
 
             <div class={styles.inline}>
                 <label for="password">密碼：</label><br />
-                {editing.password ? (
                     <input
                         type="password"
                         id="password"
                         name="password"
-                        value="123123123"
+                        value="*********"
                         class={`form-control ${styles.text_area}`}
                         onChange={handleInputChange}
                         disabled={!editing.password}
-                    />
-                ) : (
-                    <span>{userData.password}</span>
-                )}
+                    />  
                 {editing.password ? (
                     <button
                         type='button'
