@@ -27,16 +27,16 @@ public class ArticleController {
     public Page<ArticleVo> getArticleVo(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "id") String sortBy) {
+            @RequestParam(defaultValue = "articleId") String sortBy) {
         
         // 使用 Sort 進行排序
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).descending());
         return articleRepository.findAll(pageable);
     }
     
-    @GetMapping("/{id}")
-    public ResponseEntity<ArticleVo> getArticleById(@PathVariable Long id) {
-        return articleService.getArticleById(id)
+    @GetMapping("/{articleId}")
+    public ResponseEntity<ArticleVo> getArticleById(@PathVariable Long articleId) {
+        return articleService.getArticleById(articleId)
                 .map(article -> ResponseEntity.ok(article))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -51,26 +51,26 @@ public class ArticleController {
         return articleService.createOrUpdateArticle(article);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ArticleVo> updateArticle(@PathVariable Long article_id, @RequestBody ArticleVo article) {
-        return articleService.getArticleById(article_id)
+    @PutMapping("/{articleId}")
+    public ResponseEntity<ArticleVo> updateArticle(@PathVariable Long articleId, @RequestBody ArticleVo article) {
+        return articleService.getArticleById(articleId)
                 .map(existingArticle -> {
-                    existingArticle.setAuthor_id(article.getAuthor_id());
+                    existingArticle.setAuthorId(article.getAuthorId());
                     existingArticle.setTitle(article.getTitle());
                     existingArticle.setContentTEXT(article.getContentTEXT());
-                    existingArticle.setPublished_at(article.getPublished_at());
-                    existingArticle.setLast_edited_at(article.getLast_edited_at());
+                    existingArticle.setPublishedAt(article.getPublishedAt());
+                    existingArticle.setLastEditedAt(article.getLastEditedAt());
                     ArticleVo updatedArticle = articleService.createOrUpdateArticle(existingArticle);
                     return ResponseEntity.ok(updatedArticle);
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteArticle(@PathVariable Long article_id) {
-        return articleService.getArticleById(article_id)
+    @DeleteMapping("/{articleId}")
+    public ResponseEntity<Void> deleteArticle(@PathVariable Long articleId) {
+        return articleService.getArticleById(articleId)
                 .map(article -> {
-                    articleService.deleteArticle(article_id);
+                    articleService.deleteArticle(articleId);
                     return ResponseEntity.ok().<Void>build();
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());

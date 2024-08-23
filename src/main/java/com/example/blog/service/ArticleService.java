@@ -20,8 +20,8 @@ public class ArticleService {
     // }
 
     //透過ID查詢文章
-    public Optional<ArticleVo> getArticleById(Long article_id) {
-        return articleRepository.findById(article_id);
+    public Optional<ArticleVo> getArticleById(Long articleId) {
+        return articleRepository.findById(articleId);
     }
 
     public List<ArticleVo> searchArticleByTitle(String title) {
@@ -33,7 +33,7 @@ public class ArticleService {
     }
     //根據ID刪除文章
 
-    public void deleteArticle(Long article_id) {
-        articleRepository.deleteById(article_id);
+    public void deleteArticle(Long articleId) {
+        articleRepository.deleteById(articleId);
     }
 }
