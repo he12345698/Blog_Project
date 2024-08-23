@@ -28,13 +28,15 @@ const ArticleEditor = () => {
         try {
             if (articleId) {
                 // 更新文章 傳入id和內容
+                console.log("updating... id="+articleId);
                 await articleService.updateArticle(articleId, articleData);
             } else {
                 // 創建新文章 只傳入內容 id自動生成
+                console.log("creating...")
                 await articleService.createArticle(articleData);
             }
             alert("文章提交成功! 將返回文章列表");
-            navigate('/all-articles'); // 成功後跳轉
+            navigate('/articlesPage'); // 成功後跳轉
         } catch (error) {
             alert("文章提交失敗! 請稍後再嘗試");
             console.error('文章提交失敗:', error);
@@ -91,7 +93,7 @@ const ArticleEditor = () => {
                         </div>
                         <div className="form-group">
                             <button type="submit">發布</button>
-                            <button type="button" onClick={() => navigate('/all_articles')}>取消</button>
+                            <button type="button" onClick={() => navigate('/articlesPage')}>取消</button>
                         </div>
                     </form>
                 </section>
