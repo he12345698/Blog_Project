@@ -7,7 +7,7 @@ import ArticlesPage from './pages/ArticlesPage';
 import Test1 from './Test1';
 import ArticleEditor from './pages/ArticleEditor';
 import './styles/App.css';
-import ForgotPasswordPage from './ForgotPasswordPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './ResetPasswordPage ';
 import Header from './components/Header';
 import Footer from './components/Footer';

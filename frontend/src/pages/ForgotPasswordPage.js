@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './ForgotPasswordPage.css'; // 引用样式文件
+import '../styles/pages/ForgotPasswordPage.css'; // 引用样式文件
 
 const ForgotPasswordPage = () => {
   const [email, setEmail] = useState('');

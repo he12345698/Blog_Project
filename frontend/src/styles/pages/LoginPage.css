@@ -4,7 +4,7 @@
     justify-content: center;
     align-items: center;
     height: 100vh; /* 確保容器高度為視口高度 */
-    background-image: url('./images/istockphoto-184948373-1024x1024.jpg'); /* 背景圖片 */
+    background-image: url('../components/images/istockphoto-184948373-1024x1024.jpg'); /* 背景圖片 */
     background-size: cover; /* 使背景圖片完全覆蓋容器，保持圖片比例 */
     background-position: center; /* 背景圖片居中對齊 */
     background-repeat: no-repeat; /* 防止背景圖片重複 */
