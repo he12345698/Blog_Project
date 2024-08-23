@@ -5,6 +5,7 @@ import LoginPage from './pages/LoginPage';
 import Register from './pages/Register';
 import ArticlesPage from './pages/ArticlesPage';
 import Test1 from './Test1';
+import ArticleEditor from './pages/ArticleEditor';
 
 import './styles/App.css';
 import Header from './components/Header';
@@ -22,7 +23,9 @@ const App = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<Register />} />
         <Route path="/test1" element={<Test1 />} />
+        <Route path='/publish-article' element={<ArticleEditor />} />
         <Route path="/articlesPage" element={<ArticlesPage />} />
+        <Route path="/edit-article/:articleId" element={<ArticleEditor />} />
         {/* 你可以在这里添加更多的路由 */}
       </Routes>
     </main>
