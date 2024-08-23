@@ -10,7 +10,8 @@ const Register = () => {
   const [rePassword, setRePassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-  const errorRef = useRef(null);
+  const [animationKey, setAnimationKey] = useState(Date.now());
+  const [countdown, setCountdown] = useState(3); // 倒數計時初始值（秒）
 
   const handlePasswordChange = (e) => {
     const newPassword = e.target.value;
@@ -41,66 +42,55 @@ const Register = () => {
       if (password !== rePassword) {
         setErrorMessage('密碼不相同');
       } else {
-        // 如果相同性檢查通過，可以清除錯誤訊息
         setErrorMessage((prev) => (prev === '密碼不相同' ? '' : prev));
       }
-    }, 750); // 設定 1 秒的延遲
+    }, 750);
   };
 
-  useEffect(() => {
-    if (errorMessage) {
-      const ref = errorRef.current;
-      if (ref) {
-        ref.classList.remove('shake');
-        // 使用 setTimeout 來強制重新應用動畫
-        setTimeout(() => ref.classList.add('shake'), 0);
-      }
+const handleSubmit = async (event) => {
+  event.preventDefault();
+  const missingFields = [];
+  if (!username) missingFields.push('用戶名');
+  if (!email) missingFields.push('電子郵件');
+  if (!password) missingFields.push('密碼');
+  if (!rePassword) missingFields.push('確認密碼');
+  // 如果有任何字段沒填寫，顯示錯誤訊息
+  if (missingFields.length > 0) {
+    setErrorMessage(`請填寫：${missingFields.join('、')}`);
+    return;
+  }
+  
+  const userData = {
+    username,
+    email,
+    password,
+  };
+  try {
+    // const response = await fetch('http://114.32.14.238:8080/blog/ac/register', {
+    const response = await fetch('http://localhost:8080/blog-0.0.1-SNAPSHOT/ac/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userData),
+    });
+    if (response.ok) {
+      const message = await response.text(); // 讀取後端返回的訊息
+      setSuccessMessage(message); // 成功訊息
+      setErrorMessage(''); // 清空錯誤訊息
+    } else {
+      const errorMessage = await response.text(); // 讀取後端返回的錯誤訊息
+      console.log('Error response:', response);
+      setSuccessMessage('');
+      setErrorMessage(errorMessage || '註冊失敗1，請重試。'); // 顯示錯誤訊息
     }
-  }, [errorMessage]);
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const missingFields = [];
-    if (!username) missingFields.push('用戶名');
-    if (!email) missingFields.push('電子郵件');
-    if (!password) missingFields.push('密碼');
-    if (!rePassword) missingFields.push('確認密碼');
-    // 如果有任何字段沒填寫，顯示錯誤訊息
-    if (missingFields.length > 0) {
-      setErrorMessage(`請填寫：${missingFields.join('、')}`);
-      return;
-    }
-
-    const userData = {
-      username,
-      email,
-      password,
-    };
-    try {
-      // const response = await fetch('http://114.32.14.238:8080/demo/ac/register', {
-      const response = await fetch('http://localhost:8080/blog-0.0.1-SNAPSHOT/ac/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-      });
-      if (response.ok) {
-        const message = await response.text(); // 讀取後端返回的訊息
-        setSuccessMessage(message); // 成功訊息
-        setErrorMessage(''); // 清空錯誤訊息
-      } else {
-        const errorMessage = await response.text(); // 讀取後端返回的錯誤訊息
-        console.log('Error response:', response);
-        setSuccessMessage('');
-        setErrorMessage(errorMessage || '註冊失敗1，請重試。'); // 顯示錯誤訊息
-      }
-    } catch (error) {
+  } catch (error) {
       console.error('Error:', error);
       setSuccessMessage('');
-      setErrorMessage('註冊失敗2，請重試。'); // 顯示錯誤訊息
+      setErrorMessage('註冊失敗，請重試。');
     }
   };
+  
 
   return (
     <div className="wrapper">
@@ -148,9 +138,16 @@ const Register = () => {
           </form>
           <div className="message-container">
             {errorMessage && (
-              <div ref={errorRef} className="error-message shake">{errorMessage}</div>
+              <p key={animationKey} className="error-message shake" style={{ whiteSpace: 'pre-line' }}>
+                {errorMessage}
+              </p>
             )}
-            <div className="succ-message">{successMessage}</div>
+            {successMessage && (
+              <div className="succ-message">
+                <p>{successMessage}</p>
+                <p>即將在 {countdown} 秒後導向至首頁...</p>
+              </div>
+            )}
           </div>
         </div>
       </main>
