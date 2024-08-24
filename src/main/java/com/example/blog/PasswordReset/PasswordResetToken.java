@@ -2,7 +2,8 @@ package com.example.blog.PasswordReset;
 
 import java.time.LocalDateTime;
 
-import com.example.blog.AccountVo;
+
+import com.example.blog.Model.AccountVo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
