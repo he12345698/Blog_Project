@@ -11,8 +11,9 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 // .allowedOrigins("http://niceblog.myvnc.com:81")
                 .allowedOrigins("http://localhost:3000")
-                .allowedMethods("*")
-                .allowCredentials(true);
+                .allowedMethods("*") // 允許的方法
+                .allowCredentials(true)
+                .allowedHeaders("Authorization", "*", "captcha");
     }
 
 
