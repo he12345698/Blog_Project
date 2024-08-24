@@ -1,4 +1,4 @@
-package com.example.blog;
+package com.example.blog.controller;
 
 import java.io.IOException;
 import java.security.Principal;
@@ -23,11 +23,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.blog.JwtUtil;
 import com.example.blog.Model.AccountVo;
 
 import com.example.blog.PasswordReset.PasswordResetToken;
 import com.example.blog.PasswordReset.PasswordResetTokenRepository;
 import com.example.blog.PasswordReset.PasswordResetTokenService;
+import com.example.blog.service.AccountService;
+import com.example.blog.service.EmailService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -43,7 +46,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 // @CrossOrigin(origins = "http://niceblog.myvnc.com:81")
-@CrossOrigin(origins = "localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/ac")
 public class AccountAction {
