@@ -1,4 +1,4 @@
-package com.example.blog;
+package com.example.blog.controller;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/ac")
 public class CaptchaController {
