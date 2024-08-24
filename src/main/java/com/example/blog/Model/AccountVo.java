@@ -18,6 +18,12 @@ public class AccountVo {
 	String imagelink;
 	private String captcha;
 	
+	@Column(name = "created_date")
+    private LocalDateTime createdDate;
+
+	@Column(name = "last_login_date")
+    private LocalDateTime lastLoginDate;
+	
 	@Column(name = "login_attempts")
     private Integer loginAttempts = 0;
 
@@ -33,7 +39,21 @@ public class AccountVo {
     @Column(name = "token_expiration")
     private LocalDateTime tokenExpiration;
     
-    
+    public LocalDateTime getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(LocalDateTime createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public LocalDateTime getLastLoginDate() {
+		return lastLoginDate;
+	}
+
+	public void setLastLoginDate(LocalDateTime lastLoginDate) {
+		this.lastLoginDate = lastLoginDate;
+	}
 	
 	public Boolean getAccountLocked() {
 		return accountLocked;
