@@ -1,7 +1,9 @@
-package com.example.blog;
+package com.example.blog.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
+
+import com.example.blog.Model.AccountVo;
 
 public interface AccountRepository extends JpaRepository<AccountVo, String> {
     // 根據用戶名查詢帳戶

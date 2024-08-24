@@ -1,4 +1,4 @@
-package com.example.blog;
+package com.example.blog.controller;
 
 import java.util.HashMap;
 
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import com.example.blog.JwtUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
 @CrossOrigin(origins = "http://localhost:3000")

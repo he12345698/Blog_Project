@@ -1,4 +1,4 @@
-package com.example.blog;
+package com.example.blog.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
@@ -6,7 +6,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import com.example.blog.AccountVo;
+import com.example.blog.Model.AccountVo;
 
 @Service
 public class EmailService {
@@ -41,7 +41,7 @@ public class EmailService {
     public void sendVerificationEmail(AccountVo vo, String token) {
         String verificationUrl = "http://niceblog.myvnc.com:81/verify?token=" + token;
         String subject = "請驗證您的電子郵件地址";
-        String content = "親愛的 " + vo.getUsername() + "，\n\n" +
+        String content = "親愛的<3 " + vo.getUsername() + "，\n\n" +
                          "請點擊以下鏈接以驗證您的電子郵件地址：\n" + verificationUrl +
                          "\n\n謝謝！";
 
