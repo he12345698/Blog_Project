@@ -5,12 +5,17 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -57,17 +62,30 @@ public class CaptchaController {
         
         HttpSession session = request.getSession();
         session.setAttribute("captcha", captcha);
-//        request.getSession().setAttribute("captcha", captcha);
-        System.out.println("set in session captcha is " + session.getAttribute("captcha"));
-        String sessionId = session.getId();
-        System.out.println("Session ID: " + sessionId);
         g.setColor(Color.BLACK);
         g.drawString(captcha, 20, 30);
-
         g.dispose();
 
         response.setContentType("image/png");
         ImageIO.write(bufferedImage, "png", response.getOutputStream());
+    }
+    
+    public ResponseEntity<Map<String, String>> validateCaptcha(@RequestBody AccountVo vo, HttpServletRequest request) {
+        HttpSession session = request.getSession(); // 从 session 中获取生成的验证码
+        String sessionCaptcha = (String) session.getAttribute("captcha");
+        String inputCaptcha = vo.getCaptcha(); // 确保 AccountVo 包含 captcha 字段
+
+        // 检查验证码是否匹配
+        if (sessionCaptcha == null || !sessionCaptcha.equalsIgnoreCase(inputCaptcha)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonMap("message", "驗證碼不正確"));
+        }
+
+        // 验证通过后清除 session 中的验证码
+        session.removeAttribute("captcha");
+
+        // 继续处理其他逻辑，例如验证用户名和密码
+        // ...
+        return ResponseEntity.ok(Collections.singletonMap("message", "驗證碼正確"));
     }
 }
 
