@@ -2,29 +2,105 @@ package com.example.blog.Model;
 
 import java.time.LocalDateTime;
 
+import org.springframework.context.annotation.Bean;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+@Entity
 public class AccountVo {
 	
+	@Id
 	String username;
 	String password;
 	String email;
-	LocalDateTime created_date;
-	LocalDateTime last_login_date;
+	String imagelink;
+	private String captcha;
 	
+	@Column(name = "created_date")
+    private LocalDateTime createdDate;
 
-	public LocalDateTime getCreated_date() {
-		return created_date;
+	@Column(name = "last_login_date")
+    private LocalDateTime lastLoginDate;
+	
+	@Column(name = "login_attempts")
+    private Integer loginAttempts = 0;
+
+    @Column(name = "account_locked")
+    private Boolean accountLocked = false;
+	
+	@Column(name = "is_verified", nullable = false)
+    private Boolean isVerified = false;
+
+    @Column(name = "verification_token", length = 255)
+    private String verificationToken;
+
+    @Column(name = "token_expiration")
+    private LocalDateTime tokenExpiration;
+    
+    public LocalDateTime getCreatedDate() {
+		return createdDate;
 	}
 
-	public void setCreated_date(LocalDateTime created_date) {
-		this.created_date = created_date;
+	public void setCreatedDate(LocalDateTime createdDate) {
+		this.createdDate = createdDate;
 	}
 
-	public LocalDateTime getLast_login_date() {
-		return last_login_date;
+	public LocalDateTime getLastLoginDate() {
+		return lastLoginDate;
 	}
 
-	public void setLast_login_date(LocalDateTime last_login_date) {
-		this.last_login_date = last_login_date;
+	public void setLastLoginDate(LocalDateTime lastLoginDate) {
+		this.lastLoginDate = lastLoginDate;
+	}
+	
+	public Boolean getAccountLocked() {
+		return accountLocked;
+	}
+
+	public void setAccountLocked(Boolean accountLocked) {
+		this.accountLocked = accountLocked;
+	}
+
+	public Integer getLoginAttempts() {
+		return loginAttempts;
+	}
+
+	public void setLoginAttempts(Integer loginAttempts) {
+		this.loginAttempts = loginAttempts;
+	}
+
+	public Boolean getIsVerified() {
+		return isVerified;
+	}
+
+	public void setIsVerified(Boolean isVerified) {
+		this.isVerified = isVerified;
+	}
+
+	public String getVerificationToken() {
+		return verificationToken;
+	}
+
+	public void setVerificationToken(String verificationToken) {
+		this.verificationToken = verificationToken;
+	}
+
+	public LocalDateTime getTokenExpiration() {
+		return tokenExpiration;
+	}
+
+	public void setTokenExpiration(LocalDateTime tokenExpiration) {
+		this.tokenExpiration = tokenExpiration;
+	}
+
+	public String getCaptcha() {
+		return captcha;
+	}
+
+	public void setCaptcha(String captcha) {
+		this.captcha = captcha;
 	}
 
 	public String getUsername() {
@@ -42,13 +118,21 @@ public class AccountVo {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
+	
 	public String getEmail() {
 		return email;
 	}
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	
+	public String getImagelink() {
+		return imagelink;
+	}
+
+	public void setImagelink(String imagelink) {
+		this.imagelink = imagelink;
 	}
 	
 	@Override
