@@ -103,22 +103,14 @@ const LoginPage = () => {
 
       
       if (response.ok) {
-        // const data = await response.json();
-        // localStorage.setItem('token', data.token);
-        const token = response.headers.get('Authorization');
-
-        // 檢查 token 是否存在
-        if (token) {
-            // 將 'Bearer ' 前綴去除，僅存儲 token
-            const tokenWithoutBearer = token.replace('Bearer ', '');
-            localStorage.setItem('token', tokenWithoutBearer);
-            navigate('/');
-        } else {
-          const error = await response.json();
-          setErrorMessage(error.message || '登入失敗，請重試。');
-          // 失敗後刷新驗證碼
-          loadCaptcha();
-        }
+        const data = await response.json();
+        localStorage.setItem('token', data.token);
+        navigate('/');
+      } else {
+        const error = await response.json();
+        setErrorMessage(error.message || '登入失敗，請重試。');
+        // 失敗後刷新驗證碼
+        loadCaptcha();
       }
     } catch (error) {
       console.error('Error:', error);

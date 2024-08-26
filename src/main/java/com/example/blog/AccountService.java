@@ -19,9 +19,6 @@ public class AccountService {
     @Autowired
     private EmailService emailService;
     
-//    @Autowired
-//    private PasswordEncoder passwordEncoder; // 用於密碼加密和比對
-    
     // 檢查用戶名是否已存在
     public boolean checkId(String username) {
         return accountRepository.findByUsername(username).isPresent();
@@ -163,6 +160,5 @@ public class AccountService {
 		// TODO Auto-generated method stub
 		return null;
 	}
-    
     
 }
