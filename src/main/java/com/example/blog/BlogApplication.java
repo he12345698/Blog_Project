@@ -2,8 +2,10 @@ package com.example.blog;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
+@EnableJpaAuditing // 啟用 JPA 審計功能
 public class BlogApplication {
 
 	public static void main(String[] args) {

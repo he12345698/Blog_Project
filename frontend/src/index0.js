@@ -5,49 +5,80 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 
 const Index = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const [username, setUsername] = useState('');
   const [userImage, setUserImage] = useState('');
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+  const notifyLogout = async () => {
+    try {
+      // await fetch('http://192.168.50.38:8080/blog/ac/logout-notify', {
+      await fetch('http://localhost:8080/blog-0.0.1-SNAPSHOT/ac/logout-notify', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${window.localStorage.getItem('token')}`, // 如果需要
+        },
+        body: JSON.stringify({
+          username: username,
+        }),
+      });
+    } catch (error) {
+      console.error('登出通知失败:', error);
+    }
+  };
+
+  const handleLogout = () => {
+    notifyLogout(); 
+    // 处理登出逻辑，例如清除本地存储的 token，重定向到登录页面等
+    window.localStorage.removeItem('token');
+    //setUsername('未登入');
+    setTimeout(() => {
+      window.location.href = '/';
+    }, 100);
+  };
   
   // 獲取用戶信息
   useEffect(() => {
     const fetchUserInfo = async () => {
-      try {
-        // const response = await fetch('http://114.32.14.238:8080/demo/ac/session', {
-          const response = await fetch('http://localhost:8080/blog-0.0.1-SNAPSHOT/ac/session', {
-          method: 'GET',
-          credentials: 'include', // 確保請求攜帶 Session
-          headers: {
-            'Content-Type': 'application/json',
-        },
-        });
+      const token = localStorage.getItem('token');
+      // console.log('Request Headers:', {
+      //   'Authorization': `Bearer ${token}` 
+      // });
+      if(token) {
+        try {
+          const response = await fetch('http://localhost:8080/blog-0.0.1-SNAPSHOT/api/protected-endpoint', {
+              method: 'GET',
+              headers: {
+                  'Authorization': `Bearer ${token}`
+              }
+          });
 
-            if (response.ok) {
-                const data = await response.json();
-                console.log(data)
-                setUsername(data.username || 'Guest1');
-                setUserImage(data.userImage || '/Image/default-avatar.jpg'); // 默认头像
-            } else {
-                console.log('Response error:', response);
-                setUsername('Guest2');
-                setUserImage('/Image/default-avatar.jpg'); // 默认头像
-            }
+          if (response.ok) {
+              const data = await response.json();
+              console.log('geust is ' + data.username)
+              console.log('userimage ' + data.userImage)
+              setUsername(data.username || '訪客1');
+              setUserImage(data.userImage || '/Image/GG'); // 默认头像
+          } else {
+              console.log('Response error:', response);
+              //setUsername('訪客2');
+              //setUserImage('/Image/default-avatar.jpg'); // 默认头像
+          }
         } catch (error) {
             console.error('Error:', error);
             setUsername('Error');
-            setUserImage('/Image/default-avatar.jpg'); // 默认头像
+            setUserImage('/Image/GG'); // 默认头像
         }
+      }
+        
     };
 
     fetchUserInfo();
-}, []);
+  }, []);
 
   return (
     <div className="wrapper">
-      <Header username={username} userImage={userImage} />
+      <Header username={username} userImage={userImage} onLogout={handleLogout}/>
       <main className="content">
         <div className="container">
           <div className="search-bar">
@@ -85,33 +116,7 @@ const Index = () => {
           </Link>
         </div>
       </main>
-
-      <footer className="footer">
-        <div className="footer-container">
-          <p>&copy; 2024 xxx部落格 版權所有.</p>
-        </div>
-      </footer>
-
-      {/* Modal */}
-      {isModalOpen && (
-        <div id="loginModal" className="modal" onClick={closeModal}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <span className="close" onClick={closeModal}>&times;</span>
-            <h2>登入</h2>
-            <form id="loginForm">
-              <label htmlFor="username">使用者名稱:</label>
-              <input type="text" id="username" name="username" required /><br />
-              <label htmlFor="password">密碼:</label>
-              <input type="password" id="password" name="password" required /><br />
-              <button type="submit">登入</button>
-            </form>
-            <a>還沒有帳號?</a>
-            <Link to="/register">
-              <a>註冊</a>
-            </Link>
-          </div>
-        </div>
-      )}
+      <Footer />
     </div>
   );
 };
