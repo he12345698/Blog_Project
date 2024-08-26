@@ -10,6 +10,7 @@ const articles = [
     { title: '文章標題 3', url: 'article3-url', description: '文章摘要或簡短描述 3' },
 ];
 
+
 const UserData = () => {
 
     return (
@@ -19,13 +20,13 @@ const UserData = () => {
                 <div className={styles.profile_container}>
                     <div className={styles.grid_container}>
                         <div className={styles.profile}>
-                        <UserProfile />
+                        <UserProfile userId={8}/>
                         </div>
                         <div className={styles.avatar}>
                         <UserAvatar />
                         </div>
                         <div className={styles.full_width}>
-                            <UserArticles articles={articles} />
+                            {/* <UserArticles articles={articles} /> */}
                         </div>
                     </div>
                 </div>
