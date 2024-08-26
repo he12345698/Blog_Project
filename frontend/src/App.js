@@ -18,7 +18,6 @@ const App = () => {
   return (
     <Router>
       <Header />
-      <SearchBar />
     <main>
       <Routes>
         <Route path="/" element={<Index />} />
