@@ -1,8 +1,14 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from "../styles/components/UserAvatar.module.css";
+import UploadAvatar from './UploadAvater';
 //用來顯示和更新用戶頭像
 
-const UserAvatar = () => {
+const UserAvatar = ({ userId }) => {
+
+    const [avatar, setAvatar] = useState({
+        imagelink:'',
+    });
+
     return (
         <div className={`${styles.profile_picture_wrapper} text-center`}>
             <label className={`${styles.avatarName} form_label d_block`}>我的頭像</label>
@@ -15,6 +21,7 @@ const UserAvatar = () => {
                 />
             </div>
             <button type="button" className={`btn btn-dark ${styles.photo}`}>更新頭像</button>
+            <UploadAvatar avatar={avatar} setAvatar={setAvatar} />
         </div>
     );
 }
