@@ -11,7 +11,7 @@ const OnePage = () => {
         const fetchData = async () => {
             try {
                 // 取得文章資料
-                const articleResponse = await fetch(`/api/articles/${id}`);
+                const articleResponse = await fetch(`http://localhost:8080/blog/api/articles/${id}`);
                 if (!articleResponse.ok) {
                     throw new Error('Network response was not ok');
                 }
@@ -20,7 +20,7 @@ const OnePage = () => {
                 setArticle(articleData);
 
                 // 取得評論資料
-                const commentsResponse = await fetch(`/api/comments/${id}`);
+                const commentsResponse = await fetch(`http://localhost:8080/blog/api/comments/${id}`);
                 if (!commentsResponse.ok) {
                     throw new Error('Network response was not ok');
                 }
