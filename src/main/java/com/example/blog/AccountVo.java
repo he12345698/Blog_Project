@@ -153,14 +153,4 @@ public class AccountVo {
 	public String toString() {
 		return "PersonVo [id = " + username + ", paswd = " + password + ", email = " + email + "]" + "\n";
 	}
-
-	public boolean isPresent() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public AccountVo get() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

@@ -144,12 +144,25 @@ public class AccountAction {
     public String resetPassword(@RequestParam("token") String token, @RequestParam("newPassword") String newPassword) {
         PasswordResetToken resetToken = prts.validatePasswordResetToken(token);
         if (resetToken == null) {
-            return "失效或過期的憑證";
+            return "Invalid or expired token";
         }
-
-        accountService.changePassword(resetToken.getVo(), newPassword);
-        
+        AccountVo vo = resetToken.getVo();
+        changePassword(vo, newPassword);
+        System.out.println("new passord is " + newPassword);
         return "Password reset successfully";
+    }
+    
+    public void changePassword(AccountVo vo, String newPassword) {
+        // 更新密码的 SQL 语句
+        String sql = "UPDATE account_vo SET password = ? WHERE username = ?";
+
+        // 执行更新操作
+        int rowsAffected = jdbcTemplate.update(sql, newPassword, vo.getUsername());
+
+        // 检查是否成功更新
+        if (rowsAffected == 0) {
+            throw new RuntimeException("用户不存在或更新失败");
+        }
     }
 
     @PostMapping("/logout-notify")
@@ -161,15 +174,22 @@ public class AccountAction {
 
         return ResponseEntity.ok("登出通知接收成功");
     }
-    
-    @GetMapping("/verify-email")
-    public ResponseEntity<Map<String, String>> verifyAccount(@RequestParam("token") String token) {
-        String message = emailService.verifyEmail(token);
-
-        if (message.equals("無效的驗證鏈接") || message.equals("驗證鏈接已過期")) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("message", message));
+  
+    public AccountVo findAccountVoByEmail(String email) {
+        String sql = "SELECT * FROM account_vo WHERE email = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql, new Object[]{email}, (rs, rowNum) -> {
+                AccountVo accountVo = new AccountVo();
+                accountVo.setUsername(rs.getString("username"));
+                accountVo.setPassword(rs.getString("password"));
+                accountVo.setEmail(rs.getString("email"));
+                accountVo.setImagelink(rs.getString("imagelink"));
+                return accountVo;
+            });
+        } catch (EmptyResultDataAccessException e) {
+            // 如果結果為空，則返回 null 或者處理不存在的情況
+            return null;
         }
-
-        return ResponseEntity.ok(Collections.singletonMap("message", message));
     }
+    
 }

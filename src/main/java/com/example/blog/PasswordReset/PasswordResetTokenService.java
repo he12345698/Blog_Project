@@ -37,7 +37,10 @@ public class PasswordResetTokenService {
 
     public PasswordResetToken validatePasswordResetToken(String token) {
         PasswordResetToken resetToken = tokenRepository.findByToken(token);
-
+        System.out.println("Token ?? " + token);
+        System.out.println("resetToken ?? " + resetToken.getExpiryDate());
+        System.out.println("LocalDateTime.now ?? " + LocalDateTime.now());
+        System.out.println("token is before ?? " + resetToken.getExpiryDate().isBefore(LocalDateTime.now()));
         if (resetToken == null || resetToken.getExpiryDate().isBefore(LocalDateTime.now())) {
 
             return null; // 令牌無效或過期

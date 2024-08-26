@@ -7,7 +7,6 @@ import Test1 from './Test1';
 import './App.css';
 import ForgotPasswordPage from './ForgotPasswordPage';
 import ResetPasswordPage from './ResetPasswordPage ';
-import EmailVerificationPage from './EmailVerificationPage';
 
 const App = () => {
   return (
@@ -19,7 +18,6 @@ const App = () => {
         <Route path="/test1" element={<Test1 />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
-        <Route path="/verify-email" element={<EmailVerificationPage />} />
         {/* 你可以在这里添加更多的路由 */}
       </Routes>
     </Router>
