@@ -1,0 +1,89 @@
+/* styles/pages/ArticlePage.css */
+.container {
+    margin-top: 20px;
+}
+
+.search-bar {
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.article-content {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.article-title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.article-text {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+.like-section {
+    margin-bottom: 20px;
+}
+
+.article-meta {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-bottom: 20px;
+}
+
+.return-to-list {
+    text-align: right;
+}
+
+.comments-section {
+    margin-top: 40px;
+}
+
+.comment {
+    border-top: 1px solid #dee2e6;
+    padding-top: 10px;
+    margin-top: 10px;
+}
+
+.comment-author {
+    font-weight: bold;
+}
+
+.comment-meta {
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+.comment-avatar {
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.comment-like-section {
+    text-align: right;
+    margin-top: 10px;
+}
+
+.comment-actions .btn {
+    margin-right: 5px;
+}
+.comment {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+}
+.comment-avatar {
+    border-radius: 50%;
+    margin-right: 10px;
+}
+.btn:hover {
+    background-color: #ff5722;
+    color: #fff;
+}
+
