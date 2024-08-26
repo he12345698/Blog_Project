@@ -1,5 +1,8 @@
 package com.example.blog;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
@@ -12,6 +15,9 @@ import com.example.blog.AccountVo;
 public class EmailService {
 	@Autowired
     private final JavaMailSender mailSender;
+    
+    @Autowired
+    private AccountRepository accountRepository;
 
     @Autowired
     public EmailService(JavaMailSender mailSender) {
@@ -39,7 +45,7 @@ public class EmailService {
     }
     
     public void sendVerificationEmail(AccountVo vo, String token) {
-        String verificationUrl = "http://niceblog.myvnc.com:81/verify?token=" + token;
+        String verificationUrl = "http://niceblog.myvnc.com:81/verify-email?token=" + token;
         String subject = "請驗證您的電子郵件地址";
         String content = "親愛的 " + vo.getUsername() + "，\n\n" +
                          "請點擊以下鏈接以驗證您的電子郵件地址：\n" + verificationUrl +
@@ -51,6 +57,27 @@ public class EmailService {
         message.setText(content);
 
         mailSender.send(message);
+    }
+    
+    public String verifyEmail(String token) {
+        Optional<AccountVo> vo = accountRepository.findByVerificationToken(token);
+
+        if (!vo.isPresent()) {
+            return "無效的驗證鏈接";
+        }
+
+        AccountVo account = vo.get();
+
+        if (account.getTokenExpiration().isBefore(LocalDateTime.now())) {
+            return "驗證鏈接已過期";
+        }
+
+        account.setIsVerified(true);
+        account.setVerificationToken(null);  // 清除 token
+        account.setTokenExpiration(null);
+        accountRepository.save(account);
+
+        return "您的帳號已成功驗證";
     }
     
 }
