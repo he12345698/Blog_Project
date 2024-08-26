@@ -10,7 +10,7 @@ import com.example.blog.AccountVo;
 
 @Service
 public class EmailService {
-
+	@Autowired
     private final JavaMailSender mailSender;
 
     @Autowired
