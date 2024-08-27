@@ -2,26 +2,39 @@ package com.example.blog.Model;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Table;
 import org.springframework.context.annotation.Bean;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
+@Table(name = "account_vo")
 public class AccountVo {
 	
 	@Id
-	String username;
-	String password;
-	String email;
-	String imagelink;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;  // 新增一个唯一的ID欄位
+
+	@Column(unique = true)
+	private String username;
+	
+	private String password;
+	private String email;
+	private String imagelink;
 	private String captcha;
 	
 	@Column(name = "created_date")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdDate;
 
 	@Column(name = "last_login_date")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime lastLoginDate;
 	
 	@Column(name = "login_attempts")

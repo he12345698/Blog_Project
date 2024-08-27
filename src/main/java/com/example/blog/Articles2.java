@@ -1,36 +1,58 @@
 package com.example.blog;
 
+import java.time.LocalDateTime;
+
+import com.example.blog.Model.AccountVo;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 // 註解為 JPA 實體類別，對應到資料庫中的 article 表
 @Entity
-@Table(name = "Articles2")
+@Table(name = "articles2")
 public class Articles2 {
 
     // 設定主鍵，並指定自動生成策略為自增
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long article_id;
+    private Long id;
 
-    // 文章標題s
+    // 文章標題
+    @Column(name = "title", length = 255, nullable = true)
     private String title;
 
     // 文章內容
-    private String contentTEXT;
+    @Column(name = "content_text", length = 255, nullable = true)
+    private String content_text;
 
     // 文章作者
-    private String author_id;
+    @ManyToOne
+    @JoinColumn(name = "author_id",referencedColumnName = "id")
+    private AccountVo accountVo;
 
-    public Long getArticle_id() {
-        return article_id;
+    // 發表時間
+    @Column(name = "publishedDate")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime publishedDate;
+
+    // 最後編輯日期
+    @Column(name = "lastEditedDate")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime lastEditedDate;
+
+    public Long getId() {
+        return id;
     }
 
-    public void setArticle_id(Long article_id) {
-        this.article_id = article_id;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -41,29 +63,38 @@ public class Articles2 {
         this.title = title;
     }
 
-    public String getContentTEXT() {
-        return contentTEXT;
+    public String getContent_text() {
+        return content_text;
     }
 
-    public void setContentTEXT(String contentTEXT) {
-        this.contentTEXT = contentTEXT;
+    public void setContent_text(String contentText) {
+        this.content_text = contentText;
     }
 
-    public String getAuthor_id() {
-        return author_id;
+    public AccountVo getAccountVo() {
+        return accountVo;
     }
 
-    public void setAuthor_id(String author_id) {
-        this.author_id = author_id;
+    public void setAccountVo(AccountVo accountVo) {
+        this.accountVo = accountVo;
     }
 
-    // 文章標籤，以逗號分隔的標籤字串
-    //private String tags;
+    public LocalDateTime getPublishedDate() {
+        return publishedDate;
+    }
 
-    // 文章點讚數
-    //private int likesCount;
+    public void setPublishedDate(LocalDateTime publishedDate) {
+        this.publishedDate = publishedDate;
+    }
 
-    // Getter 和 Setter 方法
+    public LocalDateTime getLastEditedDate() {
+        return lastEditedDate;
+    }
+
+    public void setLastEditedDate(LocalDateTime lastEditedDate) {
+        this.lastEditedDate = lastEditedDate;
+    }
+
 
 }
    

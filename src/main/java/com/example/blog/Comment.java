@@ -13,10 +13,6 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    // 文章ID，表示這條評論所屬的文章
-    private Long articleId;
-
     // 評論內容
     private String content;
 
@@ -35,13 +31,6 @@ public class Comment {
         this.id = id;
     }
 
-    public Long getArticleId() {
-        return articleId;
-    }
-
-    public void setArticleId(Long articleId) {
-        this.articleId = articleId;
-    }
 
     public String getContent() {
         return content;

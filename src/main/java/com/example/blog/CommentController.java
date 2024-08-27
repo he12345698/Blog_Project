@@ -1,7 +1,12 @@
 package com.example.blog;
 
 import java.util.List;
+
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,10 +22,14 @@ public class CommentController {
     @Autowired
     private CommentService commentService; // 注入 CommentService 服務
 
-    @GetMapping("/{articleId}")
-    public List<Comment> getCommentsByArticleId(@PathVariable Long articleId) {
-        // 根據文章 ID 獲取所有相關評論
-        return commentService.getCommentsByArticleId(articleId);
+    @GetMapping("/{id}")
+    public ResponseEntity<Comment> getCommentsById(@PathVariable(value="id") Long id) {
+        Comment comment =commentService.getCommentById(id);
+        if (comment!=null) {
+    return  ResponseEntity.ok(comment);          
+        }else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @PostMapping

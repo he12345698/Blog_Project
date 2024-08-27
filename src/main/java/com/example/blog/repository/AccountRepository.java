@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import com.example.blog.Model.AccountVo;
 
-public interface AccountRepository extends JpaRepository<AccountVo, String> {
+public interface AccountRepository extends JpaRepository<AccountVo, Long> {
     // 根據用戶名查詢帳戶
     Optional<AccountVo> findByUsername(String username);
     

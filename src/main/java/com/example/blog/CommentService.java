@@ -1,6 +1,8 @@
 package com.example.blog;
 
 import java.util.List;
+
+import org.apache.el.stream.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -8,12 +10,13 @@ import org.springframework.stereotype.Service;
 public class CommentService {
 
     @Autowired
-    private CommentRepository commentRepository; // 注入 CommentRepository，用於數據操作
+    private CommentRepository commentRepository;
 
-    // 根據文章 ID 獲取所有相關評論
-    public List<Comment> getCommentsByArticleId(Long articleId) {
-        return commentRepository.findByArticleId(articleId);
+    
+    public Comment getCommentById(Long id){
+        return commentRepository.findById(id).orElse(null);
     }
+    
 
     // 保存新評論到數據庫
     public Comment saveComment(Comment comment) {
