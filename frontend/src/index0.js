@@ -6,79 +6,9 @@ import Footer from './components/Footer';
 
 const Index = () => {
 
-  const [username, setUsername] = useState('');
-  const [userImage, setUserImage] = useState('');
-
-  const notifyLogout = async () => {
-    try {
-      // await fetch('http://192.168.50.38:8080/blog/ac/logout-notify', {
-      await fetch('http://localhost:8080/blog-0.0.1-SNAPSHOT/ac/logout-notify', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${window.localStorage.getItem('token')}`, // 如果需要
-        },
-        body: JSON.stringify({
-          username: username,
-        }),
-      });
-    } catch (error) {
-      console.error('登出通知失败:', error);
-    }
-  };
-
-  const handleLogout = () => {
-    notifyLogout(); 
-    // 处理登出逻辑，例如清除本地存储的 token，重定向到登录页面等
-    window.localStorage.removeItem('token');
-    //setUsername('未登入');
-    setTimeout(() => {
-      window.location.href = '/';
-    }, 100);
-  };
-  
-  // 獲取用戶信息
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      const token = localStorage.getItem('token');
-      // console.log('Request Headers:', {
-      //   'Authorization': `Bearer ${token}` 
-      // });
-      if(token) {
-        try {
-          const response = await fetch('http://localhost:8080/blog-0.0.1-SNAPSHOT/api/protected-endpoint', {
-              method: 'GET',
-              headers: {
-                  'Authorization': `Bearer ${token}`
-              }
-          });
-
-          if (response.ok) {
-              const data = await response.json();
-              console.log('geust is ' + data.username)
-              console.log('userimage ' + data.userImage)
-              setUsername(data.username || '訪客1');
-              setUserImage(data.userImage || '/Image/GG'); // 默认头像
-          } else {
-              console.log('Response error:', response);
-              //setUsername('訪客2');
-              //setUserImage('/Image/default-avatar.jpg'); // 默认头像
-          }
-        } catch (error) {
-            console.error('Error:', error);
-            setUsername('Error');
-            setUserImage('/Image/GG'); // 默认头像
-        }
-      }
-        
-    };
-
-    fetchUserInfo();
-  }, []);
-
   return (
     <div className="wrapper">
-      <Header username={username} userImage={userImage} onLogout={handleLogout}/>
+      {/* <Header username={username} userImage={userImage} onLogout={handleLogout}/> */}
       <main className="content">
         <div className="container">
           <div className="search-bar">

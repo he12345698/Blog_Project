@@ -1,8 +1,11 @@
-package com.example.blog;
+package com.example.blog.service;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.example.blog.Model.Comment;
+import com.example.blog.Repository.CommentRepository;
 
 @Service // 標註此類別為 Spring 的服務層組件
 public class CommentService {

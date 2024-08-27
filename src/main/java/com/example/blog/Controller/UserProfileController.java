@@ -1,4 +1,4 @@
-package com.example.blog.controller;
+package com.example.blog.Controller;
 
 import java.util.Date;
 import java.util.Map;
@@ -28,8 +28,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
-// @CrossOrigin(origins = "http://niceblog.myvnc.com:81")
-@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api/userProfile")
 public class UserProfileController {
 

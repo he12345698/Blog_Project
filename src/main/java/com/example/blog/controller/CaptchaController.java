@@ -1,4 +1,4 @@
-package com.example.blog.controller;
+package com.example.blog.Controller;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -24,7 +24,7 @@ import com.example.blog.Model.AccountVo;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-@CrossOrigin(origins = "http://localhost:3000")
+
 @RestController
 @RequestMapping("/ac")
 public class CaptchaController {
@@ -76,7 +76,6 @@ public class CaptchaController {
         HttpSession session = request.getSession(); // 从 session 中获取生成的验证码
         String sessionCaptcha = (String) session.getAttribute("captcha");
         String inputCaptcha = vo.getCaptcha(); // 确保 AccountVo 包含 captcha 字段
-
         // 检查验证码是否匹配
         if (sessionCaptcha == null || !sessionCaptcha.equalsIgnoreCase(inputCaptcha)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonMap("message", "驗證碼不正確"));
@@ -85,8 +84,6 @@ public class CaptchaController {
         // 验证通过后清除 session 中的验证码
         session.removeAttribute("captcha");
 
-        // 继续处理其他逻辑，例如验证用户名和密码
-        // ...
         return ResponseEntity.ok(Collections.singletonMap("message", "驗證碼正確"));
     }
 }

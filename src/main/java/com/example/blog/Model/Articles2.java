@@ -1,8 +1,7 @@
-package com.example.blog;
+package com.example.blog.Model;
 
 import java.time.LocalDateTime;
 
-import com.example.blog.Model.AccountVo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Column;

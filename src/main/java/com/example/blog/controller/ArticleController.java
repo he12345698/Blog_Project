@@ -1,7 +1,9 @@
-package com.example.blog.controller;
+package com.example.blog.Controller;
 
 import com.example.blog.Model.ArticleVo;
-import com.example.blog.repository.ArticleRepository;
+
+
+import com.example.blog.Repository.ArticleRepository;
 import com.example.blog.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-@CrossOrigin(origins = "http://localhost:3000")
+
 @RestController
 @RequestMapping("/api/articles")
 public class ArticleController {
