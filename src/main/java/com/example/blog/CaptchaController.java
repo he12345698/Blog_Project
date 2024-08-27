@@ -23,6 +23,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+@CrossOrigin(origins = "http://niceblog.myvnc.com:81")
 @RestController
 @RequestMapping("/ac")
 public class CaptchaController {
@@ -61,6 +62,7 @@ public class CaptchaController {
         }
         
         HttpSession session = request.getSession();
+        System.out.println("Session ID: " + session.getId());
         session.setAttribute("captcha", captcha);
         g.setColor(Color.BLACK);
         g.drawString(captcha, 20, 30);
@@ -74,7 +76,9 @@ public class CaptchaController {
         HttpSession session = request.getSession(); // 从 session 中获取生成的验证码
         String sessionCaptcha = (String) session.getAttribute("captcha");
         String inputCaptcha = vo.getCaptcha(); // 确保 AccountVo 包含 captcha 字段
-
+        System.out.println("session is " + session);
+        System.out.println("sessionCaptcha is " + sessionCaptcha);
+        System.out.println("inputCaptcha is " + inputCaptcha);
         // 检查验证码是否匹配
         if (sessionCaptcha == null || !sessionCaptcha.equalsIgnoreCase(inputCaptcha)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonMap("message", "驗證碼不正確"));
