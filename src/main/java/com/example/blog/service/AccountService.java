@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.example.blog.Model.AccountVo;
-import com.example.blog.repository.AccountRepository;
+import com.example.blog.Repository.AccountRepository;
 
 @Service
 public class AccountService {
