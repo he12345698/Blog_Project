@@ -20,7 +20,7 @@ const UserData = () => {
                 <div className={styles.profile_container}>
                     <div className={styles.grid_container}>
                         <div className={styles.profile}>
-                        <UserProfile userId={8}/>
+                        <UserProfile userId={4}/>
                         </div>
                         <div className={styles.avatar}>
                         <UserAvatar />
