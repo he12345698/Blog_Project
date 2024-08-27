@@ -50,7 +50,17 @@ public class AccountVo {
     @Column(name = "token_expiration")
     private LocalDateTime tokenExpiration;
     
-    public LocalDateTime getCreatedDate() {
+    
+    
+    public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public LocalDateTime getCreatedDate() {
 		return createdDate;
 	}
 
