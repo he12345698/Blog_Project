@@ -1,7 +1,10 @@
-package com.example.blog;
+package com.example.blog.Repository;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.example.blog.Model.Comment;
+
 import java.util.List;
 
 // CommentRepository 介面繼承自 JpaRepository，用於執行 Comment 實體的數據存取操作

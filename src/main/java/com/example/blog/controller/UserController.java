@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.blog.JwtUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
-@CrossOrigin(origins = "http://localhost:3000")
+
 @RestController
 @RequestMapping("/api")
 public class UserController {

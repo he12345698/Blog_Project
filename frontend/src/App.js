@@ -14,6 +14,7 @@ import ResetPasswordPage from './ResetPasswordPage ';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import SearchBar from './components/SearchBar';
+import EmailVerificationPage from './pages/EmailVerificationPage';
 
 const App = () => {
   return (
@@ -32,6 +33,7 @@ const App = () => {
         <Route path="/UserData" element={<UserData />} />
         <Route path="/onePage/:id" element={<OnePage />} /> 
         <Route path="/edit-article/:articleId" element={<ArticleEditor />} />
+        <Route path="/verify-email" element={<EmailVerificationPage />} />
         {/* 你可以在这里添加更多的路由 */}
       </Routes>
     </main>

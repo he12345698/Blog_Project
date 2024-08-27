@@ -30,6 +30,7 @@ import com.example.blog.Model.AccountVo;
 import com.example.blog.PasswordReset.PasswordResetToken;
 import com.example.blog.PasswordReset.PasswordResetTokenRepository;
 import com.example.blog.PasswordReset.PasswordResetTokenService;
+import com.example.blog.Repository.AccountRepository;
 import com.example.blog.service.AccountService;
 import com.example.blog.service.EmailService;
 
@@ -46,8 +47,6 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-// @CrossOrigin(origins = "http://niceblog.myvnc.com:81")
-@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/ac")
 public class AccountAction {

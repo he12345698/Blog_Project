@@ -1,4 +1,4 @@
-package com.example.blog;
+package com.example.blog.Model;
 
 public class Article2Vo {
     Long article_id;

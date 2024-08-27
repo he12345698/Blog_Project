@@ -80,10 +80,11 @@ public class AccountService {
     public boolean insertUser(AccountVo vo) {
         try {
             String token = setVerificationToken(vo);
-            vo.setLastLoginDate(LocalDateTime.now()); //設置註冊日期
+            vo.setCreatedDate(LocalDateTime.now()); //設置註冊日期
+            
             // 發送郵件
             emailService.sendVerificationEmail(vo, token);
-            
+            accountRepository.save(vo);
             return true;
         } catch (Exception e) {
         	

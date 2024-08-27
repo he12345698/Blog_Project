@@ -66,8 +66,8 @@ const handleSubmit = async (event) => {
     password,
   };
   try {
-    // const response = await fetch('http://114.32.14.238:8080/blog/ac/register', {
-    const response = await fetch('http://localhost:8080/blog-0.0.1-SNAPSHOT/ac/register', {
+    const response = await fetch('http://niceblog.myvnc.com:8080/blog/ac/register', {
+    //const response = await fetch('http://localhost:8080/blog-0.0.1-SNAPSHOT/ac/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -75,14 +75,25 @@ const handleSubmit = async (event) => {
       body: JSON.stringify(userData),
     });
     if (response.ok) {
-      const message = await response.text(); // 讀取後端返回的訊息
-      setSuccessMessage(message); // 成功訊息
-      setErrorMessage(''); // 清空錯誤訊息
+      const message = await response.text(); 
+      console.log(message);
+      setSuccessMessage(message);
+      setErrorMessage('');
+
+      const timer = setInterval(() => {
+        setCountdown((prevCountdown) => {
+          if (prevCountdown <= 1) {
+            clearInterval(timer);
+            window.location.href = `/login?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
+          }
+          return prevCountdown - 1;
+        });
+      }, 1000);
+
     } else {
-      const errorMessage = await response.text(); // 讀取後端返回的錯誤訊息
-      console.log('Error response:', response);
+      const errorMessage = await response.text();
       setSuccessMessage('');
-      setErrorMessage(errorMessage || '註冊失敗1，請重試。'); // 顯示錯誤訊息
+      setErrorMessage(errorMessage || '註冊失敗，請重試。');
     }
   } catch (error) {
       console.error('Error:', error);

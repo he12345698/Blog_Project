@@ -10,6 +10,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import com.example.blog.Model.AccountVo;
+import com.example.blog.Repository.AccountRepository;
 
 @Service
 public class EmailService {
@@ -30,8 +31,8 @@ public class EmailService {
     }
 
     public void sendResetPasswordEmail(AccountVo vo, String token) {
-        // String resetLink = "http://niceblog.myvnc.com:81/reset-password?token=" + token;
-        String resetLink = "http://localhost:3000/reset-password?token=" + token;
+        String resetLink = "http://niceblog.myvnc.com:81/reset-password?token=" + token;
+        //String resetLink = "http://localhost:3000/reset-password?token=" + token;
         SimpleMailMessage message = new SimpleMailMessage();
 
         message.setTo(vo.getEmail());
