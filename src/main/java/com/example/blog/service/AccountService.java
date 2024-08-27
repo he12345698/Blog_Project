@@ -1,4 +1,4 @@
-package com.example.blog.service;
+package com.example.blog.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.example.blog.Model.AccountVo;
-import com.example.blog.repository.AccountRepository;
+import com.example.blog.Repository.AccountRepository;
 
 @Service
 public class AccountService {

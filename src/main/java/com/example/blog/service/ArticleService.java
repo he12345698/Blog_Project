@@ -1,7 +1,8 @@
-package com.example.blog.service;
+package com.example.blog.Service;
 
 import com.example.blog.Model.ArticleVo;
-import com.example.blog.repository.ArticleRepository;
+import com.example.blog.Repository.ArticleRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;

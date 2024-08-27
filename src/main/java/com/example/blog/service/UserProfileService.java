@@ -1,4 +1,4 @@
-package com.example.blog.service;
+package com.example.blog.Service;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.blog.Model.AccountVo;
-import com.example.blog.repository.UserProfileRepository;
+import com.example.blog.Repository.UserProfileRepository;
 
 @Service
 public class UserProfileService {

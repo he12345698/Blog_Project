@@ -1,4 +1,4 @@
-package com.example.blog.repository;
+package com.example.blog.Repository;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package com.example.blog.controller;
+package com.example.blog.Controller;
 
 import java.io.IOException;
 import java.security.Principal;
@@ -29,8 +29,8 @@ import com.example.blog.Model.AccountVo;
 import com.example.blog.PasswordReset.PasswordResetToken;
 import com.example.blog.PasswordReset.PasswordResetTokenRepository;
 import com.example.blog.PasswordReset.PasswordResetTokenService;
-import com.example.blog.service.AccountService;
-import com.example.blog.service.EmailService;
+import com.example.blog.Service.AccountService;
+import com.example.blog.Service.EmailService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
