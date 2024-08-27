@@ -17,7 +17,7 @@ public class WebConfig implements WebMvcConfigurer {
                 //.allowedOrigins("http://localhost:3000")
                 .allowedMethods("*") // 允許的方法
                 .allowCredentials(true)
-                .allowedHeaders("Authorization", "*", "captcha");
+                .allowedHeaders("*");
     }
 
 

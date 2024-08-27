@@ -26,6 +26,7 @@ public class UserController {
             String token = authHeader.replace("Bearer ", "").trim();
             String username = JwtUtil.extractUsername(token);
             String userImage = JwtUtil.extractImageLink(token);
+            System.out.println("username is " + username);
 
             if (username == null || !JwtUtil.validateToken(token, username)) {
                 Map<String, String> responseBody = new HashMap<>();
