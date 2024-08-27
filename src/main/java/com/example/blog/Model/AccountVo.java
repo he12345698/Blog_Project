@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 import org.springframework.context.annotation.Bean;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,19 +16,23 @@ import jakarta.persistence.Id;
 public class AccountVo {
 	
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-	
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;  // 新增一个唯一的ID欄位
+
+	@Column(unique = true)
 	private String username;
+	
 	private String password;
 	private String email;
 	private String imagelink;
 	private String captcha;
 	
 	@Column(name = "created_date")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdDate;
 
 	@Column(name = "last_login_date")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime lastLoginDate;
 	
 	@Column(name = "login_attempts")

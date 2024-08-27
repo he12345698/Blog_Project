@@ -11,19 +11,27 @@
     float: right;
 }
 
-label {
+.userProfie_label {
     font-weight: bold;
     margin: 10px 0px 10px 0px;
 }
 
 .text_area {
-    width: 70%;
+    width: 80%;
     height: 2em;
     margin: 0px 5px 5px 5px;
     float: left;
 }
 
-span {
-    padding-top: 10px;
-    padding-bottom: 20px;
+
+.error{
+    font-weight: bold;
+}
+
+.userProfie_p{
+    margin-bottom: 10px;
+}
+
+.input_password{
+    border: none;
 }

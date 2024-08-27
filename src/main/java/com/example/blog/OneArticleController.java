@@ -1,52 +1,46 @@
 package com.example.blog;
 
+import java.util.List;
+import com.example.blog.Articles2;
+import com.example.blog.Article2Vo;
+import java.util.Map;
+import java.util.HashMap;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.Map;
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000") // 設定允許的來源網站，這裡是本地的 React 應用
 @RestController
-@RequestMapping("/api/articles")
+@RequestMapping("/blog") // 設定基本路徑
 public class OneArticleController {
+  
+    @Autowired OneArticleRepository oneArticleRepository;
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-
-    @GetMapping("/{articleId}")
-    public Map<String, Object> getArticle(@PathVariable int articleId) {
-        // 查詢文章信息
-        String articleQuery = """
-            SELECT a.title, a.content, a.published_at
-            FROM Articles a
-            WHERE a.article_id = ?
-            """;
+    @GetMapping("/queryOne")
+    public Map queryOne(){
         
-        Map<String, Object> article = jdbcTemplate.queryForMap(articleQuery, articleId);
-        // u.username, u.avatar_url
- // JOIN Users u ON a.author_id = u.user_id
+        Map rs = new HashMap();
+		Articles2 article = oneArticleRepository.findById(1L);
+		Article2Vo vo = new Article2Vo();
+		BeanUtils.copyProperties(article , vo);
+		rs.put("success", true);
+		rs.put("article", vo);
+		return rs;
 
-        // 查詢文章的評論
-        // String commentsQuery = """
-        // SELECT c.content, c.commented_at, u.username, u.avatar_url
-        // FROM Comments c
-        // JOIN Users u ON c.user_id = u.user_id
-        // WHERE c.article_id = ?
-        // ORDER BY c.commented_at ASC;
-        // """;
-
-        // List<Map<String, Object>> comments = jdbcTemplate.queryForList(commentsQuery, articleId);
-
-   
-        // article.put("comments", comments);
-
-        return article;
     }
+    
+
+    // @PostMapping
+    // public Article2 createArticle(@RequestBody Article2 article) {
+    //     // 創建新文章
+    //     return articleService.saveArticle(article);
+    // }
 }
-
-
