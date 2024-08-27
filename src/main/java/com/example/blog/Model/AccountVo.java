@@ -6,16 +6,21 @@ import org.springframework.context.annotation.Bean;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
 public class AccountVo {
 	
 	@Id
-	String username;
-	String password;
-	String email;
-	String imagelink;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+	
+	private String username;
+	private String password;
+	private String email;
+	private String imagelink;
 	private String captcha;
 	
 	@Column(name = "created_date")
@@ -39,7 +44,17 @@ public class AccountVo {
     @Column(name = "token_expiration")
     private LocalDateTime tokenExpiration;
     
-    public LocalDateTime getCreatedDate() {
+    
+    
+    public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public LocalDateTime getCreatedDate() {
 		return createdDate;
 	}
 
