@@ -18,7 +18,7 @@ function OneArticlePage() {
         const fetchArticle = async () => {
             try {
                 // 發送 GET 請求以獲取文章和評論數據
-                const response = await axios.get(`http://localhost:8080/blog-0.0.1-SNAPSHOT/api/articles/${articleId}`);
+                const response = await axios.get(`http://localhost:8080/blog/api/articles/${articleId}`);
                 console.log(response.data); // 打印響應數據以檢查結構
                 setArticle(response.data.article); // 更新文章狀態
                 // setComments(response.data.comments); // 更新評論狀態

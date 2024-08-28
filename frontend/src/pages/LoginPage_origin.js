@@ -13,7 +13,7 @@ const LoginPage = () => {
 
     try {
       // const response = await fetch('http://114.32.14.238:8080/demo/ac/login', {
-        const response = await fetch('localhost:8080/blog-0.0.1-SNAPSHOT/ac/login', {
+        const response = await fetch('localhost:8080/blog/ac/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

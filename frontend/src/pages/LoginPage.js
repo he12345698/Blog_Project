@@ -57,7 +57,7 @@ const LoginPage = () => {
   
     if (initialUsername && initialPassword) {
       // fetch('http://192.168.50.38:8080/blog/ac/login', {
-      fetch('http://localhost:8080/blog-0.0.1-SNAPSHOT/ac/login', {
+      fetch('http://localhost:8080/blog/ac/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -91,7 +91,7 @@ const LoginPage = () => {
     setAnimationKey(Date.now());
     try {
       // const response = await fetch('http://niceblog.myvnc.com:8080/blog/ac/login', {
-        const response = await fetch('http://localhost:8080/blog-0.0.1-SNAPSHOT/ac/login', {
+        const response = await fetch('http://localhost:8080/blog/ac/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
