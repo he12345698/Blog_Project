@@ -46,26 +46,6 @@ public class CommentController {
     @PostMapping
     public CommentVo createComment(@RequestBody CommentVo comment) {
 
-import com.example.blog.Model.Comment;
-import com.example.blog.Service.CommentService;
-
-@CrossOrigin(origins = "http://localhost:3000") // 設定允許的來源網站，這裡是本地的 React 應用
-@RestController
-@RequestMapping("/api/comments") // 設定基本路徑
-public class CommentController {
-    @Autowired
-    private CommentService commentService; // 注入 CommentService 服務
-
-    @GetMapping("/{articleId}")
-    public List<Comment> getCommentsByArticleId(@PathVariable Long articleId) {
-        // 根據文章 ID 獲取所有相關評論
-        return commentService.getCommentsByArticleId(articleId);
-    }
-
-    @PostMapping
-    public Comment createComment(@RequestBody Comment comment) {
-        // 創建新評論
-
         return commentService.saveComment(comment);
     }
 }

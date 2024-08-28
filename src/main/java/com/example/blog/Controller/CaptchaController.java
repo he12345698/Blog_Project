@@ -95,7 +95,4 @@ public class CaptchaController {
 }
 
 
-        return ResponseEntity.ok(Collections.singletonMap("message", "驗證碼正確"));
-    }
-}
 
