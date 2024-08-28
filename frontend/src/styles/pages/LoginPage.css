@@ -191,7 +191,6 @@ button[type="submit"]:hover {
     background: url('/public/UserImages/122.gif') no-repeat center center;
     background-size: contain;
     pointer-events: none;} /* 使光標不可點擊 */
-     */
     
   
   .refresh-button {
