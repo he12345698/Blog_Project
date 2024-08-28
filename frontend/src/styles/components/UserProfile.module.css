@@ -1,0 +1,37 @@
+.profile_button {
+    font-weight: bold;
+    font-size: 15px;
+    width: 15%;
+    height: 2em;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 5px;
+    border-radius: 5px;
+    float: right;
+}
+
+.userProfie_label {
+    font-weight: bold;
+    margin: 10px 0px 10px 0px;
+}
+
+.text_area {
+    width: 80%;
+    height: 2em;
+    margin: 0px 5px 5px 5px;
+    float: left;
+}
+
+
+.error{
+    font-weight: bold;
+}
+
+.userProfie_p{
+    margin-bottom: 10px;
+}
+
+.input_password{
+    border: none;
+}

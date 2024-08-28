@@ -1,0 +1,90 @@
+body, h1, p, a {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    font-family: Arial, sans-serif;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.top-bar {
+    background-color: #333;
+    color: white;
+    padding: 6px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    z-index: 50; /* Make sure the header stays on top */
+}
+
+.top-container {
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 50px;
+}
+
+.logo {
+    font-size: 24px;
+}
+
+.navigation {
+    display: flex;
+    gap: 15px;
+}
+
+.navigation a {
+    color: white;
+    padding: 5px 10px;
+    transition: background-color 0.3s;
+}
+
+.navigation a:hover {
+    background-color: #555;
+}
+
+.login-btn button {
+    background-color: #555;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-radius: 4px;
+}
+
+.login-btn button:hover {
+    background-color: #777;
+}
+
+.logout-btn {
+    margin-left: 10px;
+    padding: 5px 10px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.logout-btn:hover {
+    background-color: #d32f2f;
+}
+
+/* Add padding to the body to avoid content being hidden under the fixed header */
+body {
+    padding-top: 70px; /* Adjust this value based on your header height */
+}

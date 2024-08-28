@@ -3,8 +3,9 @@ package com.example.blog.PasswordReset;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.blog.AccountRepository;
-import com.example.blog.AccountVo;
+import com.example.blog.Model.AccountVo;
+import com.example.blog.Repository.AccountRepository;
+//import com.example.blog.AccountVo;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
