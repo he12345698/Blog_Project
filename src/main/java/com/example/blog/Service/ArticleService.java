@@ -1,4 +1,4 @@
-package com.example.blog.service;
+package com.example.blog.Service;
 
 import com.example.blog.Model.ArticleVo;
 import com.example.blog.Repository.ArticleRepository;
@@ -21,7 +21,11 @@ public class ArticleService {
 
     //透過ID查詢文章
     public Optional<ArticleVo> getArticleById(Long articleId) {
-        return articleRepository.findById(articleId);
+
+        return articleRepository.findByIdWithComments(articleId);
+
+        // return articleRepository.findById(articleId);
+
     }
 
     public List<ArticleVo> searchArticleByTitle(String title) {

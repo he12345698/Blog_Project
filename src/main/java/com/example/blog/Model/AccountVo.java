@@ -2,6 +2,7 @@ package com.example.blog.Model;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Table;
 import org.springframework.context.annotation.Bean;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -13,6 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
+@Table(name = "account_vo")
 public class AccountVo {
 	
 	@Id
@@ -49,8 +51,6 @@ public class AccountVo {
 
     @Column(name = "token_expiration")
     private LocalDateTime tokenExpiration;
-    
-    
     
     public Long getId() {
 		return id;
@@ -160,9 +160,14 @@ public class AccountVo {
 	public String toString() {
 		return "PersonVo [id = " + username + ", paswd = " + password + ", email = " + email + "]" + "\n";
 	}
-	
-	
-	
-	
-	
+
+	public boolean isPresent() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public AccountVo get() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

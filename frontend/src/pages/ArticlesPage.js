@@ -8,7 +8,7 @@ const ArticlesPage = () => {
   const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
-    fetch(`http://localhost:8080/blog-0.0.1-SNAPSHOT/api/articles?page=${currentPage}&size=10`)
+    fetch(`http://niceblog.myvnc.com:8080/api/articles?page=${currentPage}&size=10`)
       .then(response => response.json())
       .then(data => {
         setArticleVo(data.content);
