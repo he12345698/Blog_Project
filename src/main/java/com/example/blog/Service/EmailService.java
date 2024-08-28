@@ -1,5 +1,6 @@
 package com.example.blog.Service;
 
+
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -52,6 +53,7 @@ public class EmailService {
         String content = "親愛的 " + vo.getUsername() + "，\n\n" +
                 "請點擊以下鏈接以驗證您的電子郵件地址：\n" + verificationUrl +
                 "\n\n謝謝！";
+
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(vo.getEmail());

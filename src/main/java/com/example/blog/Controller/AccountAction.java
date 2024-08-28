@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+
 import java.util.Optional;
 import java.util.UUID;
 import java.util.Date;
@@ -47,22 +49,27 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+// @CrossOrigin(origins = "http://niceblog.myvnc.com:81")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/ac")
 public class AccountAction {
 	
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
     @Autowired 
     private AccountService accountService;
     @Autowired
     private CaptchaController captchaController;
+
 	@Autowired
     private EmailService emailService;
     @Autowired
     private PasswordResetTokenService prts;
     @Autowired 
     private AccountRepository accountRepository;
+
 
     @GetMapping("/register")
     public String getRegistrationPage() {
@@ -87,6 +94,7 @@ public class AccountAction {
             }
 
             // 查询用户名是否存在
+
             if (!accountService.checkId(vo.getUsername())) {
                 System.out.println("未知的使用者名稱：" + vo.getUsername() + " 於 " + new Date(System.currentTimeMillis()) + " 嘗試登入");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "使用者不存在"));
@@ -96,7 +104,7 @@ public class AccountAction {
             if (accountService.checkAccountLocked(vo.getUsername())) {
             	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "帳戶已被鎖定，請聯繫管理員"));
             }
-            
+
             // 调用 AccountService 的 checkUserPassword 方法
             ResponseEntity<String> checkUserPasswordResponse = accountService.checkUserPassword(vo.getUsername(), vo.getPassword());
             if (checkUserPasswordResponse.getStatusCode() == HttpStatus.UNAUTHORIZED || checkUserPasswordResponse.getStatusCode() == HttpStatus.FORBIDDEN) {
@@ -112,6 +120,7 @@ public class AccountAction {
             	
                 String token = JwtUtil.generateToken(vo.getUsername(), accountService.findImageLinkByUsername(vo.getUsername())); 
                 // 将 JWT 添加到响应头中
+
                 response.setHeader("Authorization", "Bearer " + token);
                 System.out.println(token);
                 // 返回 JSON 对象
@@ -119,7 +128,9 @@ public class AccountAction {
                 responseBody.put("token", token);
 
                 return ResponseEntity.ok(responseBody);
+
             }           
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.singletonMap("message", "伺服器錯誤：" + e.getMessage()));
@@ -132,6 +143,7 @@ public class AccountAction {
 
         // 查找是否存在 AccountVo
         Optional<AccountVo> existingVo = accountRepository.findByEmail(vo.getEmail());
+
         if (existingVo == null) {
             return ResponseEntity.badRequest().body("電子郵件不存在");
         }
@@ -166,6 +178,7 @@ public class AccountAction {
 
         return ResponseEntity.ok("登出通知接收成功");
     }
+
     
     @GetMapping("/verify-email")
     public ResponseEntity<Map<String, String>> verifyAccount(@RequestParam("token") String token) {
@@ -178,3 +191,4 @@ public class AccountAction {
         return ResponseEntity.ok(Collections.singletonMap("message", message));
     }
 }
+

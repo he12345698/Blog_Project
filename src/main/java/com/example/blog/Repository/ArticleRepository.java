@@ -1,3 +1,4 @@
+
 package com.example.blog.Repository;
 
 import java.util.List;
@@ -30,6 +31,5 @@ public interface ArticleRepository extends JpaRepository<ArticleVo, Long> {
     @Query("SELECT DISTINCT a FROM ArticleVo a LEFT JOIN FETCH a.comments WHERE a.articleId = :articleId")
     Optional<ArticleVo> findByIdWithComments(@Param("articleId") Long articleId);
 
-    
-
+   
 }

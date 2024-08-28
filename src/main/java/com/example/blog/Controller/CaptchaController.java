@@ -26,7 +26,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 @CrossOrigin(origins = "http://localhost:3000")
-
 @RestController
 @RequestMapping("/ac")
 public class CaptchaController {
@@ -87,12 +86,9 @@ public class CaptchaController {
         // 验证通过后清除 session 中的验证码
         session.removeAttribute("captcha");
 
-
         // 继续处理其他逻辑，例如验证用户名和密码
         // ...
         return ResponseEntity.ok(Collections.singletonMap("message", "驗證碼正確"));
     }
 }
-
-
 

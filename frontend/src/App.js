@@ -20,6 +20,7 @@ import Footer from './components/Footer';
 import SearchBar from './components/SearchBar';
 import EmailVerificationPage from './pages/EmailVerificationPage';
 
+
 const App = () => {
 
   // 提升状态到父组件

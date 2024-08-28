@@ -24,6 +24,7 @@ public class ArticleController {
     @Autowired
     private ArticleRepository articleRepository;
 
+
     // 直接用get方法 取得全部文章的列表
 
     // 直接用get方法 取得全部文章的列表
@@ -38,6 +39,7 @@ public class ArticleController {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).descending());
         return articleRepository.findAll(pageable);
     }
+
 
     @GetMapping("/{articleId}")
     public ResponseEntity<ArticleVo> getArticleById(@PathVariable Long articleId) {
