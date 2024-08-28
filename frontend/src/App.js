@@ -37,7 +37,7 @@ const App = () => {
         <Route path="/verify-email" element={<EmailVerificationPage />} />
         {/* 你可以在这里添加更多的路由 */}
       </Routes>
-    </main>s
+    </main>
     <Footer />
   </Router>
   );
