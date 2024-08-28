@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import articleService from '../services/ArticleService'; // 假設你有一個文章服務
+import tagService from '../services/TagService'
 import '../styles/pages/ArticleEditor.css';
-
 const ArticleEditor = () => {
     const [title, setTitle] = useState('');
     const [contentTEXT, setContentTEXT] = useState('');
-    const [category, setCategory] = useState('');
+    const [tag, settag] = useState('');
     const navigate = useNavigate();//用於跳轉網址
     const { articleId } = useParams(); // 假設用於編輯現有文章
 
@@ -16,14 +16,17 @@ const ArticleEditor = () => {
             articleService.getArticleById(articleId).then(article => {
                 setTitle(article.title);
                 setContentTEXT(article.contentTEXT);
-                // setCategory(article.category);
+            });
+            tagService.getTag(articleId).then(tag =>{
+                settag(tag.tag);
+                console.log(tag);
             });
         }
     }, [articleId]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const articleData = { title, contentTEXT, category };
+        const articleData = { title, contentTEXT, tag };
 
         try {
             if (articleId) {
@@ -62,8 +65,8 @@ const ArticleEditor = () => {
                             />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="category">分類：</label>
-                            <select
+                            <label htmlFor="tag">分類：</label>
+                            {/* <select
                                 id="category"
                                 name="category"
                                 value={category}
@@ -77,7 +80,7 @@ const ArticleEditor = () => {
                                 <option value="國際">國際</option>
                                 <option value="美食">美食</option>
                                 <option value="遊戲">遊戲</option>
-                            </select>
+                            </select> */}
                         </div>
                         <div className="form-group">
                             <label htmlFor="contentTEXT">內文：</label>
