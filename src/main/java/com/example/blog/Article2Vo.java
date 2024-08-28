@@ -1,24 +1,17 @@
 package com.example.blog;
 
 public class Article2Vo {
-    Long article_id;
+    Long id;
 
     // 文章標題
     String title;
 
     // 文章內容
-    String contentTEXT;
+    String contentText;
 
     // 文章作者
-    String author_id;
+    Long author_id;
 
-    public Long getArticle_id() {
-        return article_id;
-    }
-
-    public void setArticle_id(Long article_id) {
-        this.article_id = article_id;
-    }
 
     public String getTitle() {
         return title;
@@ -28,19 +21,27 @@ public class Article2Vo {
         this.title = title;
     }
 
-    public String getContentTEXT() {
-        return contentTEXT;
+    public Long getId() {
+        return id;
     }
 
-    public void setContentTEXT(String contentTEXT) {
-        this.contentTEXT = contentTEXT;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getAuthor_id() {
+    public Long getAuthor_id() {
         return author_id;
     }
 
-    public void setAuthor_id(String author_id) {
+    public void setAuthor_id(Long author_id) {
         this.author_id = author_id;
+    }
+
+    public String getContentText() {
+        return contentText;
+    }
+
+    public void setContentText(String contentText) {
+        this.contentText = contentText;
     }
 }
