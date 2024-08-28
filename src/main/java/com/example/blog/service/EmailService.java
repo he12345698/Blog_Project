@@ -1,4 +1,4 @@
-package com.example.blog.service;
+package com.example.blog.Service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;

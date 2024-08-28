@@ -31,8 +31,8 @@ import com.example.blog.PasswordReset.PasswordResetToken;
 import com.example.blog.PasswordReset.PasswordResetTokenRepository;
 import com.example.blog.PasswordReset.PasswordResetTokenService;
 import com.example.blog.Repository.AccountRepository;
-import com.example.blog.service.AccountService;
-import com.example.blog.service.EmailService;
+import com.example.blog.Service.AccountService;
+import com.example.blog.Service.EmailService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
