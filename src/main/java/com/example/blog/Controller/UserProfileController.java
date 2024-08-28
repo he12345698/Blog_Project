@@ -89,6 +89,25 @@ public class UserProfileController {
             throw new IllegalArgumentException("圖片大小超過10MB限制");
         }
 
+        // 查詢資料庫以獲取原有的圖片路徑
+        AccountVo accountVo = userProfileService.getUserById(id);
+        String existingImagePath = "frontend/" + accountVo.getImagelink().toString();
+        System.out.println(existingImagePath);
+
+        // 如果存在原有的圖片，刪除它
+        if (existingImagePath != null) {
+            Path existingFilePath = Paths.get(existingImagePath);
+            try {
+                boolean deleted = Files.deleteIfExists(existingFilePath);
+                if (!deleted) {
+                    System.err.println("無法刪除原有圖片：" + existingFilePath);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        
+
         try {
             // 生成唯一的檔案名稱
             String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
