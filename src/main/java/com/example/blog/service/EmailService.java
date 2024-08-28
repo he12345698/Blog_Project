@@ -1,4 +1,4 @@
-package com.example.blog.service;
+package com.example.blog.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
