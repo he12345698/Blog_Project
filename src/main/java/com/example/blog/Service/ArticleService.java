@@ -24,7 +24,7 @@ public class ArticleService {
 
         return articleRepository.findByIdWithComments(articleId);
 
-        return articleRepository.findById(articleId);
+        // return articleRepository.findById(articleId);
 
     }
 
