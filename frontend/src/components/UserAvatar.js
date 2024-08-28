@@ -1,106 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from "../styles/components/UserAvatar.module.css";
 import Modal from 'react-modal';
-import ReactCrop from 'react-image-crop';
-import 'react-image-crop/dist/ReactCrop.css';
+import ImageCropper from './ImageCropper';
 
 const UserAvatar = ({ userId }) => {
-    const [avatar, setAvatar] = useState({
-        imagelink: '',
-    });
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [crop, setCrop] = useState({ aspect: 1 });
-    const [croppedImage, setCroppedImage] = useState(null);
-    const [imageSrc, setImageSrc] = useState(null);
-    const [previewSrc, setPreviewSrc] = useState(null);
-    const [maxWidth, setMaxWidth] = useState(200);
-    const [maxHeight, setMaxHeight] = useState(200);
+    // const [isModalOpen, setIsModalOpen] = useState(false);// 設定彈跳視窗開關
 
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = () => setImageSrc(reader.result);
-            reader.readAsDataURL(file);
-        }
-    };
+    // 用來管理用戶資料
+    const [userImage, setUserImage] = useState('');
 
-    const handleCropComplete = (crop) => {
-        if (imageSrc && crop.width && crop.height) {
-            generateCroppedImage(crop);
-        }
-    };
+    // 透過圖片路徑顯示圖片
+    // 獲取用戶信息
+    useEffect(() => {
+        const fetchUserInfo = async () => {
+            const token = localStorage.getItem('token');
+            // console.log('Request Headers:', {
+            //   'Authorization': `Bearer ${token}` 
+            // });
+            if (token) {
+                try {
+                    const response = await fetch('http://localhost:8080/blog/api/protected-endpoint', {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
 
-    const generateCroppedImage = (crop) => {
-        const image = new Image();
-        image.src = imageSrc;
-        image.onload = () => {
-            const canvas = document.createElement('canvas');
-            const scaleX = image.naturalWidth / image.width;
-            const scaleY = image.naturalHeight / image.height;
-            canvas.width = crop.width;
-            canvas.height = crop.height;
-            const ctx = canvas.getContext('2d');
-
-            ctx.drawImage(
-                image,
-                crop.x * scaleX,
-                crop.y * scaleY,
-                crop.width * scaleX,
-                crop.height * scaleY,
-                0,
-                0,
-                crop.width,
-                crop.height
-            );
-
-            canvas.toBlob(blob => {
-                const resizedCanvas = document.createElement('canvas');
-                let width = canvas.width;
-                let height = canvas.height;
-
-                if (width > height) {
-                    if (width > maxWidth) {
-                        height *= maxWidth / width;
-                        width = maxWidth;
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log('data:', data);
+                        console.log('userimage ' + data.userImage)
+                        setUserImage(data.userImage || 'public/UserImages/IMG_20240701_124913.JPG'); // 默认头像
+                    } else {
+                        console.log('Response error:', response);
+                        //setUsername('訪客2');
+                        //setUserImage('/Image/default-avatar.jpg'); // 默认头像
                     }
-                } else {
-                    if (height > maxHeight) {
-                        width *= maxHeight / height;
-                        height = maxHeight;
-                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    setUserImage('public/UserImages/IMG_20240701_124913.JPG'); // 默认头像
                 }
-
-                resizedCanvas.width = width;
-                resizedCanvas.height = height;
-                resizedCanvas.getContext('2d').drawImage(canvas, 0, 0, width, height);
-
-                resizedCanvas.toBlob(resizedBlob => {
-                    const resizedFile = new File([resizedBlob], 'cropped_resized_image.jpg');
-                    setCroppedImage(resizedFile);
-                    
-                    // Create preview URL
-                    const previewUrl = URL.createObjectURL(resizedBlob);
-                    setPreviewSrc(previewUrl);
-                }, 'image/jpeg');
-            }, 'image/jpeg');
-        };
-    };
-
-    const handleUpload = () => {
-        const formData = new FormData();
-        formData.append('avatar', croppedImage);
-
-        fetch('/api/upload-avatar', {
-            method: 'POST',
-            body: formData,
-        }).then(response => {
-            if (response.ok) {
-                console.log('上传成功');
-                setIsModalOpen(false);
             }
-        });
-    };
+
+        };
+
+        fetchUserInfo();
+    }, []);
+
 
     return (
         <div className={`${styles.profile_picture_wrapper} text-center`}>
@@ -108,65 +54,26 @@ const UserAvatar = ({ userId }) => {
             <div className="image-container mb-3">
                 <img
                     id={styles.profile_avatar}
-                    src={avatar.imagelink || "IMG_20240701_124913.JPG"}
-                    alt="Profile"
+                    src={userImage}
+                    alt="頭像"
                     className="img-fluid rounded border border-3 border-dark"
                 />
             </div>
             <button
                 type="button"
                 className={`btn btn-dark ${styles.photo}`}
-                onClick={() => setIsModalOpen(true)}
+                // onClick={() => setIsModalOpen(true)}
             >
                 更新頭像
             </button>
 
-            <Modal
+            {/* <Modal
                 isOpen={isModalOpen}
                 onRequestClose={() => setIsModalOpen(false)}
                 contentLabel="Crop Avatar"
             >
-                <input type="file" accept="image/*" onChange={handleFileChange} />
-                {imageSrc && (
-                    <>
-                        <ReactCrop
-                            src={imageSrc}
-                            crop={crop}
-                            onChange={newCrop => setCrop(newCrop)}
-                            onComplete={handleCropComplete}
-                        />
-                        <div>
-                            <label>
-                                最大宽度:
-                                <input
-                                    type="number"
-                                    value={maxWidth}
-                                    onChange={(e) => setMaxWidth(parseInt(e.target.value, 10))}
-                                />
-                            </label>
-                            <label>
-                                最大高度:
-                                <input
-                                    type="number"
-                                    value={maxHeight}
-                                    onChange={(e) => setMaxHeight(parseInt(e.target.value, 10))}
-                                />
-                            </label>
-                        </div>
-                        {previewSrc && (
-                            <div className="preview-container mt-3">
-                                <h3>预览</h3>
-                                <img
-                                    src={previewSrc}
-                                    alt="Cropped Preview"
-                                    style={{ maxWidth: '100%', height: 'auto' }}
-                                />
-                            </div>
-                        )}
-                    </>
-                )}
-                <button type="button" onClick={handleUpload}>確定並上傳</button>
-            </Modal>
+
+            </Modal> */}
         </div>
     );
 };

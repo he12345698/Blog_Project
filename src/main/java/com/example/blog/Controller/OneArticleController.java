@@ -1,8 +1,12 @@
-package com.example.blog;
+
+package com.example.blog.Controller;
 
 import java.util.List;
-import com.example.blog.Articles2;
-import com.example.blog.Article2Vo;
+
+import com.example.blog.Model.Article2Vo;
+import com.example.blog.Model.Articles2;
+import com.example.blog.Repository.OneArticleRepository;
+
 import java.util.Map;
 import java.util.HashMap;
 import org.springframework.beans.BeanUtils;
