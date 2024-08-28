@@ -4,7 +4,7 @@ import '../styles/pages/LoginPage.css';
 import Maintenanceheader from '../Maintenanceheader';
 import { FaSync } from 'react-icons/fa';
 
-const LoginPage = () => {
+const LoginPage = ({ onLoginSuccess }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [captcha, setCaptcha] = useState(''); // 用戶輸入的驗證碼
@@ -18,8 +18,8 @@ const LoginPage = () => {
   // 加載驗證碼圖片
   const loadCaptcha = async () => {
     try {
-      // const response = await fetch('http://niceblog.myvnc.com:8080/blog/ac/captcha', {
-      const response = await fetch('http://localhost:8080/blog/ac/captcha', {
+      const response = await fetch('http://niceblog.myvnc.com:8080/blog/ac/captcha', {
+      //const response = await fetch('http://localhost:8080/blog/ac/captcha', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ const LoginPage = () => {
         // 将响应的 Blob 对象转换为 URL
         const blob = await response.blob();
         const captchaUrl = URL.createObjectURL(blob);
-  
+        
         // 更新图片的 src 属性
         setCaptchaUrl(captchaUrl);
       } else {
@@ -56,6 +56,7 @@ const LoginPage = () => {
     const initialPassword = searchParams.get('password');
   
     if (initialUsername && initialPassword) {
+
       // fetch('http://192.168.50.38:8080/blog/ac/login', {
       fetch('http://localhost:8080/blog/ac/login', {
         method: 'POST',
@@ -90,6 +91,7 @@ const LoginPage = () => {
     e.preventDefault();
     setAnimationKey(Date.now());
     try {
+
       const response = await fetch('http://localhost:8080/blog/ac/login', {
         method: 'POST',
         headers: {
