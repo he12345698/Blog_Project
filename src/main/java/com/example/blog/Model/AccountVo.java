@@ -52,7 +52,15 @@ public class AccountVo {
     @Column(name = "token_expiration")
     private LocalDateTime tokenExpiration;
     
-    public LocalDateTime getCreatedDate() {
+    public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public LocalDateTime getCreatedDate() {
 		return createdDate;
 	}
 
@@ -152,9 +160,14 @@ public class AccountVo {
 	public String toString() {
 		return "PersonVo [id = " + username + ", paswd = " + password + ", email = " + email + "]" + "\n";
 	}
-	
-	
-	
-	
-	
+
+	public boolean isPresent() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public AccountVo get() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

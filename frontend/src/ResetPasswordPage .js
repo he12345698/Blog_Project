@@ -28,7 +28,7 @@ const ResetPasswordPage = () => {
         setErrorMessage('');
 
         try {
-            const response = await axios.post('http://localhost:8080/blog-0.0.1-SNAPSHOT/ac/reset-password', new URLSearchParams({
+            const response = await axios.post('http://192.168.50.38:8080/blog/ac/reset-password', new URLSearchParams({
                 token,
                 newPassword
             }), {

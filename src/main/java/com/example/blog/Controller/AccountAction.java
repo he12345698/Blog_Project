@@ -6,6 +6,9 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import java.util.Optional;
+
 import java.util.UUID;
 import java.util.Date;
 
@@ -29,6 +32,9 @@ import com.example.blog.Model.AccountVo;
 import com.example.blog.PasswordReset.PasswordResetToken;
 import com.example.blog.PasswordReset.PasswordResetTokenRepository;
 import com.example.blog.PasswordReset.PasswordResetTokenService;
+
+import com.example.blog.Repository.AccountRepository;
+
 import com.example.blog.Service.AccountService;
 import com.example.blog.Service.EmailService;
 
@@ -47,10 +53,10 @@ import org.springframework.stereotype.Service;
 
 // @CrossOrigin(origins = "http://niceblog.myvnc.com:81")
 @CrossOrigin(origins = "http://localhost:3000")
+
 @RestController
 @RequestMapping("/ac")
 public class AccountAction {
-	
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -58,6 +64,14 @@ public class AccountAction {
     private AccountService accountService;
     @Autowired
     private CaptchaController captchaController;
+
+	@Autowired
+    private EmailService emailService;
+    @Autowired
+    private PasswordResetTokenService prts;
+    @Autowired 
+    private AccountRepository accountRepository;
+
 
     @GetMapping("/register")
     public String getRegistrationPage() {
@@ -69,7 +83,7 @@ public class AccountAction {
 
     	ResponseEntity<String> response = accountService.registerUser(vo);
         return response;
-        
+
     }
     
     @PostMapping("/login")
@@ -83,10 +97,23 @@ public class AccountAction {
             }
 
             // 查询用户名是否存在
+
             if (!checkId(vo.getUsername())) {
                 System.out.println("未知的使用者名稱：" + vo.getUsername() + " 於 " + new Date(System.currentTimeMillis()) + " 嘗試登入");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "使用者不存在"));
             }
+
+
+            if (!accountService.checkId(vo.getUsername())) {
+                System.out.println("未知的使用者名稱：" + vo.getUsername() + " 於 " + new Date(System.currentTimeMillis()) + " 嘗試登入");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "使用者不存在"));
+            }
+            
+            // 查询用户名是否已鎖定
+            if (accountService.checkAccountLocked(vo.getUsername())) {
+            	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "帳戶已被鎖定，請聯繫管理員"));
+            }
+            
 
             // 调用 AccountService 的 checkUserPassword 方法
             ResponseEntity<String> checkUserPasswordResponse = accountService.checkUserPassword(vo.getUsername(), vo.getPassword());
@@ -96,6 +123,9 @@ public class AccountAction {
                 errorResponse.put("message", checkUserPasswordResponse.getBody());
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
             }
+
+            System.out.println("使用者：" + vo.getUsername() + " 於 " + new Date(System.currentTimeMillis()) + " 登入");
+            
 
             // 如果验证成功，生成 JWT
             if (checkUserPasswordResponse.getStatusCode() == HttpStatus.OK) {
@@ -109,6 +139,7 @@ public class AccountAction {
                 responseBody.put("token", token);
 
                 return ResponseEntity.ok(responseBody);
+
             }
 //            } else {
 //                // 返回服务层返回的错误信息
@@ -116,12 +147,16 @@ public class AccountAction {
 //                return new ResponseEntity<>(responseBody, serviceResponse.getStatusCode());
 //            }
 //            
+
+            }           
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.singletonMap("message", "伺服器錯誤：" + e.getMessage()));
         }
 		return null;
     }
+
 
     
     private boolean checkAccountLocked(String username) {
@@ -144,10 +179,18 @@ public class AccountAction {
         AccountVo existingVo = findAccountVoByEmail(email);
         //PasswordResetToken resetToken = tokenService.createPasswordResetTokenForUser(vo);
 
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<String> forgotPassword(@RequestBody AccountVo vo) {
+
+        // 查找是否存在 AccountVo
+        Optional<AccountVo> existingVo = accountRepository.findByEmail(vo.getEmail());
+
         if (existingVo == null) {
             return ResponseEntity.badRequest().body("電子郵件不存在");
         }
         
+
         // 生成随机 token
 //        String token = UUID.randomUUID().toString();
 //        LocalDateTime expiryDate = LocalDateTime.now().plusHours(1);
@@ -195,6 +238,27 @@ public class AccountAction {
         if (rowsAffected == 0) {
             throw new RuntimeException("用户不存在或更新失败");
         }
+
+        //创建密码重置令牌并获取生成的令牌
+        String token = prts.createPasswordResetTokenForUser(existingVo.get());
+        
+        // 调用 emailService 的方法来发送邮件
+        emailService.sendResetPasswordEmail(existingVo.get(), token);
+
+        return ResponseEntity.ok("請檢查您的電子郵件以重設密碼");
+    }
+    
+    @PostMapping("/reset-password")
+    public String resetPassword(@RequestParam("token") String token, @RequestParam("newPassword") String newPassword) {
+        PasswordResetToken resetToken = prts.validatePasswordResetToken(token);
+        if (resetToken == null) {
+            return "失效或過期的憑證";
+        }
+
+        accountService.changePassword(resetToken.getVo(), newPassword);
+        
+        return "Password reset successfully";
+
     }
 
     @PostMapping("/logout-notify")
@@ -206,6 +270,7 @@ public class AccountAction {
 
         return ResponseEntity.ok("登出通知接收成功");
     }
+
 
     public boolean checkId(String id) {
         String sql = "SELECT COUNT(*) FROM account_vo WHERE username = ?";
@@ -257,4 +322,17 @@ public class AccountAction {
         return password.equals(storedPassword);
     }
     
+
+    
+    @GetMapping("/verify-email")
+    public ResponseEntity<Map<String, String>> verifyAccount(@RequestParam("token") String token) {
+        String message = emailService.verifyEmail(token);
+
+        if (message.equals("無效的驗證鏈接") || message.equals("驗證鏈接已過期")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("message", message));
+        }
+
+        return ResponseEntity.ok(Collections.singletonMap("message", message));
+    }
+
 }
