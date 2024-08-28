@@ -1,4 +1,4 @@
-package com.example.blog.controller;
+package com.example.blog.Controller;
 
 import java.io.IOException;
 import java.security.Principal;
@@ -29,8 +29,8 @@ import com.example.blog.Model.AccountVo;
 import com.example.blog.PasswordReset.PasswordResetToken;
 import com.example.blog.PasswordReset.PasswordResetTokenRepository;
 import com.example.blog.PasswordReset.PasswordResetTokenService;
-import com.example.blog.service.AccountService;
-import com.example.blog.service.EmailService;
+import com.example.blog.Service.AccountService;
+import com.example.blog.Service.EmailService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -100,8 +100,9 @@ public class AccountAction {
             // 如果验证成功，生成 JWT
             if (checkUserPasswordResponse.getStatusCode() == HttpStatus.OK) {
             	
-                String token = JwtUtil.generateToken(vo.getUsername(), accountService.findImageLinkByUsername(vo.getUsername())); 
+                String token = JwtUtil.generateToken(vo.getUsername(), accountService.checkImageLink(vo.getUsername())); 
                 // 将 JWT 添加到响应头中
+                System.out.println("imagelink is " + accountService.checkImageLink(vo.getUsername()));
                 response.setHeader("Authorization", "Bearer " + token);
                 System.out.println(token);
                 // 返回 JSON 对象

@@ -1,41 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from "../styles/components/UserAvatar.module.css";
 import Modal from 'react-modal';
 import ImageCropper from './ImageCropper';
 
 const UserAvatar = ({ userId }) => {
-    const [avatar, setAvatar] = useState({
-        imagelink: '',
-    });
-    const [isModalOpen, setIsModalOpen] = useState(false);// 設定彈跳視窗開關
-    const [imageSrc, setImageSrc] = useState(null);// 設定用來存放上傳照片的url
-    const [croppedImage, setCroppedImage] = useState(null);
+    // const [isModalOpen, setIsModalOpen] = useState(false);// 設定彈跳視窗開關
 
-    // 處理文件變更事件
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = () => setImageSrc(reader.result);
-            reader.readAsDataURL(file);
-        }
-    };
+    // 用來管理用戶資料
+    const [userImage, setUserImage] = useState('');
 
-    // 上傳圖片
-    const handleUpload = () => {
-        const formData = new FormData();
-        formData.append('avatar', croppedImage);
+    // 透過圖片路徑顯示圖片
+    // 獲取用戶信息
+    useEffect(() => {
+        const fetchUserInfo = async () => {
+            const token = localStorage.getItem('token');
+            // console.log('Request Headers:', {
+            //   'Authorization': `Bearer ${token}` 
+            // });
+            if (token) {
+                try {
+                    const response = await fetch('http://localhost:8080/blog/api/protected-endpoint', {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
 
-        fetch('/api/upload-avatar', {
-            method: 'POST',
-            body: formData,
-        }).then(response => {
-            if (response.ok) {
-                console.log('上傳成功');
-                setIsModalOpen(false);
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log('data:', data);
+                        console.log('userimage ' + data.userImage)
+                        setUserImage(data.userImage || 'public/UserImages/IMG_20240701_124913.JPG'); // 默认头像
+                    } else {
+                        console.log('Response error:', response);
+                        //setUsername('訪客2');
+                        //setUserImage('/Image/default-avatar.jpg'); // 默认头像
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    setUserImage('public/UserImages/IMG_20240701_124913.JPG'); // 默认头像
+                }
             }
-        });
-    };
+
+        };
+
+        fetchUserInfo();
+    }, []);
+
 
     return (
         <div className={`${styles.profile_picture_wrapper} text-center`}>
@@ -43,32 +54,26 @@ const UserAvatar = ({ userId }) => {
             <div className="image-container mb-3">
                 <img
                     id={styles.profile_avatar}
-                    src={avatar.imagelink || "IMG_20240701_124913.JPG"}
-                    alt="Profile"
+                    src={userImage}
+                    alt="頭像"
                     className="img-fluid rounded border border-3 border-dark"
                 />
             </div>
             <button
                 type="button"
                 className={`btn btn-dark ${styles.photo}`}
-                onClick={() => setIsModalOpen(true)}
+                // onClick={() => setIsModalOpen(true)}
             >
                 更新頭像
             </button>
 
-            <Modal
+            {/* <Modal
                 isOpen={isModalOpen}
                 onRequestClose={() => setIsModalOpen(false)}
                 contentLabel="Crop Avatar"
             >
-                <input type="file" accept="image/*" onChange={handleFileChange} />
-                {imageSrc && (
-                    <div>
-                        <ImageCropper src={imageSrc} setCroppedImage={setCroppedImage} />
-                    </div>
-                )}
-                <button type="button" onClick={handleUpload}>確定並上傳</button>
-            </Modal>
+
+            </Modal> */}
         </div>
     );
 };

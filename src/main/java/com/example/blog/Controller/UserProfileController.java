@@ -1,4 +1,4 @@
-package com.example.blog.controller;
+package com.example.blog.Controller;
 
 import java.util.Date;
 import java.util.Map;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.blog.Model.AccountVo;
-import com.example.blog.service.UserProfileService;
+import com.example.blog.Service.UserProfileService;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;

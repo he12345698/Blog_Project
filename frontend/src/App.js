@@ -18,28 +18,6 @@ import SearchBar from './components/SearchBar';
 
 const App = () => {
   return (
-<<<<<<< HEAD
-      <Router>
-        <Header />
-      <main>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/test1" element={<Test1 />} />
-          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-          <Route path="/reset-password" element={<ResetPasswordPage />} />
-          <Route path='/publish-article' element={<ArticleEditor />} />
-          <Route path="/articlesPage" element={<ArticlesPage />} />
-          <Route path="/UserData" element={<UserData />} />
-          <Route path="/onePage/:id" element={<OnePage />} /> 
-          <Route path="/edit-article/:articleId" element={<ArticleEditor />} />
-          {/* 你可以在这里添加更多的路由 */}
-        </Routes>
-      </main>
-      <Footer />
-    </Router>
-=======
     <Router>
       <Header />
     <main>
@@ -60,7 +38,6 @@ const App = () => {
     </main>
     <Footer />
   </Router>
->>>>>>> 96d7813a965a00d98b97ff9a4c9881e2772de269
   );
 };
 

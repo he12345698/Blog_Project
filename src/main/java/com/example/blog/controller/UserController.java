@@ -1,4 +1,4 @@
-package com.example.blog.controller;
+package com.example.blog.Controller;
 
 import java.util.HashMap;
 
@@ -26,7 +26,7 @@ public class UserController {
             String token = authHeader.replace("Bearer ", "").trim();
             String username = JwtUtil.extractUsername(token);
             String userImage = JwtUtil.extractImageLink(token);
-
+            System.out.println("userImage is " + userImage);
             if (username == null || !JwtUtil.validateToken(token, username)) {
                 Map<String, String> responseBody = new HashMap<>();
                 responseBody.put("message", "无效的令牌");

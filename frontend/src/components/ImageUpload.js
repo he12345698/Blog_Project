@@ -23,8 +23,7 @@ function ImageUpload({id}) {
             });
 
             if (response.ok) {
-                const result = await response.json();
-                alert('圖片已成功上傳: ' + result.filePath);
+                alert('圖片已成功上傳: ');
             } else {
                 alert('圖片上傳失敗！');
             }
