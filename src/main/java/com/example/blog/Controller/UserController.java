@@ -30,7 +30,7 @@ public class UserController {
             String userImage = JwtUtil.extractImageLink(token);
 
             System.out.println("username is " + username);
-
+            System.out.println("userImage is " + userImage);
 
             if (username == null || !JwtUtil.validateToken(token, username)) {
                 Map<String, String> responseBody = new HashMap<>();

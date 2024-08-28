@@ -5,9 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
 import java.time.LocalDateTime;
-import java.util.Map;
 import java.util.Optional;
 
 import com.example.blog.Model.AccountVo;
@@ -39,9 +37,9 @@ public class AccountService {
                                 .orElse(false);
     }
     
-    public Optional<String> checkImageLink(String username) {
-        return accountRepository.findImageLinkByUsername(username);
-    }
+//    public Optional<String> checkImageLink(String username) {
+//        return accountRepository.findImageLinkByUsername(username);
+//    }
     
     // 檢查使用者輸入密碼是否正確，錯誤則計數，滿三次鎖定帳戶
     private static final int MAX_LOGIN_ATTEMPTS = 5;
@@ -172,8 +170,8 @@ public class AccountService {
     }
 
 	public String findImageLinkByUsername(String username) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return accountRepository.findImageLinkByUsername(username);
 	}
     
 }
