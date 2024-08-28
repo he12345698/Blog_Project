@@ -28,9 +28,6 @@ public class ArticleService {
 
     }
 
-    public List<ArticleVo> searchArticleByTitle(String title) {
-        return articleRepository.findByTitleContaining(title);
-    }
     //新增或更新文章 根據JpaRepository的方法 它會自動偵測ID是否存在 不存在則新增 存在則更新
     public ArticleVo createOrUpdateArticle(ArticleVo article) {
         return articleRepository.save(article);

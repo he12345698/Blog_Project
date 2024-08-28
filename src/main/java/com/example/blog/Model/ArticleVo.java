@@ -25,16 +25,23 @@ public class ArticleVo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "article_id")
     private Long articleId;
+
     @Column(name = "author_id")
     private Long authorId;
+
     private String title;
+
     @Column(name = "contenttext")
     private String contentTEXT;
+
     @CreatedDate
-    @Column(updatable = false)
+    @Column(name = "published_at", updatable = false)
     private LocalDateTime publishedAt;
+
     @LastModifiedDate
+    @Column(name = "last_edited_at")
     private LocalDateTime lastEditedAt;
+
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CommentVo> comments;
     
