@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.blog.JwtUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
- 
+
+@CrossOrigin(origins = "http://localhost:3000")
+
 @RestController
 @RequestMapping("/api")
 public class UserController {
@@ -26,7 +28,9 @@ public class UserController {
             String token = authHeader.replace("Bearer ", "").trim();
             String username = JwtUtil.extractUsername(token);
             String userImage = JwtUtil.extractImageLink(token);
+
             System.out.println("username is " + username);
+
 
             if (username == null || !JwtUtil.validateToken(token, username)) {
                 Map<String, String> responseBody = new HashMap<>();

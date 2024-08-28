@@ -2,6 +2,7 @@ package com.example.blog.Model;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Table;
 import org.springframework.context.annotation.Bean;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -13,6 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
+@Table(name = "account_vo")
 public class AccountVo {
 	
 	@Id

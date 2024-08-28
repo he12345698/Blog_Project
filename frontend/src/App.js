@@ -5,8 +5,12 @@ import LoginPage from './pages/LoginPage';
 import Register from './pages/Register';
 import ArticlesPage from './pages/ArticlesPage';
 import Test1 from './Test1';
+
+import SingleArticle from './pages/SingleArticle';
+
 import UserData from './pages/UserData';
 import OnePage from './pages/OnePage';
+
 import ArticleEditor from './pages/ArticleEditor';
 import './styles/App.css';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
@@ -40,14 +44,18 @@ const App = () => {
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/articlesPage" element={<ArticlesPage />} />
+
+        <Route path="/singleArticle/:articleId" element={<SingleArticle />} /> 
+
         <Route path='/publish-article' element={<ArticleEditor />} />
         <Route path="/UserData" element={<UserData />} />
         <Route path="/onePage/:id" element={<OnePage />} /> 
+
         <Route path="/edit-article/:articleId" element={<ArticleEditor />} />
         <Route path="/verify-email" element={<EmailVerificationPage />} />
         {/* 你可以在这里添加更多的路由 */}
       </Routes>
-    </main>
+    </main>s
     <Footer />
   </Router>
   );
