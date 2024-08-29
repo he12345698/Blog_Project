@@ -5,9 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
 import java.time.LocalDateTime;
-import java.util.Map;
 import java.util.Optional;
 
 import com.example.blog.Model.AccountVo;
@@ -37,10 +35,6 @@ public class AccountService {
         return accountRepository.findByUsername(username)
                                 .map(AccountVo::getAccountLocked)
                                 .orElse(false);
-    }
-    
-    public Optional<String> checkImageLink(String username) {
-        return accountRepository.findImageLinkByUsername(username);
     }
     
     // 檢查使用者輸入密碼是否正確，錯誤則計數，滿三次鎖定帳戶
@@ -81,7 +75,6 @@ public class AccountService {
         try {
             String token = setVerificationToken(vo);
             vo.setCreatedDate(LocalDateTime.now()); //設置註冊日期
-            
             // 發送郵件
             emailService.sendVerificationEmail(vo, token);
             accountRepository.save(vo);
@@ -118,10 +111,8 @@ public class AccountService {
         // 通过用户名查找用户
         AccountVo account = accountRepository.findByUsername(vo.getUsername())
                                              .orElseThrow(() -> new RuntimeException("用户不存在"));
-
         // 更新密码
         account.setPassword(newPassword);
-
         // 保存更新后的用户信息
         accountRepository.save(account);
     }
@@ -157,7 +148,7 @@ public class AccountService {
         return token;
     }
     
-    // 驗證帳戶
+    // 驗證帳戶(Email)
     public boolean verifyAccount(String token) {
         Optional<AccountVo> accountOpt = findByVerificationToken(token);
         if (accountOpt.isPresent()) {
@@ -172,8 +163,8 @@ public class AccountService {
     }
 
 	public String findImageLinkByUsername(String username) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return accountRepository.findImageLinkByUsername(username);
 	}
     
 }
