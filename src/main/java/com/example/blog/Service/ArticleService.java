@@ -22,7 +22,11 @@ public class ArticleService {
 
     //透過ID查詢文章
     public Optional<ArticleVo> getArticleById(Long articleId) {
-        return articleRepository.findById(articleId);
+
+        return articleRepository.findByIdWithComments(articleId);
+
+        // return articleRepository.findById(articleId);
+
     }
 
     public List<ArticleVo> searchArticleByTitle(String title) {

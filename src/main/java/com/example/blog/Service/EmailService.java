@@ -1,5 +1,8 @@
 package com.example.blog.Service;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
@@ -14,13 +17,11 @@ public class EmailService {
     private final JavaMailSender mailSender;
 
     @Autowired
+    private AccountRepository accountRepository;
+    
+
     public EmailService(JavaMailSender mailSender) {
         this.mailSender = mailSender;
-    }
-    
-    public EmailService() {
-        this.mailSender = null;
-		return;
     }
 
     public void sendResetPasswordEmail(AccountVo vo, String token) {
@@ -54,5 +55,23 @@ public class EmailService {
 
         mailSender.send(message);
     }
-    
+
+    public String verifyEmail(String token) {
+        Optional<AccountVo> vo = accountRepository.findByVerificationToken(token);
+        if (!vo.isPresent()) {
+            return "無效的驗證鏈接";
+        }
+
+        AccountVo account = vo.get();
+        if (account.getTokenExpiration().isBefore(LocalDateTime.now())) {
+            return "驗證鏈接已過期";
+        }
+
+        account.setIsVerified(true);
+        account.setVerificationToken(null); // 清除 token
+        account.setTokenExpiration(null);
+        accountRepository.save(account);
+
+        return "您的帳號已成功驗證";
+    }
 }

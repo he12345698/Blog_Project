@@ -119,8 +119,8 @@ public class UserProfileController {
 
             // 只保留 "public/UserImages/...jpg" 部分
             // 生成相對路徑並保留反斜線
-            Path relativePath = Paths.get("public", "UserImages", fileName);
-            String relativeImagePath = relativePath.toString();
+            Path netPath = Paths.get("http://localhost:8080","public", "UserImages", fileName);
+            String relativeImagePath = netPath.toString();
 
             // 更新資料庫中的圖片路徑
             userProfileService.updateUserImagePath(id, relativeImagePath);

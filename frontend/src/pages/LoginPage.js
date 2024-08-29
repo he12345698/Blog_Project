@@ -4,7 +4,7 @@ import '../styles/pages/LoginPage.css';
 import Maintenanceheader from '../Maintenanceheader';
 import { FaSync } from 'react-icons/fa';
 
-const LoginPage = ({ onLoginSuccess }) => {
+const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [captcha, setCaptcha] = useState(''); // 用戶輸入的驗證碼
@@ -51,14 +51,11 @@ const LoginPage = ({ onLoginSuccess }) => {
     }
     document.addEventListener('mousemove', handleMouseMove);
 
-
     const initialUsername = searchParams.get('username');
     const initialPassword = searchParams.get('password');
   
     if (initialUsername && initialPassword) {
-
-      // fetch('http://192.168.50.38:8080/blog/ac/login', {
-      fetch('http://localhost:8080/blog/ac/login', {
+      fetch('http://niceblog.myvnc.com:8080/blog/ac/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -109,6 +106,7 @@ const LoginPage = ({ onLoginSuccess }) => {
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem('token', data.token);
+
         navigate('/');
       } else {
         const error = await response.json();
@@ -130,7 +128,7 @@ const LoginPage = ({ onLoginSuccess }) => {
         className="custom-cursor"
         style={{ left: `${cursorPosition.x}px`, top: `${cursorPosition.y}px` }}
       ></div>
-      <Maintenanceheader />{/* 系統維護中跑馬燈 */}
+      {/* <Maintenanceheader />系統維護中跑馬燈 */}
       <div className="loginform-container">
         <h2>登入</h2>
         <form onSubmit={handleSubmit}>
