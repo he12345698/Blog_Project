@@ -17,6 +17,7 @@ const UserData = () => {
 
     return (
         <div class={styles.wrapper}>
+            <ImageUpload id={7}/>
             <h1>Account Name的小窩</h1>
             <main class={styles.profile_wrapper}>
                 <div className={styles.profile_container}>
@@ -25,7 +26,7 @@ const UserData = () => {
                         <UserProfile userId={7}/>
                         </div>
                         <div className={styles.avatar}>
-                        <UserAvatar />
+                        <UserAvatar userId={7}/>
                         </div>
                         <div className={styles.full_width}>
                             {/* <UserArticles articles={articles} /> */}
