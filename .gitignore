@@ -46,6 +46,7 @@ build/
 frontend/*
 !frontend/src/
 !frontend/src/**
+src/main/resources/application.properties
 
 mvnw
 mvnw.cmd
