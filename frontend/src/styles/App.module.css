@@ -1,6 +1,6 @@
 /* App.css */
 body {
-  margin: 0;
+  margin-top: 40px;
   font-family: Arial, sans-serif;
 }
 
@@ -8,4 +8,5 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  margin-top: 40px;
 }

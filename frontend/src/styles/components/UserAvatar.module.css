@@ -30,3 +30,9 @@ body, h1, p, a {
     padding: 5px;
     border-radius: 5px;
 }
+
+
+.mymodal {
+    width: 500px;
+    height: 300px;
+    }

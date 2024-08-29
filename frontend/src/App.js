@@ -7,12 +7,11 @@ import ArticlesPage from './pages/ArticlesPage';
 import Test1 from './Test1';
 
 import SingleArticle from './pages/SingleArticle';
-
+import styles from './styles/App.module.css'
 import UserData from './pages/UserData';
 
 
 import ArticleEditor from './pages/ArticleEditor';
-import './styles/App.css';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './ResetPasswordPage ';
 import Header from './components/Header';
@@ -36,7 +35,7 @@ const App = () => {
   return (
     <Router>
       <Header username={username} userImage={userImage} /> 
-    <main>
+    <main className={styles.app}>
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/login" element={<LoginPage onLoginSuccess={handleLoginSuccess} />} />

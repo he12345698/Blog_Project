@@ -1,34 +1,41 @@
-import React, { useState, useRef, useEffect } from "react";
-import Cropper from "cropperjs";
-import "cropperjs/dist/cropper.min.css";
+import React, { useRef, useState } from "react";
+import Cropper from "react-cropper";
+import "cropperjs/dist/cropper.css"; // 引入 Cropper 的 CSS
 import styles from "../styles/components/ImageCropper.module.css";
 
 const ImageCropper = ({ src }) => {
-    const [imageDestination, setImageDestination] = useState("");
-    const imageElement = useRef(null);
+    const cropperRef = useRef(null);
+    const [croppedImageUrl, setCroppedImageUrl] = useState("");
 
-    useEffect(() => {
-        const cropper = new Cropper(imageElement.current, {
-            zoomable: false,
-            scalable: false,
-            aspectRatio: 1,
-            crop: () => {
-                const canvas = cropper.getCroppedCanvas();
-                setImageDestination(canvas.toDataURL("image/png"));
+    const onCrop = () => {
+        const cropper = cropperRef.current.cropper;
+        cropper.getCroppedCanvas().toBlob((blob) => {
+            if (blob) {
+                const url = URL.createObjectURL(blob);
+                setCroppedImageUrl(url);
             }
-        });
-
-        return () => {
-            cropper.destroy();
-        };
-    }, []);
+        }, "image/jpeg");
+    };
 
     return (
         <div>
             <div className={styles.img_container}>
-                <img ref={imageElement} src={src} alt="Source" />
+                <Cropper
+                    src={src}
+                    style={{ height: 400, width: "100%" }}
+                    initialAspectRatio={1}
+                    aspectRatio={1}
+                    guides={false}
+                    crop={onCrop}
+                    ref={cropperRef}
+                />
             </div>
-            <img className={styles.img_preview} src={imageDestination} alt="Destination" />
+            {croppedImageUrl && (
+                <div className={styles.img_preview}>
+                    <h3>圖片預覽:</h3>
+                    <img src={croppedImageUrl} alt="Cropped" className={styles.img}/>
+                </div>
+            )}
         </div>
     );
 };
