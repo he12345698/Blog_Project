@@ -9,7 +9,7 @@ import Test1 from './Test1';
 import SingleArticle from './pages/SingleArticle';
 
 import UserData from './pages/UserData';
-import OnePage from './pages/OnePage';
+// import OnePage from './pages/OnePage';
 
 import ArticleEditor from './pages/ArticleEditor';
 import './styles/App.css';
@@ -17,7 +17,6 @@ import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './ResetPasswordPage ';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import SearchBar from './components/SearchBar';
 import EmailVerificationPage from './pages/EmailVerificationPage';
 
 const App = () => {
@@ -49,7 +48,7 @@ const App = () => {
 
         <Route path='/publish-article' element={<ArticleEditor />} />
         <Route path="/UserData" element={<UserData />} />
-        <Route path="/onePage/:id" element={<OnePage />} /> 
+        {/* <Route path="/onePage/:id" element={<OnePage />} />  */}
 
         <Route path="/edit-article/:articleId" element={<ArticleEditor />} />
         <Route path="/verify-email" element={<EmailVerificationPage />} />
