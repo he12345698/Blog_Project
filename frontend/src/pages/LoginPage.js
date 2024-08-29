@@ -18,20 +18,20 @@ const LoginPage = () => {
   // 加載驗證碼圖片
   const loadCaptcha = async () => {
     try {
-      // const response = await fetch('http://niceblog.myvnc.com:8080/blog/ac/captcha', {
-      const response = await fetch('http://localhost:8080/blog/ac/captcha', {
+      const response = await fetch('http://niceblog.myvnc.com:8080/blog/ac/captcha', {
+        //const response = await fetch('http://localhost:8080/blog/ac/captcha', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
         credentials: 'include' // 包含凭证 (Cookies)
       });
-  
+
       if (response.ok) {
         // 将响应的 Blob 对象转换为 URL
         const blob = await response.blob();
         const captchaUrl = URL.createObjectURL(blob);
-        
+
         // 更新图片的 src 属性
         setCaptchaUrl(captchaUrl);
       } else {
@@ -47,13 +47,13 @@ const LoginPage = () => {
     loadCaptcha();
 
     const handleMouseMove = (e) => {
-    setCursorPosition({ x: e.pageX, y: e.pageY });
+      setCursorPosition({ x: e.pageX, y: e.pageY });
     }
     document.addEventListener('mousemove', handleMouseMove);
 
     const initialUsername = searchParams.get('username');
     const initialPassword = searchParams.get('password');
-  
+
     if (initialUsername && initialPassword) {
       fetch('http://localhost:8080/blog/ac/login', {
         method: 'POST',
@@ -67,19 +67,19 @@ const LoginPage = () => {
         }),
         //credentials: 'include',
       })
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error('Login failed');
-      })
-      .then(data => {
-        localStorage.setItem('token', data.token);
-        navigate('/');
-      })
-      .catch(error => {
-        setErrorMessage(error.message || '登入失敗，請重試。');
-      });
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          }
+          throw new Error('Login failed');
+        })
+        .then(data => {
+          localStorage.setItem('token', data.token);
+          navigate('/');
+        })
+        .catch(error => {
+          setErrorMessage(error.message || '登入失敗，請重試。');
+        });
     }
   }, [searchParams, navigate]);
 
@@ -101,7 +101,7 @@ const LoginPage = () => {
         credentials: 'include',
       });
 
-      
+
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem('token', data.token);
@@ -154,34 +154,34 @@ const LoginPage = () => {
             />
           </div>
           <div className="form-group captcha-group">
-          <div className="captcha-container">
-            <img
-              src={captchaUrl}
-              alt="captcha"
-              className="captcha-image"
-              onClick={loadCaptcha}
-            />
-            <button
-              type="button"
-              className="refresh-button"
-              onClick={loadCaptcha}
-              aria-label="刷新验证码"
-            >
-              <FaSync />
-            </button>
+            <div className="captcha-container">
+              <img
+                src={captchaUrl}
+                alt="captcha"
+                className="captcha-image"
+                onClick={loadCaptcha}
+              />
+              <button
+                type="button"
+                className="refresh-button"
+                onClick={loadCaptcha}
+                aria-label="刷新验证码"
+              >
+                <FaSync />
+              </button>
+            </div>
+            <div className="form-group">
+              <label htmlFor="captcha">驗證碼</label>
+              <input
+                type="text"
+                id="captcha"
+                name="captcha"
+                value={captcha}
+                onChange={(e) => setCaptcha(e.target.value)}
+                required
+              />
+            </div>
           </div>
-          <div className="form-group">
-            <label htmlFor="captcha">驗證碼</label>
-            <input
-              type="text"
-              id="captcha"
-              name="captcha"
-              value={captcha}
-              onChange={(e) => setCaptcha(e.target.value)}
-              required
-            />
-          </div>
-        </div>
           <button type="submit">登入</button>
           <div className="error-placeholder">
             {errorMessage && (

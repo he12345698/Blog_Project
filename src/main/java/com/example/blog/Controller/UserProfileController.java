@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -77,11 +79,11 @@ public class UserProfileController {
     }
 
     @PostMapping("/upload-image/{id}")
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file, @PathVariable(value = "id") Long id) {
+    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file, @PathVariable(value = "id") Long id) throws MalformedURLException {
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("請選擇一個檔案來上傳。");
         }
-
+        
         // 圖片大小限制在10MB以下
         final long MAX_SIZE = 10 * 1024 * 1024;
         if (file.getSize() > MAX_SIZE) {
@@ -90,12 +92,25 @@ public class UserProfileController {
 
         // 查詢資料庫以獲取原有的圖片路徑
         AccountVo accountVo = userProfileService.getUserById(id);
-        String existingImagePath = "frontend/" + accountVo.getImagelink().toString();
-        System.out.println(existingImagePath);
-
+//        String existingImagePath = "frontend/" + accountVo.getImagelink().toString();
+//        String imageUrl = accountVo.getImagelink();
+//        String imagePath = imageUrl.replaceAll("^[^/]+//[^/]+", "");
+//        System.out.println(existingImagePath);
+//        System.out.println("imagePath is " + imagePath);
+//        String localFilePath = "E:\\Blog_Project\\frontend\\public\\UserImages\\123.jpg";
+        String url = accountVo.getImagelink().toString();
+        URL urlObj = new URL(url);
+        String path = urlObj.getPath();
+        String localRootDirectory = "E:\\Blog_Project\\frontend\\public";
+        // 拼接本地文件路径
+        String localFilePath = localRootDirectory + path.replace('/', '\\'); // 替换斜杠为反斜杠
+        // 创建 Path 对象
+        Path existingFilePath = Paths.get(localFilePath);
+        
         // 如果存在原有的圖片，刪除它
-        if (existingImagePath != null) {
-            Path existingFilePath = Paths.get(existingImagePath);
+        if (existingFilePath != null) {
+            //Path existingFilePath = Paths.get(localFilePath);
+            System.out.println("existingFilePath is " + existingFilePath);
             try {
                 boolean deleted = Files.deleteIfExists(existingFilePath);
                 if (!deleted) {
@@ -110,8 +125,8 @@ public class UserProfileController {
         try {
             // 生成唯一的檔案名稱
             String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-            Path filePath = Paths.get(UPLOAD_DIR, fileName);
-
+            Path filePath = Paths.get("E:\\Blog_Project\\frontend\\public\\UserImages\\", fileName);
+            System.out.println(filePath);
             // 確保目錄存在，創建上傳目錄（包括所有父目錄）
             Files.createDirectories(filePath.getParent());
 
@@ -120,7 +135,7 @@ public class UserProfileController {
 
             // 只保留 "public/UserImages/...jpg" 部分
             // 生成相對路徑並保留反斜線
-            Path netPath = Paths.get("http://localhost:8080","public", "UserImages", fileName);
+            Path netPath = Paths.get("public", "UserImages", fileName);
             String relativeImagePath = netPath.toString();
 
             // 更新資料庫中的圖片路徑
