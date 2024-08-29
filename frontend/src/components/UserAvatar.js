@@ -19,7 +19,7 @@ const UserAvatar = ({ userId }) => {
             // });
             if (token) {
                 try {
-                    const response = await fetch('http://localhost:8080/blog/api/protected-endpoint', {
+                    const response = await fetch('http://niceblog.myvnc.com:8080/blog/api/protected-endpoint', {
                         method: 'GET',
                         headers: {
                             'Authorization': `Bearer ${token}`
@@ -93,7 +93,7 @@ const UserAvatar = ({ userId }) => {
                 contentLabel="Crop Avatar"
                 style={customStyles}
             >
-                <ImageCropper src="UserImages/IMG_20240701_124913.JPG"/>
+                <ImageCropper src="UserImages/123.JPG"/>
             </Modal>
         </div>
     );

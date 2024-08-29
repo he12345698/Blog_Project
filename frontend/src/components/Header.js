@@ -80,7 +80,7 @@ const Header = () => {
           <Link to="/edit-article">編輯文章</Link>
           <Link to="/publish-article">發表文章</Link>
           <Link to="/about">關於我們</Link>
-          <Link to="/account">帳戶管理</Link>
+          <Link to="/UserData">帳戶管理</Link>
           <Link to="/">首頁</Link>
         </nav>
         <div className={styles["user-login-container"]}>
