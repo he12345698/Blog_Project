@@ -12,7 +12,6 @@ import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './ResetPasswordPage ';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import SearchBar from './components/SearchBar';
 import EmailVerificationPage from './pages/EmailVerificationPage';
 
 

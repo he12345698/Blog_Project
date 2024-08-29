@@ -16,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.blog.Model.AccountVo;
 import com.example.blog.Repository.UserProfileRepository;
 
-
 @Service
 public class UserProfileService {
 

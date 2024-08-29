@@ -18,23 +18,30 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 import java.util.List;
 @Entity
-@Table(name = "articleVo")
+@Table(name = "article_vo")
 @EntityListeners(AuditingEntityListener.class)// 啟用審計功能
 public class ArticleVo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "article_id")
     private Long articleId;
+
     @Column(name = "author_id")
     private Long authorId;
+
     private String title;
+
     @Column(name = "contenttext")
     private String contentTEXT;
+
     @CreatedDate
-    @Column(updatable = false)
+    @Column(name = "published_at", updatable = false)
     private LocalDateTime publishedAt;
+
     @LastModifiedDate
+    @Column(name = "last_edited_at")
     private LocalDateTime lastEditedAt;
+
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CommentVo> comments;
     
