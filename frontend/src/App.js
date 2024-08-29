@@ -32,7 +32,7 @@ const App = () => {
           <Route path="/articlesPage" element={<ArticlesPage />} />
           <Route path="/singleArticle/:articleId" element={<SingleArticle />} />
           <Route path='/publish-article' element={<ArticleEditor />} />
-          <Route path="/UserData" element={<UserData />} />
+          <Route path="/account" element={<UserData />} />
           <Route path="/edit-article/:articleId" element={<ArticleEditor />} />
           <Route path="/verify-email" element={<EmailVerificationPage />} />
           {/* 你可以在这里添加更多的路由 */}

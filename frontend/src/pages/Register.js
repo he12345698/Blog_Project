@@ -66,8 +66,8 @@ const handleSubmit = async (event) => {
     password,
   };
   try {
-    const response = await fetch('http://niceblog.myvnc.com:8080/blog/ac/register', {
-    //const response = await fetch('http://localhost:8080/blog-0.0.1-SNAPSHOT/ac/register', {
+    // const response = await fetch('http://niceblog.myvnc.com:8080/blog/ac/register', {
+    const response = await fetch('http://localhost:8080/blog/ac/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const BACKEND_URL = 'http://localhost:8080';//後端網址
 
-const API_BASE_URL = 'http://localhost:8080/blog-0.0.1-SNAPSHOT/api/articles';
+const API_BASE_URL = 'http://localhost:8080/blog/api/articles';
 
 const getAllArticles = async () => {
     console.log("try to get all...");

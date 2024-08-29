@@ -30,7 +30,7 @@ const UserAvatar = ({ userId }) => {
                         const data = await response.json();
                         console.log('data:', data);
                         console.log('userimage ' + data.userImage)
-                        setUserImage(data.userImage || 'public/UserImages/IMG_20240701_124913.JPG'); // 默认头像
+                        setUserImage(data.userImage || 'UserImages/IMG_20240701_124913.JPG'); // 默认头像
                     } else {
                         console.log('Response error:', response);
                         //setUsername('訪客2');
