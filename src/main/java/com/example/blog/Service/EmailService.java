@@ -10,23 +10,23 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import com.example.blog.Model.AccountVo;
+import com.example.blog.Repository.AccountRepository;
 
 @Service
 public class EmailService {
-
+    @Autowired
     private final JavaMailSender mailSender;
 
     @Autowired
     private AccountRepository accountRepository;
-    
 
     public EmailService(JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }
 
     public void sendResetPasswordEmail(AccountVo vo, String token) {
-        // String resetLink = "http://niceblog.myvnc.com:81/reset-password?token=" + token;
-        String resetLink = "http://localhost:3000/reset-password?token=" + token;
+        String resetLink = "http://niceblog.myvnc.com:81/reset-password?token=" + token;
+        // String resetLink = "http://localhost:3000/reset-password?token=" + token;
         SimpleMailMessage message = new SimpleMailMessage();
 
         message.setTo(vo.getEmail());
@@ -39,14 +39,13 @@ public class EmailService {
             System.err.println("Failed to send email: " + e.getMessage());
         }
     }
-    
+
     public void sendVerificationEmail(AccountVo vo, String token) {
-        // String verificationUrl = "http://niceblog.myvnc.com:81/verify?token=" + token;
-        String verificationUrl = "http://localhost:3000/verify?token=" + token;
+        String verificationUrl = "http://niceblog.myvnc.com:81/verify-email?token=" + token;
         String subject = "請驗證您的電子郵件地址";
         String content = "親愛的 " + vo.getUsername() + "，\n\n" +
-                         "請點擊以下鏈接以驗證您的電子郵件地址：\n" + verificationUrl +
-                         "\n\n謝謝！";
+                "請點擊以下鏈接以驗證您的電子郵件地址：\n" + verificationUrl +
+                "\n\n謝謝！";
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(vo.getEmail());
