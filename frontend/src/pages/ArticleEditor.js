@@ -7,20 +7,25 @@ const ArticleEditor = () => {
     const [title, setTitle] = useState('');
     const [contentTEXT, setContentTEXT] = useState('');
     const [tag, settag] = useState('');
+    const [alltags, setalltags] = useState('');
     const navigate = useNavigate();//用於跳轉網址
     const { articleId } = useParams(); // 假設用於編輯現有文章
 
     // 加載文章內容（如果是編輯模式）
     React.useEffect(() => {
+        tagService.getAllTags().then(alltags => {
+            setalltags(alltags);
+            console.log(alltags);
+        })
         if (articleId) {
             articleService.getArticleById(articleId).then(article => {
                 setTitle(article.title);
                 setContentTEXT(article.contentTEXT);
             });
-            tagService.getTag(articleId).then(tag =>{
-                settag(tag.tag);
-                console.log(tag);
-            });
+            // tagService.getTag(articleId).then(tag =>{
+            //     settag(tag.tag);
+            //     console.log(tag);
+            // });
         }
     }, [articleId]);
 
@@ -31,7 +36,7 @@ const ArticleEditor = () => {
         try {
             if (articleId) {
                 // 更新文章 傳入id和內容
-                console.log("updating... id="+articleId);
+                console.log("updating... id=" + articleId);
                 await articleService.updateArticle(articleId, articleData);
             } else {
                 // 創建新文章 只傳入內容 id自動生成
@@ -66,21 +71,20 @@ const ArticleEditor = () => {
                         </div>
                         <div className="form-group">
                             <label htmlFor="tag">分類：</label>
-                            {/* <select
-                                id="category"
-                                name="category"
-                                value={category}
-                                onChange={(e) => setCategory(e.target.value)}
+                            <select
+                                id="tag"
+                                name="tag"
+                                value={tag}
+                                onChange={(e) => settag(e.target.value)}
                                 required
                             >
                                 <option value="">請選擇分類</option>
-                                <option value="財金">財金</option>
-                                <option value="政治">政治</option>
-                                <option value="體育">體育</option>
-                                <option value="國際">國際</option>
-                                <option value="美食">美食</option>
-                                <option value="遊戲">遊戲</option>
-                            </select> */}
+                                {alltags.map((tag) => (
+                                    <option key={tag.id} value={tag.id}>
+                                        {tag.name}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
                         <div className="form-group">
                             <label htmlFor="contentTEXT">內文：</label>

@@ -23,12 +23,12 @@ public class TagController {
     private TagService tagService;
 
 
-    @GetMapping("/{articleId}")
-    public ResponseEntity<TagVo> getArticleTag(@PathVariable Long articleId) {
-        return tagService.getArticleTag(articleId)
-                .map(tag -> ResponseEntity.ok(tag))
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
+    // @GetMapping("/{articleId}")
+    // public ResponseEntity<TagVo> getArticleTag(@PathVariable Long articleId) {
+    //     return tagService.getArticleTag(articleId)
+    //             .map(tag -> ResponseEntity.ok(tag))
+    //             .orElseGet(() -> ResponseEntity.notFound().build());
+    // }
 
     @GetMapping("/all")
     public List<TagVo> getAllTags(){

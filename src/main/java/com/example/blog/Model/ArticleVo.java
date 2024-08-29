@@ -8,6 +8,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -38,6 +40,11 @@ public class ArticleVo {
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CommentVo> comments;
     
+    @ManyToOne
+    @JoinColumn(name = "tag_id")
+    private TagVo tags;
+
+
     // Getters and setters
     public List<CommentVo> getComments() {
         return comments;
@@ -89,6 +96,14 @@ public class ArticleVo {
         return "ArticleVo [articleId=" + articleId + ", authorId=" + authorId + ", title=" + title
                 + ", contentTEXT=" + contentTEXT + ", publishedAt=" + publishedAt + ", lastEditedAt="
                 + lastEditedAt + "]";
+    }
+
+    public TagVo getTags() {
+        return tags;
+    }
+
+    public void setTags(TagVo tags) {
+        this.tags = tags;
     }
     
 }

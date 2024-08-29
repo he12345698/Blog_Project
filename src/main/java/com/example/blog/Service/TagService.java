@@ -14,9 +14,9 @@ public class TagService {
     @Autowired
     TagRepository tagRepository;
 
-    public Optional<TagVo> getArticleTag(Long articleId) {
-        return tagRepository.findByArticleId(articleId);
-    }
+    // public Optional<TagVo> getArticleTag(Long articleId) {
+    //     return tagRepository.findByArticleId(articleId);
+    // }
 
     public List<TagVo> getAllTags(){
         return tagRepository.findAll();

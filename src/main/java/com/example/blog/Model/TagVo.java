@@ -2,6 +2,8 @@ package com.example.blog.Model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -10,16 +12,17 @@ import jakarta.persistence.Table;
 public class TagVo {
     
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int Id;
-    @Column(name = "name")
-    private String name;
-    public int getId() {
+    private Long Id;
+    public Long getId() {
         return Id;
     }
-    public void setId(int id) {
+    public void setId(Long id) {
         Id = id;
     }
+    @Column(name = "name")
+    private String name;
     public String getName() {
         return name;
     }
