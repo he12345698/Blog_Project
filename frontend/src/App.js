@@ -21,7 +21,7 @@ const App = () => {
   return (
     <Router>
       <Header />
-      <main className={styles["main-content"]}>
+      <main className={styles.app}>
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/login" element={<LoginPage />} />
