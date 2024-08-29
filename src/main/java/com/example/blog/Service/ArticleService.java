@@ -2,22 +2,36 @@ package com.example.blog.Service;
 
 import com.example.blog.Model.ArticleVo;
 import com.example.blog.Repository.ArticleRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class ArticleService {
 
     @Autowired
     private ArticleRepository articleRepository;
-    //取得全部文章 可用於文章列表//先讓Controller跳過Service直接和Repo對接
-    // public Page getAllArticles(Page pageable) {
-    //     return articleRepository.findAll(pageable);
-    // }
+    
+    public Page<ArticleVo> searchArticles(String keyword, String authorKeyword, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        if (keyword != null && !keyword.isEmpty()) {
+            return articleRepository.findByTitleContaining(keyword, pageable);
+        }
+        if (authorKeyword != null && !authorKeyword.isEmpty()) {
+            return articleRepository.findByAuthorUsernameContaining(authorKeyword, pageable);
+        }
+        return articleRepository.findAll(pageable);
+    }
+    
 
     //透過ID查詢文章
     public Optional<ArticleVo> getArticleById(Long articleId) {
@@ -37,4 +51,6 @@ public class ArticleService {
     public void deleteArticle(Long articleId) {
         articleRepository.deleteById(articleId);
     }
+
+    
 }

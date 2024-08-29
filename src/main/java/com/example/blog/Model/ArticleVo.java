@@ -18,7 +18,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 import java.util.List;
 @Entity
-@Table(name = "articleVo")
+@Table(name = "article_vo")
 @EntityListeners(AuditingEntityListener.class)// 啟用審計功能
 public class ArticleVo {
     @Id
