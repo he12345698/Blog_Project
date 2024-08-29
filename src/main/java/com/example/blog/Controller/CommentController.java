@@ -1,4 +1,3 @@
-
 package com.example.blog.Controller;
 
 import java.util.List;
@@ -46,6 +45,7 @@ public class CommentController {
 
     @PostMapping
     public CommentVo createComment(@RequestBody CommentVo comment) {
+
         return commentService.saveComment(comment);
     }
 }
