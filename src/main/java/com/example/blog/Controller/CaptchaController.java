@@ -25,28 +25,28 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-@CrossOrigin(origins = "http://niceblog.myvnc.com:81")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/ac")
 public class CaptchaController {
-	
-	public String getClientIp(HttpServletRequest request) {
-	    String header = request.getHeader("X-Forwarded-For");
-	    if (header == null || header.isEmpty() || "unknown".equalsIgnoreCase(header)) {
-	        header = request.getHeader("X-Real-IP");
-	    }
-	    if (header == null || header.isEmpty() || "unknown".equalsIgnoreCase(header)) {
-	        header = request.getRemoteAddr();
-	    }
-	    return header;
-	}
+
+    public String getClientIp(HttpServletRequest request) {
+        String header = request.getHeader("X-Forwarded-For");
+        if (header == null || header.isEmpty() || "unknown".equalsIgnoreCase(header)) {
+            header = request.getHeader("X-Real-IP");
+        }
+        if (header == null || header.isEmpty() || "unknown".equalsIgnoreCase(header)) {
+            header = request.getRemoteAddr();
+        }
+        return header;
+    }
 
     @GetMapping("/captcha")
     public void getCaptcha(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    	
-    	String clientIpAddress = getClientIp(request);
+
+        String clientIpAddress = getClientIp(request);
         System.out.println("Client IP Address: " + clientIpAddress);
-    	
+
         int width = 160;
         int height = 40;
         char data[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".toCharArray();
@@ -62,7 +62,7 @@ public class CaptchaController {
         for (int i = 0; i < 6; i++) {
             captcha += data[random.nextInt(data.length)];
         }
-        
+
         HttpSession session = request.getSession();
         System.out.println("Session ID: " + session.getId());
         session.setAttribute("captcha", captcha);
@@ -73,7 +73,7 @@ public class CaptchaController {
         response.setContentType("image/png");
         ImageIO.write(bufferedImage, "png", response.getOutputStream());
     }
-    
+
     public ResponseEntity<Map<String, String>> validateCaptcha(@RequestBody AccountVo vo, HttpServletRequest request) {
         HttpSession session = request.getSession(); // 从 session 中获取生成的验证码
         String sessionCaptcha = (String) session.getAttribute("captcha");
@@ -95,6 +95,3 @@ public class CaptchaController {
         return ResponseEntity.ok(Collections.singletonMap("message", "驗證碼正確"));
     }
 }
-
-
-
