@@ -9,7 +9,9 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import com.example.blog.Model.AccountVo;
+
 import com.example.blog.Repository.AccountRepository;
+
 
 @Service
 public class AccountService {
@@ -20,6 +22,8 @@ public class AccountService {
     @Autowired
     private EmailService emailService;
     
+
+
     // 檢查用戶名是否已存在
     public boolean checkId(String username) {
         return accountRepository.findByUsername(username).isPresent();
@@ -47,10 +51,11 @@ public class AccountService {
             AccountVo vo = optionalUser.get();
 
             if (vo.getPassword().equals(inputPassword)) {
+
                 vo.setLoginAttempts(0); // 重置登錄嘗試次數
                 vo.setLastLoginDate(LocalDateTime.now()); //設置最後登入時間
                 accountRepository.save(vo);
-                
+
                 return ResponseEntity.ok("登入成功");
             } else {
                 int attempts = vo.getLoginAttempts() + 1;
@@ -70,6 +75,7 @@ public class AccountService {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("用戶名或密碼錯誤");
     }
     
+
     // 插入新用戶資料
     public boolean insertUser(AccountVo vo) {
         try {
@@ -80,7 +86,7 @@ public class AccountService {
             accountRepository.save(vo);
             return true;
         } catch (Exception e) {
-        	
+
             return false;
         }
     }
@@ -117,6 +123,7 @@ public class AccountService {
         accountRepository.save(account);
     }
 
+
     // 根據用戶名查找帳戶
     public Optional<AccountVo> findByUsername(String username) {
         return accountRepository.findByUsername(username);
@@ -139,12 +146,12 @@ public class AccountService {
     }
     
     //設置生成的token至資料庫
+
     public String setVerificationToken(AccountVo vo) {
         String token = generateVerificationToken(); // 自定義方法生成驗證 token
         vo.setVerificationToken(token);
         vo.setTokenExpiration(LocalDateTime.now().plusHours(24));  // 設置24小時過期時間
         accountRepository.save(vo);  // 保存帳戶
-        
         return token;
     }
     
@@ -166,5 +173,4 @@ public class AccountService {
 		
 		return accountRepository.findImageLinkByUsername(username);
 	}
-    
 }

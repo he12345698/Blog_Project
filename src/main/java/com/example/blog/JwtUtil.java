@@ -17,10 +17,10 @@ public class JwtUtil {
     private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     // 生成JWT token
-    public static String generateToken(String username, String imageLink) {
+    public static String generateToken(String username, Optional<String> optional) {
         return Jwts.builder()
         		.setSubject(username)
-        		.claim("imagelink", imageLink)
+        		.claim("imagelink", optional)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10小时过期
                 .signWith(SECRET_KEY) // 修正簽名方式

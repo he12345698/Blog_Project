@@ -1,3 +1,4 @@
+
 package com.example.blog.Repository;
 
 import java.util.List;
@@ -10,7 +11,5 @@ public interface CommentRepository extends JpaRepository<CommentVo, Long> {
     // 根據 ArticleVo 的 article_id 查詢所有評論
     List<CommentVo> findByArticleArticleId(Long articleId);
 }
-
-
 
 

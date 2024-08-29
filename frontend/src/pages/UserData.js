@@ -3,6 +3,7 @@ import UserProfile from "../components/UserProfile";
 import UserAvatar from "../components/UserAvatar";
 import UserArticles from "../components/UserArticles";
 import styles from "../styles/pages/UserData.module.css"
+import ImageUpload from "../components/ImageUpload";
 
 const articles = [
     { title: '文章標題 1', url: 'article1-url', description: '文章摘要或簡短描述 1' },
@@ -15,15 +16,16 @@ const UserData = () => {
 
     return (
         <div class={styles.wrapper}>
+            <ImageUpload id={7}/>
             <h1>Account Name的小窩</h1>
             <main class={styles.profile_wrapper}>
                 <div className={styles.profile_container}>
                     <div className={styles.grid_container}>
                         <div className={styles.profile}>
-                        <UserProfile userId={4}/>
+                        {/* <UserProfile userId={4}/> */}
                         </div>
                         <div className={styles.avatar}>
-                        <UserAvatar />
+                        <UserAvatar userId={7}/>
                         </div>
                         <div className={styles.full_width}>
                             {/* <UserArticles articles={articles} /> */}
