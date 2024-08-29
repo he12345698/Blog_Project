@@ -1,6 +1,7 @@
 package com.example.blog.Controller;
 
 import java.io.IOException;
+
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -40,12 +41,12 @@ import jakarta.servlet.http.HttpSession;
 
 import org.springframework.ui.Model;
 
-
-
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.fusesource.jansi.Ansi;
+import org.fusesource.jansi.AnsiConsole;
 
 @RestController
 @RequestMapping("/ac")
@@ -88,7 +89,7 @@ public class AccountAction {
 
             // 查詢用戶是否存在
             if (!accountService.checkId(vo.getUsername())) {
-                System.out.println("未知的使用者名稱：" + vo.getUsername() + " 於 " + new Date(System.currentTimeMillis()) + " 嘗試登入");
+                System.out.println("\033[0;31m" + "未知的使用者名稱：" + vo.getUsername() + " 於 " + new Date(System.currentTimeMillis()) + " 嘗試登入" + "\033[0m");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "使用者不存在"));
             }
             
@@ -105,7 +106,7 @@ public class AccountAction {
                 errorResponse.put("message", checkUserPasswordResponse.getBody());
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
             }
-            System.out.println("使用者：" + vo.getUsername() + " 於 " + new Date(System.currentTimeMillis()) + " 登入");
+            System.out.println("\033[0;32m" + "使用者：" + vo.getUsername() + " 於 " + new Date(System.currentTimeMillis()) + " 登入" + "\033[0m");
             
             // 如果验证成功，生成 JWT
             if (checkUserPasswordResponse.getStatusCode() == HttpStatus.OK) {
@@ -113,7 +114,7 @@ public class AccountAction {
                 String token = JwtUtil.generateToken(vo.getUsername(), accountRepository.findImageLinkByUsername(vo.getUsername())); 
                 // 将 JWT 添加到响应头中
                 response.setHeader("Authorization", "Bearer " + token);
-                System.out.println(token);
+                System.out.println("已生成token:" + token);
                 // 返回 JSON 对象
                 Map<String, String> responseBody = new HashMap<>();
                 responseBody.put("token", token);
@@ -162,8 +163,10 @@ public class AccountAction {
         String username = payload.get("username");
 
         // 後臺打印登出通知
-        System.out.println("使用者：" + username + " 於 " + new Date(System.currentTimeMillis()) + " 登出");
+        System.out.println("\033[0;31m" + "使用者：" + username + " 於 " + new Date(System.currentTimeMillis()) + " 登出" + "\033[0m");
 
+        //System.out.println(ansi().fgRed().a("123").reset());
+        
         return ResponseEntity.ok("登出通知接收成功");
     }
     
