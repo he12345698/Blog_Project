@@ -169,7 +169,7 @@ button[type="submit"]:hover {
   .captcha-container {
     display: flex;
     align-items: center;
-    margin-top: 11PX;
+    margin-top: 12PX;
   }
   /*
   .captcha-image {
@@ -191,7 +191,6 @@ button[type="submit"]:hover {
     background: url('/public/UserImages/122.gif') no-repeat center center;
     background-size: contain;
     pointer-events: none;} /* 使光標不可點擊 */
-     */
     
   
   .refresh-button {

@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import styles from '../styles/components/Header.module.css';
 
-import '../styles/components/Header.css';
 
-
-const Header = ({ triggerFetchUser }) => {
+const Header = () => {
 
   const [username, setUsername] = useState('');
   const [userImage, setUserImage] = useState('');
+  const location = useLocation();
 
   const notifyLogout = async () => {
     try {
       await fetch('http://192.168.50.38:8080/blog/ac/logout-notify', {
-      //await fetch('http://localhost:8080/blog-0.0.1-SNAPSHOT/ac/logout-notify', {
+        //await fetch('http://localhost:8080/blog-0.0.1-SNAPSHOT/ac/logout-notify', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -28,7 +29,7 @@ const Header = ({ triggerFetchUser }) => {
   };
 
   const handleLogout = () => {
-    notifyLogout(); 
+    notifyLogout();
     // 处理登出逻辑，例如清除本地存储的 token，重定向到登录页面等
     window.localStorage.removeItem('token');
     //setUsername('未登入');
@@ -52,6 +53,8 @@ const Header = ({ triggerFetchUser }) => {
 
           if (response.ok) {
             const data = await response.json();
+            console.log('username is:', data.username);
+            console.log('userImage is:', data.userImage);
             setUsername(data.username || '訪客1');
             setUserImage(data.userImage || '/Image/GG'); // 默认头像
           } else {
@@ -66,14 +69,13 @@ const Header = ({ triggerFetchUser }) => {
     };
 
     fetchUserInfo();
-  }, [triggerFetchUser]); // 监听 triggerFetchUser 的变化
+  }, [location]);
 
   return (
-    <header className="top-bar">
-      <link rel="icon" type="image/gif" href="./favicon.gif" />
-      <div className="top-container">
-        <div className="logo">xxx部落格</div>
-        <nav className="navigation">
+    <header className={styles["top-bar"]}>
+      <div className={styles["top-container"]}>
+        <div className={styles.logo}>xxx部落格</div>
+        <nav className={styles.navigation}>
           <Link to="/articlesPage">所有文章</Link>
           <Link to="/edit-article">編輯文章</Link>
           <Link to="/publish-article">發表文章</Link>
@@ -81,21 +83,21 @@ const Header = ({ triggerFetchUser }) => {
           <Link to="/account">帳戶管理</Link>
           <Link to="/">首頁</Link>
         </nav>
-        <div className="user-login-container">
+        <div className={styles["user-login-container"]}>
           {username ? (
-            <div className="user-info">
+            <div className={styles["user-info"]}>
               <img
                 src={userImage}
                 width="50"
                 height="50"
                 alt="User Avatar"
-                className="user-avatar"
+                className={styles["user-avatar"]}
               />
-              <span className="username">使用者：{username}</span>
-              <button onClick={handleLogout} className="logout-btn">登出</button>
+              <span className={styles.username}>使用者：{username}</span>
+              <button onClick={handleLogout} className={styles["logout-btn"]}>登出</button>
             </div>
           ) : (
-            <div className="login-btn">
+            <div className={styles["login-btn"]}>
               <button onClick={() => window.location.href = '/login'}>登入</button>
             </div>
           )}
