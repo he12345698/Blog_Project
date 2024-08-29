@@ -6,7 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 // 註解為 JPA 實體類別，對應到資料庫中的 comment 表
-@Entity
+// @Entity
 public class Comment {
 
     // 設定主鍵，並指定自動生成策略為自增
