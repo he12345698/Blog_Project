@@ -1,21 +1,15 @@
 package com.example.blog;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-
 import java.security.Key;
 import java.util.Date;
 import java.util.Optional;
-
 import com.example.blog.Model.AccountVo;
-
 public class JwtUtil {
-
     // 生成一個安全密鑰
     private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-
     // 生成JWT token
     public static String generateToken(String username, String imageLink) {
         return Jwts.builder()
@@ -26,7 +20,6 @@ public class JwtUtil {
                 .signWith(SECRET_KEY) // 修正簽名方式
                 .compact();
     }
-
     // 提取Claims
     public static Claims extractClaims(String token) {
         return Jwts.parserBuilder()
@@ -35,7 +28,6 @@ public class JwtUtil {
                 .parseClaimsJws(token)
                 .getBody();
     }
-
     // 提取用户名
     public static String extractUsername(String token) {
         return extractClaims(token).getSubject();
@@ -56,4 +48,3 @@ public class JwtUtil {
         return username.equals(extractUsername(token)) && !isTokenExpired(token);
     }
 }
-

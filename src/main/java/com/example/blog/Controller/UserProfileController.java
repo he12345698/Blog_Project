@@ -76,10 +76,29 @@ public class UserProfileController {
     public ResponseEntity<String> uploadImage(@RequestParam("image") MultipartFile image,
             @PathVariable(value = "id") Long id) {
         try {
-            String imageName = userProfileService.uploadImage(image, id);
-            return ResponseEntity.ok("圖片上傳成功, 檔案名稱: " + imageName);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            // 生成唯一的檔案名稱
+            String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+            Path filePath = Paths.get(UPLOAD_DIR, fileName);
+
+            // 確保目錄存在，創建上傳目錄（包括所有父目錄）
+            Files.createDirectories(filePath.getParent());
+
+            // 儲存檔案到指定目錄
+            Files.write(filePath, file.getBytes());
+
+            // 只保留 "public/UserImages/...jpg" 部分
+            // 生成相對路徑並保留反斜線
+            Path netPath = Paths.get("http://localhost:8080","public", "UserImages", fileName);
+            String relativeImagePath = netPath.toString();
+
+            // 更新資料庫中的圖片路徑
+            userProfileService.updateUserImagePath(id, relativeImagePath);
+
+            // 構建返回的 JSON
+            String jsonResponse = String.format("{\"filePath\":\"%s\"}", filePath.toString().replace("\\", "\\\\"));
+
+            // 返回檔案的路徑
+            return ResponseEntity.ok().body(jsonResponse);
         } catch (IOException e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("圖片上傳失敗");

@@ -1,6 +1,6 @@
 /* App.css */
 body {
-  margin: 0;
+  margin-top: 40px;
   font-family: Arial, sans-serif;
 }
 
@@ -8,9 +8,5 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-}
-
-main {
-  margin-top: 60px; /* 确保这个值与 header 的高度一致 */
-  padding: 20px; /* 可选，增加额外的内边距以美化布局 */
+  margin-top: 40px;
 }

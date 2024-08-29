@@ -91,16 +91,26 @@ const UserAvatar = ({ userId }) => {
         const formData = new FormData();
         formData.append('avatar', croppedImage);
 
-        fetch('/api/upload-avatar', {
-            method: 'POST',
-            body: formData,
-        }).then(response => {
-            if (response.ok) {
-                console.log('上传成功');
-                setIsModalOpen(false);
-            }
-        });
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+
+    const openModal = () => {
+        setIsModalOpen(true);
     };
+
+    const customStyles = {
+        content: {
+            width: '70%', 
+            height: '70%', 
+            top: '50%',
+            left: '50%',
+            right: 'auto',
+            bottom: 'auto',
+            marginRight: '-50%',
+            transform: 'translate(-50%, -50%)'
+        }
+    };
+    
 
     return (
         <div className={`${styles.profile_picture_wrapper} text-center`}>
@@ -116,7 +126,7 @@ const UserAvatar = ({ userId }) => {
             <button
                 type="button"
                 className={`btn btn-dark ${styles.photo}`}
-                onClick={() => setIsModalOpen(true)}
+            onClick={() => setIsModalOpen(true)}
             >
                 更新頭像
             </button>
@@ -125,47 +135,9 @@ const UserAvatar = ({ userId }) => {
                 isOpen={isModalOpen}
                 onRequestClose={() => setIsModalOpen(false)}
                 contentLabel="Crop Avatar"
+                style={customStyles}
             >
-                <input type="file" accept="image/*" onChange={handleFileChange} />
-                {imageSrc && (
-                    <>
-                        <ReactCrop
-                            src={imageSrc}
-                            crop={crop}
-                            onChange={newCrop => setCrop(newCrop)}
-                            onComplete={handleCropComplete}
-                        />
-                        <div>
-                            <label>
-                                最大宽度:
-                                <input
-                                    type="number"
-                                    value={maxWidth}
-                                    onChange={(e) => setMaxWidth(parseInt(e.target.value, 10))}
-                                />
-                            </label>
-                            <label>
-                                最大高度:
-                                <input
-                                    type="number"
-                                    value={maxHeight}
-                                    onChange={(e) => setMaxHeight(parseInt(e.target.value, 10))}
-                                />
-                            </label>
-                        </div>
-                        {previewSrc && (
-                            <div className="preview-container mt-3">
-                                <h3>预览</h3>
-                                <img
-                                    src={previewSrc}
-                                    alt="Cropped Preview"
-                                    style={{ maxWidth: '100%', height: 'auto' }}
-                                />
-                            </div>
-                        )}
-                    </>
-                )}
-                <button type="button" onClick={handleUpload}>確定並上傳</button>
+                <ImageCropper src="UserImages/IMG_20240701_124913.JPG"/>
             </Modal>
         </div>
     );
