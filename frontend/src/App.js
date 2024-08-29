@@ -5,9 +5,9 @@ import Register from './pages/Register';
 import ArticlesPage from './pages/ArticlesPage';
 import Test1 from './Test1';
 import SingleArticle from './pages/SingleArticle';
+import styles from './styles/App.module.css'
 import UserData from './pages/UserData';
 import ArticleEditor from './pages/ArticleEditor';
-import styles from './styles/App.module.css';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './ResetPasswordPage ';
 import Header from './components/Header';
