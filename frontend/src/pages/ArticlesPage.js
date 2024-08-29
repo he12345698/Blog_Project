@@ -6,18 +6,18 @@ const ArticlesPage = () => {
   const [articles, setArticles] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-  const [searchQuery, setSearchQuery] = useState(''); // 用於跟蹤搜尋查詢
+  const [query, setQuery] = useState(''); // 單一搜尋查詢
 
   // 處理搜尋功能
-  const handleSearch = (query) => {
-    setSearchQuery(query); // 更新搜尋查詢
+  const handleSearch = (searchQuery) => {
+    setQuery(searchQuery); // 更新搜尋查詢
     setCurrentPage(0); // 搜尋時返回到首頁
-    fetchArticles(query, 0);
+    fetchArticles(searchQuery, 0);
   };
 
   // 獲取文章數據
   const fetchArticles = (query, page) => {
-    fetch(`http://localhost:8080/blog/api/articles/search?keyword=${encodeURIComponent(query)}&authorKeyword=${encodeURIComponent(query)}&page=${page}&size=10`)
+    fetch(`http://localhost:8080/blog/api/articles/search?keyword=${encodeURIComponent(query)}&page=${page}&size=10`)
       .then(response => response.json())
       .then(data => {
         setArticles(data.content || []);
@@ -25,19 +25,19 @@ const ArticlesPage = () => {
       })
       .catch(error => console.error('Error fetching data:', error));
   };
-  
+
   // 處理分頁更改
   const handlePageChange = (page) => {
     if (page >= 0 && page < totalPages) {
       setCurrentPage(page);
-      fetchArticles(searchQuery, page);
+      fetchArticles(query, page);
     }
   };
 
   useEffect(() => {
     // 當前頁碼或搜尋查詢變化時獲取資料
-    fetchArticles(searchQuery, currentPage);
-  }, [currentPage, searchQuery]); // 依賴於當前頁碼和搜尋查詢
+    fetchArticles(query, currentPage);
+  }, [currentPage, query]); // 依賴於當前頁碼和搜尋查詢
 
   return (
     <main className="content">
