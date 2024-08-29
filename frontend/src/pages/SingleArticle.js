@@ -12,10 +12,10 @@ const SingleArticle = () => {
     const [likeCount, setLikeCount] = useState(0);
 
     useEffect(() => {
-        //console.log(articleId)
+        console.log(articleId)
         const fetchArticle = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/blog/api/articles/${articleId}`); // 使用動態獲取的 articleId
+                const response = await axios.get(`http://niceblog.myvnc.com:8080/blog/api/articles/${articleId}`); // 使用動態獲取的 articleId
                 console.log(response.data)
                 setArticle(response.data);
                 //console.log("id is",article.authorId)
@@ -28,7 +28,7 @@ const SingleArticle = () => {
 
         const fetchComments = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/blog/api/comments/article/${articleId}`);
+                const response = await axios.get(`http://niceblog.myvnc.com:8080/blog/api/comments/article/${articleId}`);
                 setComments(response.data);
             } catch (error) {
                 console.error("獲取留言失敗", error);
