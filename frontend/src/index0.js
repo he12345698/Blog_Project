@@ -1,14 +1,11 @@
-import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './styles/pages/Index.css';
-import Header from './components/Header';
 import Footer from './components/Footer';
 
 const Index = () => {
 
   return (
     <div className="wrapper">
-      {/* <Header username={username} userImage={userImage} onLogout={handleLogout}/> */}
       <main className="content">
         <div className="container">
           <div className="search-bar">
@@ -46,7 +43,6 @@ const Index = () => {
           </Link>
         </div>
       </main>
-      <Footer />
     </div>
   );
 };
