@@ -118,7 +118,7 @@ public class AccountAction {
             // 如果验证成功，生成 JWT
             if (checkUserPasswordResponse.getStatusCode() == HttpStatus.OK) {
             	
-                String token = JwtUtil.generateToken(vo.getUsername(), accountService.findImageLinkByUsername(vo.getUsername())); 
+                String token = JwtUtil.generateToken(vo.getUsername(), accountRepository.findImageLinkByUsername(vo.getUsername())); 
                 // 将 JWT 添加到响应头中
 
                 response.setHeader("Authorization", "Bearer " + token);
