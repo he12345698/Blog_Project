@@ -5,16 +5,9 @@ import Register from './pages/Register';
 import ArticlesPage from './pages/ArticlesPage';
 import Test1 from './Test1';
 import SingleArticle from './pages/SingleArticle';
-<<<<<<< HEAD
 import styles from './styles/App.module.css'
-=======
->>>>>>> 327131cb2d164ff23ef9be06ca774452f93e112c
 import UserData from './pages/UserData';
 import ArticleEditor from './pages/ArticleEditor';
-<<<<<<< HEAD
-=======
-import styles from './styles/App.module.css';
->>>>>>> 327131cb2d164ff23ef9be06ca774452f93e112c
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './ResetPasswordPage ';
 import Header from './components/Header';
