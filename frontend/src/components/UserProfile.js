@@ -27,7 +27,7 @@ const UserProfile = ({ userId }) => {
     useEffect(() => {
         setLoading(true);
 
-        fetch(`http://localhost:8080/blog/api/userProfile/${userId}`)
+        fetch(`http://niceblog.myvnc.com:8080/blog/api/userProfile/${userId}`)
             .then(response => {
                 console.log('網頁回應:', response);
                 return response.json();
@@ -63,7 +63,7 @@ const UserProfile = ({ userId }) => {
     const handleSave = (field) => {
         setLoading(true);
 
-        fetch(`http://localhost:8080/blog/api/userProfile/update-${field}/${userId}`, {
+        fetch(`http://niceblog.myvnc.com:8080/blog/api/userProfile/update-${field}/${userId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

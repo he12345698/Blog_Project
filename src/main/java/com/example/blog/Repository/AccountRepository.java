@@ -18,5 +18,6 @@ public interface AccountRepository extends JpaRepository<AccountVo, Long> {
     
     @Query("SELECT a.imagelink FROM AccountVo a WHERE a.username = :username")
     String findImageLinkByUsername(@Param("username") String username);
+
 }
 

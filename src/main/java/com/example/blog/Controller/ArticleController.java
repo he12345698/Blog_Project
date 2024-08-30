@@ -4,6 +4,8 @@ import com.example.blog.Model.ArticleVo;
 import com.example.blog.Model.TagVo;
 import com.example.blog.Repository.ArticleRepository;
 import com.example.blog.Service.ArticleService;
+import java.lang.String;
+
 import com.example.blog.Service.TagService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +27,17 @@ public class ArticleController {
     @Autowired
     private ArticleRepository articleRepository;
 
-    // 直接用get方法 取得全部文章的列表
+    @GetMapping("/search")
+    public ResponseEntity<Page<ArticleVo>> searchArticles(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String authorKeyword,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Page<ArticleVo> articles = articleService.searchArticles(keyword, authorKeyword, page, size);
+        return ResponseEntity.ok(articles);
+    }
+    
+
 
     // 直接用get方法 取得全部文章的列表
 
@@ -45,11 +57,6 @@ public class ArticleController {
         return articleService.getArticleById(articleId)
                 .map(article -> ResponseEntity.ok(article))
                 .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    @GetMapping("/search")
-    public List<ArticleVo> getArticleByTitle(@PathVariable String title) {
-        return articleService.searchArticleByTitle(title);
     }
 
     @PostMapping
