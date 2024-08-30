@@ -21,7 +21,6 @@ import com.example.blog.Service.CommentService;
 
 @RestController
 @RequestMapping("/api/comments")
-@CrossOrigin(origins = "http://localhost:3000") // 或者你的前端地址
 public class CommentController {
 
     @Autowired

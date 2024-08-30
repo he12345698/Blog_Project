@@ -1,4 +1,5 @@
 package com.example.blog;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -17,5 +18,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedMethods("*") // 允許的方法
                 .allowCredentials(true)
                 .allowedHeaders("*");
+        System.out.println("Allowed Origins: " + allowedOrigins);
     }
+    
 }
