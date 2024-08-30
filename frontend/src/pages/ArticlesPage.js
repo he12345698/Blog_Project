@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SearchBar from '../components/SearchBar'
 import axios from 'axios';
+import '../styles/pages/ArticlesPage.css';
 
 function ArticlesPage() {
   const [articles, setArticles] = useState([]);
