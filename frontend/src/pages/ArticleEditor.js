@@ -83,7 +83,7 @@ const ArticleEditor = () => {
                             >
                                 <option value="">請選擇分類</option>
                                 {alltags.map((tag) => (
-                                    <option key={tag.id} value={tag.id}>
+                                    <option key={tag.tag_id} value={tag.tag_id}>
                                         {tag.name}
                                     </option>
                                 ))}

@@ -17,9 +17,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
 @Entity
 @Table(name = "article_vo")
-@EntityListeners(AuditingEntityListener.class)// 啟用審計功能
+@EntityListeners(AuditingEntityListener.class) // 啟用審計功能
 public class ArticleVo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,7 +45,10 @@ public class ArticleVo {
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CommentVo> comments;
-    
+
+    @Column(name = "likes", nullable = false)
+    private int likes = 0;
+
     // Getters and setters
     public List<CommentVo> getComments() {
         return comments;
@@ -61,36 +65,47 @@ public class ArticleVo {
     public void setArticleId(Long articleId) {
         this.articleId = articleId;
     }
+
     public Long getAuthorId() {
         return authorId;
     }
+
     public void setAuthorId(Long authorId) {
         this.authorId = authorId;
     }
+
     public String getTitle() {
         return title;
     }
+
     public void setTitle(String title) {
         this.title = title;
     }
+
     public String getContentTEXT() {
         return contentTEXT;
     }
+
     public void setContentTEXT(String contentTEXT) {
         this.contentTEXT = contentTEXT;
     }
+
     public LocalDateTime getPublishedAt() {
         return publishedAt;
     }
+
     public void setPublishedAt(LocalDateTime publishedAt) {
         this.publishedAt = publishedAt;
     }
+
     public LocalDateTime getLastEditedAt() {
         return lastEditedAt;
     }
+
     public void setLastEditedAt(LocalDateTime lastEditedAt) {
         this.lastEditedAt = lastEditedAt;
     }
+
     @Override
     public String toString() {
         return "ArticleVo [articleId=" + articleId + ", authorId=" + authorId + ", title=" + title
@@ -101,6 +116,13 @@ public class ArticleVo {
     public Long getId() {
         return this.articleId;
     }
-    
-    
+
+    public int getLikes() {
+        return likes;
+    }
+
+    public void setLikes(int likes) {
+        this.likes = likes;
+    }
+
 }
