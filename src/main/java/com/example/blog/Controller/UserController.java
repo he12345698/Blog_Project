@@ -25,6 +25,7 @@ public class UserController {
         try {
             String token = authHeader.replace("Bearer ", "").trim();
             String username = JwtUtil.extractUsername(token);
+            Long id = JwtUtil.extractId(token);
             String userImage = JwtUtil.extractImageLink(token);
 
             if (username == null || !JwtUtil.validateToken(token, username)) {
@@ -36,6 +37,7 @@ public class UserController {
             // 生成保护的数据
             Map<String, String> responseBody = new HashMap<>();
             responseBody.put("username", username); // 添加 username 字段
+            responseBody.put("id", String.valueOf(id));
             responseBody.put("userImage", userImage); // 示例头像
             return ResponseEntity.ok(responseBody);
         } catch (Exception e) {
