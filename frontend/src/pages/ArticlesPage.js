@@ -9,11 +9,11 @@ function ArticlesPage() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // 从 URL 查询参数中获取搜索查询
+  // 從 URL 查詢參數中獲取搜索查詢
   const query = new URLSearchParams(location.search).get('query') || '';
 
   const handleSearch = (query) => {
-    // 更新 URL 查询参数
+    // 更新 URL 查詢參數
     navigate(`?query=${encodeURIComponent(query)}`);
   };
 
@@ -28,7 +28,7 @@ function ArticlesPage() {
       .catch((error) => {
         console.error('搜尋文章失敗:', error);
       });
-  }, [query]); // 依赖于查询参数变化
+  }, [query]); // 依賴於查詢參數變化
 
   return (
     <div>
