@@ -27,7 +27,7 @@ const UserData = () => {
             // });
             if (token) {
                 try {
-                    const response = await fetch('http://niceblog.myvnc.com:8080/blog/api/protected-endpoint', {
+                    const response = await fetch('http://localhost:8080/blog/api/protected-endpoint', {
                         method: 'GET',
                         headers: {
                             'Authorization': `Bearer ${token}`
