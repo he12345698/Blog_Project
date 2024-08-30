@@ -11,7 +11,7 @@ const ForgotPasswordPage = () => {
     // TODO: 添加密码重置逻辑
 
     try {
-      const response = await fetch('http://192.168.50.38:8080/blog/ac/forgot-password', {
+      const response = await fetch('http://localhost:8080/blog/ac/forgot-password', {
       //const response = await fetch('http://localhost:8080/blog-0.0.1-SNAPSHOT/ac/forgot-password', {
         method: 'POST',
         headers: {

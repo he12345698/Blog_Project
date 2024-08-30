@@ -16,8 +16,9 @@ const SingleArticle = () => {
         console.log(articleId);
         const fetchArticle = async () => {
             try {
-                const response = await axios.get(`http://niceblog.myvnc.com:8080/blog/api/articles/${articleId}`); // 使用動態獲取的 articleId
-                console.log(response.data);
+                // const response = await axios.get(`http://niceblog.myvnc.com:8080/blog/api/articles/${articleId}`); // 使用動態獲取的 articleId
+                const response = await axios.get(`http://localhost:8080/blog/api/articles/${articleId}`); // 使用動態獲取的 articleId
+                console.log(response.data)
                 setArticle(response.data);
                 setLikeCount(response.data.likes);
             } catch (error) {

@@ -51,18 +51,18 @@ import org.fusesource.jansi.AnsiConsole;
 @RestController
 @RequestMapping("/ac")
 public class AccountAction {
-	
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    @Autowired 
+    @Autowired
     private AccountService accountService;
     @Autowired
     private CaptchaController captchaController;
-	@Autowired
+    @Autowired
     private EmailService emailService;
     @Autowired
     private PasswordResetTokenService prts;
-    @Autowired 
+    @Autowired
     private AccountRepository accountRepository;
 
     @GetMapping("/register")
@@ -73,12 +73,13 @@ public class AccountAction {
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody AccountVo vo) {
 
-    	ResponseEntity<String> response = accountService.registerUser(vo);
+        ResponseEntity<String> response = accountService.registerUser(vo);
         return response;
     }
-    
+
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody AccountVo vo, HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody AccountVo vo, HttpServletRequest request,
+            HttpServletResponse response) {
         try {
         	ResponseEntity<Map<String, String>> captchaResponse = captchaController.validateCaptcha(vo, request);
             //回應驗證碼輸入結果
@@ -88,29 +89,36 @@ public class AccountAction {
 
             // 查詢用戶是否存在
             if (!accountService.checkId(vo.getUsername())) {
-                System.out.println("\033[0;31m" + "未知的使用者名稱：" + vo.getUsername() + " 於 " + new Date(System.currentTimeMillis()) + " 嘗試登入" + "\033[0m");
+                System.out.println("\033[0;31m" + "未知的使用者名稱：" + vo.getUsername() + " 於 "
+                        + new Date(System.currentTimeMillis()) + " 嘗試登入" + "\033[0m");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "使用者不存在"));
             }
-            
+
             // 確認用戶是否處於鎖定狀態
             if (accountService.checkAccountLocked(vo.getUsername())) {
-            	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "帳戶已被鎖定，請聯繫管理員"));
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(Collections.singletonMap("message", "帳戶已被鎖定，請聯繫管理員"));
             }
-            
+
             // 调用 AccountService 的 checkUserPassword 方法
-            ResponseEntity<String> checkUserPasswordResponse = accountService.checkUserPassword(vo.getUsername(), vo.getPassword());
-            if (checkUserPasswordResponse.getStatusCode() == HttpStatus.UNAUTHORIZED || checkUserPasswordResponse.getStatusCode() == HttpStatus.FORBIDDEN) {
+            ResponseEntity<String> checkUserPasswordResponse = accountService.checkUserPassword(vo.getUsername(),
+                    vo.getPassword());
+            if (checkUserPasswordResponse.getStatusCode() == HttpStatus.UNAUTHORIZED
+                    || checkUserPasswordResponse.getStatusCode() == HttpStatus.FORBIDDEN) {
                 // 将错误信息封装为 Map
                 Map<String, String> errorResponse = new HashMap<>();
                 errorResponse.put("message", checkUserPasswordResponse.getBody());
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
             }
-            System.out.println("\033[0;32m" + "使用者：" + vo.getUsername() + " 於 " + new Date(System.currentTimeMillis()) + " 登入" + "\033[0m");
-            
+            System.out.println("\033[0;32m" + "使用者：" + vo.getUsername() + " 於 " + new Date(System.currentTimeMillis())
+                    + " 登入" + "\033[0m");
+
             // 如果验证成功，生成 JWT
             if (checkUserPasswordResponse.getStatusCode() == HttpStatus.OK) {
-            	
-                String token = JwtUtil.generateToken(vo.getUsername(), accountRepository.findImageLinkByUsername(vo.getUsername())); 
+
+                String token = JwtUtil.generateToken(accountRepository.findByUsername(vo.getUsername()).get().getId(), vo.getUsername(),
+                        accountRepository.findImageLinkByUsername(vo.getUsername()));
+                System.out.println("id is " + accountRepository.findByUsername(vo.getUsername()).get().getId());
                 // 将 JWT 添加到响应头中
                 response.setHeader("Authorization", "Bearer " + token);
                 System.out.println("已生成token:" + token);
@@ -119,12 +127,13 @@ public class AccountAction {
                 responseBody.put("token", token);
 
                 return ResponseEntity.ok(responseBody);
-            }           
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.singletonMap("message", "伺服器錯誤：" + e.getMessage()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.singletonMap("message", "伺服器錯誤：" + e.getMessage()));
         }
-		return null;
+        return null;
     }
 
     @PostMapping("/forgot-password")
@@ -134,16 +143,16 @@ public class AccountAction {
         if (existingVo == null) {
             return ResponseEntity.badRequest().body("電子郵件不存在");
         }
-        
-        //创建密码重置令牌并获取生成的令牌
+
+        // 创建密码重置令牌并获取生成的令牌
         String token = prts.createPasswordResetTokenForUser(existingVo.get());
-        
+
         // 调用 emailService 的方法来发送邮件
         emailService.sendResetPasswordEmail(existingVo.get(), token);
 
         return ResponseEntity.ok("請檢查您的電子郵件以重設密碼");
     }
-    
+
     @PostMapping("/reset-password")
     public String resetPassword(@RequestParam("token") String token, @RequestParam("newPassword") String newPassword) {
         PasswordResetToken resetToken = prts.validatePasswordResetToken(token);
@@ -151,7 +160,7 @@ public class AccountAction {
             return "失效或過期的憑證";
         }
         accountService.changePassword(resetToken.getVo(), newPassword);
-        
+
         return "密碼重設完成！";
     }
 
@@ -163,7 +172,7 @@ public class AccountAction {
         
         return ResponseEntity.ok("登出通知接收成功");
     }
-    
+
     @GetMapping("/verify-email")
     public ResponseEntity<Map<String, String>> verifyAccount(@RequestParam("token") String token) {
         String message = emailService.verifyEmail(token);

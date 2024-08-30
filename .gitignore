@@ -50,3 +50,7 @@ src/main/resources/application.properties
 
 mvnw
 mvnw.cmd
+
+src\main\resources\application.properties
+
+src/main/resources/application.properties
