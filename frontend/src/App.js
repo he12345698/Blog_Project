@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import Index from './index0';
 import LoginPage from './pages/LoginPage';
 import Register from './pages/Register';
@@ -19,6 +19,8 @@ const MainLayout = ({ children }) => (
     {children}
   </main>
 );
+
+
 
 const App = () => {
 
