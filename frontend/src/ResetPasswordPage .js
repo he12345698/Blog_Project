@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import styles from './styles/pages/ResetPasswordPage.module.css';
 
 const ResetPasswordPage = () => {
     const [newPassword, setNewPassword] = useState('');
@@ -46,36 +47,36 @@ const ResetPasswordPage = () => {
     };
 
     return (
-        <div>
-            <h2>Reset Password</h2>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="newPassword">New Password</label>
-                    <input
-                        type="password"
-                        id="newPassword"
-                        value={newPassword}
-                        onChange={(e) => setNewPassword(e.target.value)}
-                        required
-                    />
-                </div>
-                <div>
-                    <label htmlFor="confirmPassword">Confirm Password</label>
-                    <input
-                        type="password"
-                        id="confirmPassword"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        required
-                    />
-                </div>
-                {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-                {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
-                <button type="submit" disabled={isLoading}>
-                    {isLoading ? 'Processing...' : 'Reset Password'}
-                </button>
-            </form>
+        <div className={styles.resetPasswordContainer}>
+      <h2 className={styles.title}>Reset Password</h2>
+      <form className={styles.form} onSubmit={handleSubmit}>
+        <div className={styles.formGroup}>
+          <label htmlFor="newPassword">New Password</label>
+          <input
+            type="password"
+            id="newPassword"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            required
+          />
         </div>
+        <div className={styles.formGroup}>
+          <label htmlFor="confirmPassword">Confirm Password</label>
+          <input
+            type="password"
+            id="confirmPassword"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          />
+        </div>
+        {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
+        {successMessage && <p className={styles.successMessage}>{successMessage}</p>}
+        <button type="submit" className={styles.submitButton} disabled={isLoading}>
+          {isLoading ? 'Processing...' : 'Reset Password'}
+        </button>
+      </form>
+    </div>
     );
 };
 

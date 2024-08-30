@@ -5,7 +5,7 @@ import Register from './pages/Register';
 import ArticlesPage from './pages/ArticlesPage';
 import Test1 from './Test1';
 import SingleArticle from './pages/SingleArticle';
-import './styles/App.css';
+import style from './styles/App.module.css';
 import UserData from './pages/UserData';
 import ArticleEditor from './pages/ArticleEditor';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
@@ -13,11 +13,9 @@ import ResetPasswordPage from './ResetPasswordPage ';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import EmailVerificationPage from './pages/EmailVerificationPage';
-import { useLocation } from 'react-router-dom';
-import React, { useState, useEffect, useRef } from 'react';
 
 const MainLayout = ({ children }) => (
-  <main>
+  <main className={style.App}>
     {children}
   </main>
 );

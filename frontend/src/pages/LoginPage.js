@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import '../styles/pages/LoginPage.css';
-import Maintenanceheader from '../Maintenanceheader';
+import Maintenanceheader from '../components/Maintenanceheader';
 import { FaSync } from 'react-icons/fa';
 
 const LoginPage = () => {
@@ -88,7 +88,7 @@ const LoginPage = () => {
     e.preventDefault();
     setAnimationKey(Date.now());
     try {
-      const response = await fetch('http://localhost:8080/blog/ac/login', {
+      const response = await fetch('http://niceblog.myvnc.com:8080/blog/ac/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
