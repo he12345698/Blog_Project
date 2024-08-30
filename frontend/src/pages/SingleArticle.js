@@ -16,8 +16,8 @@ const SingleArticle = () => {
         console.log(articleId);
         const fetchArticle = async () => {
             try {
-                // const response = await axios.get(`http://niceblog.myvnc.com:8080/blog/api/articles/${articleId}`); // 使用動態獲取的 articleId
-                const response = await axios.get(`http://localhost:8080/blog/api/articles/${articleId}`); // 使用動態獲取的 articleId
+                const response = await axios.get(`http://niceblog.myvnc.com:8080/blog/api/articles/${articleId}`); // 使用動態獲取的 articleId
+                //const response = await axios.get(`http://localhost:8080/blog/api/articles/${articleId}`); // 使用動態獲取的 articleId
                 console.log(response.data)
                 setArticle(response.data);
                 setLikeCount(response.data.likes);
@@ -41,7 +41,7 @@ const SingleArticle = () => {
 
     const likeArticle = async () => {
         try {
-            await axios.post(`http://localhost:8080/blog/api/articles/${articleId}/like`);
+            await axios.post(`http://niceblog.myvnc.com:8080/blog/api/articles/${articleId}/like`);
             setLikeCount(likeCount + 1);
         } catch (error) {
             console.error("按讚失敗", error);
@@ -50,7 +50,7 @@ const SingleArticle = () => {
 
     const likeComment = async (commentId) => {
         try {
-            await axios.post(`http://localhost:8080/blog/api/comments/${commentId}/like`);
+            await axios.post(`http://niceblog.myvnc.com:8080/blog/api/comments/${commentId}/like`);
             setComments(comments.map(comment =>
                 comment.id === commentId ? { ...comment, likes: comment.likes + 1 } : comment
             ));

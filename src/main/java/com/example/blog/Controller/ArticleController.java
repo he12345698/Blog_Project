@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3000")
+
 @RestController
 @RequestMapping("/api/articles")
 public class ArticleController {
@@ -36,8 +36,6 @@ public class ArticleController {
         return ResponseEntity.ok(articles);
     }
     
-
-
     // 直接用get方法 取得全部文章的列表
 
     @GetMapping
