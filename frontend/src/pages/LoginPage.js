@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import '../styles/pages/LoginPage.css';
-import Maintenanceheader from '../Maintenanceheader';
+import Maintenanceheader from '../components/Maintenanceheader';
 import { FaSync } from 'react-icons/fa';
 
 const LoginPage = () => {
