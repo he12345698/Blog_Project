@@ -25,14 +25,16 @@ const ImageCropper = ({ src }) => {
                     style={{ height: 400, width: "100%" }}
                     initialAspectRatio={1}
                     aspectRatio={1}
-                    guides={false}
+                    guides={true}
+                    zoomable={false}
+                    highlight={true}
                     cropend={onCropEnd}
                     ref={cropperRef}
                 />
             </div>
+            <h3 className={styles.h3}>圖片預覽:</h3>
             {croppedImageUrl && (
                 <div className={styles.img_preview}>
-                    <h3>圖片預覽:</h3>
                     <img src={croppedImageUrl} alt="Cropped" className={styles.img}/>
                 </div>
             )}

@@ -50,6 +50,7 @@ import org.fusesource.jansi.AnsiConsole;
 
 @RestController
 @RequestMapping("/ac")
+@CrossOrigin(origins = "http://localhost:3000")
 public class AccountAction {
 
     @Autowired
