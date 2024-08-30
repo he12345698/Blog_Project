@@ -13,14 +13,9 @@ public class TagVo {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long Id;
-    public Long getId() {
-        return Id;
-    }
-    public void setId(Long id) {
-        Id = id;
-    }
+    @Column(name = "tag_id")
+    private Long tag_id;
+    
     @Column(name = "name")
     private String name;
     public String getName() {
@@ -28,6 +23,12 @@ public class TagVo {
     }
     public void setName(String name) {
         this.name = name;
+    }
+    public Long getTag_id() {
+        return tag_id;
+    }
+    public void setTag_id(Long tag_id) {
+        this.tag_id = tag_id;
     }
     
 
