@@ -31,15 +31,15 @@ function ArticlesPage() {
   }, [query]); // 依賴於查詢參數變化
 
   return (
-    <div>
+    <div className="articles-page">
       <SearchBar onSearch={handleSearch} />
       {/* 在這裡渲染文章列表 */}
       <div>
         {articles.map((article) => (
-          <div key={article.id}>
+          <div key={article.id} className="article-card">
             <h3>{article.title}</h3>
             <p>{article.content}</p>
-            <p>作者: {article.authorName}</p>
+            <p className="author-name">作者: {article.authorName}</p>
           </div>
         ))}
       </div>

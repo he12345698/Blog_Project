@@ -1,74 +1,27 @@
 /* src/styles/pages/ArticlesPage.css */
-.content {
+
+.articles-page {
     padding: 20px;
-}
-
-.article-list {
-    margin-bottom: 20px;
-}
-
-.post-container {
-    display: flex;
-    flex-direction: column;
-}
-
-.post {
-    border: 1px solid #ddd;
-    padding: 10px;
-    margin-bottom: 10px;
-}
-
-.pagination {
-    margin-top: 10px;
-}
-
-.pagination button {
-    margin: 0 5px;
-}
-
-.pagination .active {
-    font-weight: bold;
-}
-
-.back-to-top {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-}
-/* src/styles/pages/ArticlesPage.css */
-.content {
+  }
+  
+  .articles-page .article-card {
+    border: 1px solid #ced4da;
+    border-radius: 4px;
     padding: 20px;
-}
-
-.article-list {
     margin-bottom: 20px;
-}
-
-.post-container {
-    display: flex;
-    flex-direction: column;
-}
-
-.post {
-    border: 1px solid #ddd;
-    padding: 10px;
-    margin-bottom: 10px;
-}
-
-.pagination {
-    margin-top: 10px;
-}
-
-.pagination button {
-    margin: 0 5px;
-}
-
-.pagination .active {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .articles-page .article-card h3 {
+    margin-top: 0;
+    font-size: 1.5rem;
+  }
+  
+  .articles-page .article-card p {
+    margin: 10px 0;
+  }
+  
+  .articles-page .article-card .author-name {
     font-weight: bold;
-}
-
-.back-to-top {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-}
+  }
+  
