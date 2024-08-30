@@ -17,7 +17,8 @@ const ArticlesPage = () => {
 
   // 獲取文章數據
   const fetchArticles = (query, page) => {
-    fetch(`http://192.168.50.38:8080/blog/api/articles/search?keyword=${encodeURIComponent(query)}&page=${page}&size=10`)
+    // fetch(`http://192.168.50.38:8080/blog/api/articles/search?keyword=${encodeURIComponent(query)}&page=${page}&size=10`)
+    fetch(`http://localhost:8080/blog/api/articles/search?keyword=${encodeURIComponent(query)}&page=${page}&size=10`)
       .then(response => response.json())
       .then(data => {
         setArticles(data.content || []);

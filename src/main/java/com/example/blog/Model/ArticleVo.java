@@ -98,9 +98,9 @@ public class ArticleVo {
                 + lastEditedAt + "]";
     }
 
-    public String getId() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getId'");
+    public Long getId() {
+        return this.articleId;
     }
+    
     
 }

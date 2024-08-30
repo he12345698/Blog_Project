@@ -24,6 +24,7 @@ const getArticleByTitle = async (title) => {
 };
 
 const createArticle = async (articleData) => {
+    console.log(articleData);
     const response = await axios.post(API_BASE_URL, articleData);
     return response.data;
 };

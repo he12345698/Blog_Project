@@ -7,20 +7,23 @@ const ArticleEditor = () => {
     const [title, setTitle] = useState('');
     const [contentTEXT, setContentTEXT] = useState('');
     const [tag, settag] = useState('');
-    const [alltags, setalltags] = useState('');
+    const [alltags, setalltags] = useState([]);
     const navigate = useNavigate();//用於跳轉網址
-    const { articleId } = useParams(); // 假設用於編輯現有文章
+    const { articleId } = useParams();// 假設用於編輯現有文章
+    const [likes, setlikes] = useState(0);
 
     // 加載文章內容（如果是編輯模式）
-    React.useEffect(() => {
+    useEffect(() => {
         tagService.getAllTags().then(alltags => {
             setalltags(alltags);
+            console.log("getAllTags");
             console.log(alltags);
         })
         if (articleId) {
             articleService.getArticleById(articleId).then(article => {
                 setTitle(article.title);
                 setContentTEXT(article.contentTEXT);
+                setlikes(article.likes);
             });
             // tagService.getTag(articleId).then(tag =>{
             //     settag(tag.tag);
@@ -31,7 +34,7 @@ const ArticleEditor = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const articleData = { title, contentTEXT, tag };
+        const articleData = { title, contentTEXT, tag, likes };
 
         try {
             if (articleId) {
