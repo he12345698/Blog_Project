@@ -49,6 +49,7 @@ const Register = () => {
 
 const handleSubmit = async (event) => {
   event.preventDefault();
+  setAnimationKey(Date.now());
   const missingFields = [];
   if (!username) missingFields.push('用戶名');
   if (!email) missingFields.push('電子郵件');
@@ -104,17 +105,17 @@ const handleSubmit = async (event) => {
   
 
   return (
-    <div className="wrapper">
+    <div className="rswrapper">
       <Header />
       <main className="login-register-container">
-        <div className="form-container">
+        <div className="rsform-container">
           <h2>註冊</h2>
           <form onSubmit={handleSubmit}>
-            <div className="form-group">
+            <div className="rsform-group">
               <label htmlFor="username">用戶名</label>
               <input type="text" id="username" name="username" value={username} onChange={(e) => setUsername(e.target.value)} />
             </div>
-            <div className="form-group">
+            <div className="rsform-group">
               <label htmlFor="email">電子郵件</label>
               <input
                 type="email"
@@ -124,7 +125,7 @@ const handleSubmit = async (event) => {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-            <div className="form-group">
+            <div className="rsform-group">
               <label htmlFor="password">密碼</label>
               <input
                 type="password"
@@ -134,7 +135,7 @@ const handleSubmit = async (event) => {
                 onChange={handlePasswordChange}
               />
             </div>
-            <div className="form-group">
+            <div className="rsform-group">
               <label htmlFor="repassword">確認密碼</label>
               <input
                 type="password"
