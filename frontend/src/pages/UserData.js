@@ -57,8 +57,8 @@ const UserData = () => {
 
     return (
         <div class={styles.wrapper}>
-            <ImageUpload id={userId} />
-            <h1>Account Name的小窩</h1>
+            <ImageUpload id={7}/>
+            <h1 className={styles.custom_font}>Account Name 的小窩</h1>
             <main class={styles.profile_wrapper}>
                 <div className={styles.profile_container}>
                     <div className={styles.grid_container}>

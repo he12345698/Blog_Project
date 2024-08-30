@@ -81,9 +81,8 @@ public class AccountAction {
     public ResponseEntity<Map<String, String>> login(@RequestBody AccountVo vo, HttpServletRequest request,
             HttpServletResponse response) {
         try {
-
-            ResponseEntity<Map<String, String>> captchaResponse = captchaController.validateCaptcha(vo, request);
-            // 回應驗證碼輸入結果
+        	ResponseEntity<Map<String, String>> captchaResponse = captchaController.validateCaptcha(vo, request);
+            //回應驗證碼輸入結果
             if (captchaResponse.getStatusCode() == HttpStatus.FORBIDDEN) {
                 return captchaResponse; // 返回包含错误信息的响应
             }
@@ -139,7 +138,6 @@ public class AccountAction {
 
     @PostMapping("/forgot-password")
     public ResponseEntity<String> forgotPassword(@RequestBody AccountVo vo) {
-
         // 查找是否存在 AccountVo
         Optional<AccountVo> existingVo = accountRepository.findByEmail(vo.getEmail());
         if (existingVo == null) {
@@ -161,7 +159,6 @@ public class AccountAction {
         if (resetToken == null) {
             return "失效或過期的憑證";
         }
-
         accountService.changePassword(resetToken.getVo(), newPassword);
 
         return "密碼重設完成！";
@@ -170,13 +167,9 @@ public class AccountAction {
     @PostMapping("/logout-notify")
     public ResponseEntity<String> notifyLogout(@RequestBody Map<String, String> payload) {
         String username = payload.get("username");
-
         // 後臺打印登出通知
-        System.out.println(
-                "\033[0;31m" + "使用者：" + username + " 於 " + new Date(System.currentTimeMillis()) + " 登出" + "\033[0m");
-
-        // System.out.println(ansi().fgRed().a("123").reset());
-
+        System.out.println("\033[0;31m" + "使用者：" + username + " 於 " + new Date(System.currentTimeMillis()) + " 登出" + "\033[0m");
+        
         return ResponseEntity.ok("登出通知接收成功");
     }
 

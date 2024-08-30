@@ -80,13 +80,11 @@ public class UserProfileController {
     }
 
     @PostMapping("/upload-image/{id}")
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file,
-            @PathVariable(value = "id") Long id) {
-        // 檢查文件是否為空
+    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file, @PathVariable(value = "id") Long id) throws MalformedURLException {
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("請選擇一個檔案來上傳。");
         }
-
+        
         // 圖片大小限制在10MB以下
         final long MAX_SIZE = 10 * 1024 * 1024;
         if (file.getSize() > MAX_SIZE) {

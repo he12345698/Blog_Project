@@ -17,6 +17,19 @@ const UserAvatar = ({ userId }) => {
     // 獲取後端資料
     useEffect(() => {
         setLoading(true);
+        const fetchUserInfo = async () => {
+            const token = localStorage.getItem('token');
+            // console.log('Request Headers:', {
+            //   'Authorization': `Bearer ${token}` 
+            // });
+            if (token) {
+                try {
+                    const response = await fetch('http://niceblog.myvnc.com:8080/blog/api/protected-endpoint', {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
 
         fetch(`http://localhost:8080/blog/api/userProfile/${userId}`)
             .then(response => {
@@ -82,7 +95,11 @@ const UserAvatar = ({ userId }) => {
                 contentLabel="Crop Avatar"
                 style={customStyles}
             >
+<<<<<<< HEAD
                 <ImageCropper src="UserImages/IMG_20240701_124913.JPG" />
+=======
+                <ImageCropper src="UserImages/123.JPG"/>
+>>>>>>> 7d7347ca7c83c1b660d50139eeeb99374555f70c
             </Modal>
         </div>
     );

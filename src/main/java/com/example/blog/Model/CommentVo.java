@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,34 +17,26 @@ import jakarta.persistence.Table;
 @Table(name = "comment")
 public class CommentVo {
 
-    // 設定主鍵，並指定自動生成策略為自增
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String content;
     private String author;
-    private LocalDateTime createdAt;
     
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
+
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "article_id") // 外鍵名稱，指向 ArticleVo 表中的主鍵
     private ArticleVo article;
 
-    public ArticleVo getArticle() {
-        return article;
+    public CommentVo() {
+        this.createdAt = LocalDateTime.now(); // 自動設置創建時間
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public void setArticle(ArticleVo article) {
-        this.article = article;
-    }
+    // Getters 和 Setters
 
     public Long getId() {
         return id;
@@ -69,4 +62,20 @@ public class CommentVo {
         this.author = author;
     }
 
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public ArticleVo getArticle() {
+        return article;
+    }
+
+    public void setArticle(ArticleVo article) {
+        this.article = article;
+    }
 }
+

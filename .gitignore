@@ -4,6 +4,10 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+### Mac ###
+.DS_Store
+
+
 ### React ###
 node_moduls/
 
@@ -42,6 +46,7 @@ build/
 frontend/*
 !frontend/src/
 !frontend/src/**
+src/main/resources/application.properties
 
 mvnw
 mvnw.cmd
