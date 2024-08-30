@@ -12,8 +12,8 @@ const Header = () => {
 
   const notifyLogout = async () => {
     try {
-      await fetch('http://192.168.50.38:8080/blog/ac/logout-notify', {
-        //await fetch('http://localhost:8080/blog-0.0.1-SNAPSHOT/ac/logout-notify', {
+
+        await fetch('http://localhost:8080/blog/ac/logout-notify', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -44,7 +44,7 @@ const Header = () => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          const response = await fetch('http://192.168.50.38:8080/blog/api/protected-endpoint', {
+          const response = await fetch('http://localhost:8080/blog/api/protected-endpoint', {
             method: 'GET',
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -80,7 +80,7 @@ const Header = () => {
           <Link to="/edit-article">編輯文章</Link>
           <Link to="/publish-article">發表文章</Link>
           <Link to="/about">關於我們</Link>
-          <Link to="/account">帳戶管理</Link>
+          <Link to="/UserData">帳戶管理</Link>
           <Link to="/">首頁</Link>
         </nav>
         <div className={styles["user-login-container"]}>

@@ -13,7 +13,7 @@ html, body {
 }
 
 /* 外部容器樣式，使用 Flexbox 進行排版 */
-.wrapper {
+.rswrapper {
     display: flex; /* 使用 Flexbox 進行排版 */
     flex-direction: column; /* 垂直排列內容 */
     height: 100%; /* 設置高度為 100% */
@@ -80,7 +80,7 @@ html, body {
     padding: 20px; /* 內邊距 */
 }
 
-.form-container {
+.rsform-container {
     max-width: 400px; /* 最大寬度 */
     width: 100%; /* 寬度 100% */
     padding: 20px; /* 內邊距 */
@@ -96,18 +96,18 @@ h2 {
     color: #2B2D42; /* 文字顏色 */
 }
 
-.form-group {
+.rsform-group {
     margin-bottom: 15px; /* 下邊距 */
     padding: 0 10px; /* 內邊距以防止輸入框靠近邊界 */
 }
 
-.form-group label {
+.rsform-group label {
     display: block; /* 使標籤成為塊級元素 */
     margin-bottom: 5px; /* 下邊距 */
     color: #2B2D42; /* 文字顏色 */
 }
 
-.form-group input {
+.rsform-group input {
     width: 95%; /* 寬度 100% */
     padding: 10px; /* 內邊距 */
     border: 1px solid #ccc; /* 邊框顏色 */
@@ -115,14 +115,15 @@ h2 {
 }
 
 button[type="submit"] {
-    width: 100%; /* 寬度 隨著文字大小 */
+    width: 30%; /* 寬度 隨著文字大小 */
     background-color: #333; /* 背景顏色 */
     color: #fff; /* 文字顏色 */
     border: none; /* 去掉邊框 */
     padding: 10px; /* 內邊距 */
     border-radius: 5px; /* 邊角圓潤 */
     cursor: pointer; /* 鼠標懸停時顯示手形光標 */
-
+    display: block; /* 将按钮设为块级元素 */
+    margin: 0 auto; /* 水平居中 */
 }
 
 
