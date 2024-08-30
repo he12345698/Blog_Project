@@ -12,8 +12,8 @@ const Header = () => {
 
   const notifyLogout = async () => {
     try {
-      await fetch('http://niceblog.myvnc.com:8080/blog/ac/logout-notify', {
-       // await fetch('http://localhost:8080/blog/ac/logout-notify', {
+
+        await fetch('http://localhost:8080/blog/ac/logout-notify', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

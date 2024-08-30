@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,21 +28,16 @@ public class ArticleController {
     @Autowired
     private ArticleRepository articleRepository;
 
-    @GetMapping("/search")
-    public ResponseEntity<Page<ArticleVo>> searchArticles(
-            @RequestParam(required = false) String keyword,
-            @RequestParam(required = false) String authorKeyword,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        Page<ArticleVo> articles = articleService.searchArticles(keyword, authorKeyword, page, size);
-        return ResponseEntity.ok(articles);
+
+    @GetMapping
+    public ResponseEntity<List<ArticleVo>> searchArticles(@RequestParam("query") String query) {
+        List<ArticleVo> articles = articleService.searchByTitleOrAuthor(query);
+        return new ResponseEntity<>(articles, HttpStatus.OK);
     }
     
 
-
     // 直接用get方法 取得全部文章的列表
-
-    @GetMapping
+    @GetMapping("/list")
     public Page<ArticleVo> getArticleVo(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,

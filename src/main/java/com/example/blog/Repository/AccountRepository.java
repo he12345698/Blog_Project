@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.example.blog.Model.AccountVo;
@@ -19,5 +20,7 @@ public interface AccountRepository extends JpaRepository<AccountVo, Long> {
     @Query("SELECT a.imagelink FROM AccountVo a WHERE a.username = :username")
     String findImageLinkByUsername(@Param("username") String username);
 
+    //查詢作者名稱
+    List<AccountVo> findByUsernameContainingIgnoreCase(String username);
 }
 
