@@ -73,7 +73,7 @@ const SingleArticle = () => {
             };
     
             // 发送POST请求，传递评论数据和文章ID
-            const response = await axios.post(`http://localhost:8080/blog/api/comments?articleId=${articleId}`, commentData);
+            const response = await axios.post(`http://niceblog.myvnc.com:8080/blog/api/comments?articleId=${articleId}`, commentData);
             
             // 更新评论列表，添加新评论
             setComments([...comments, response.data]); 

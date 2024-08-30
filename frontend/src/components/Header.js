@@ -12,8 +12,8 @@ const Header = () => {
 
   const notifyLogout = async () => {
     try {
-      // await fetch('http://192.168.50.38:8080/blog/ac/logout-notify', {
-        await fetch('http://localhost:8080/blog/ac/logout-notify', {
+      await fetch('http://niceblog.myvnc.com:8080/blog/ac/logout-notify', {
+       // await fetch('http://localhost:8080/blog/ac/logout-notify', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -44,7 +44,7 @@ const Header = () => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          const response = await fetch('http://localhost:8080/blog/api/protected-endpoint', {
+          const response = await fetch('http://niceblog.myvnc.com:8080/blog/api/protected-endpoint', {
             method: 'GET',
             headers: {
               'Authorization': `Bearer ${token}`,
