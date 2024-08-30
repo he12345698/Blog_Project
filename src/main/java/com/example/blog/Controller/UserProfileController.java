@@ -80,11 +80,12 @@ public class UserProfileController {
     }
 
     @PostMapping("/upload-image/{id}")
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file, @PathVariable(value = "id") Long id) throws MalformedURLException {
+    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file,
+            @PathVariable(value = "id") Long id) {
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("請選擇一個檔案來上傳。");
         }
-        
+
         // 圖片大小限制在10MB以下
         final long MAX_SIZE = 10 * 1024 * 1024;
         if (file.getSize() > MAX_SIZE) {
@@ -107,13 +108,12 @@ public class UserProfileController {
 
                     // 如果存在原有的圖片，刪除它
                     if (Files.exists(existingFilePath)) {
-                        boolean deleted = Files.deleteIfExists(existingFilePath);
-                        if (!deleted) {
-                            System.err.println("無法刪除原有圖片：" + existingFilePath);
-                        }
+                        Files.delete(existingFilePath); // 确保删除原有图片
                     }
                 } catch (MalformedURLException e) {
                     System.err.println("圖片 URL 格式錯誤：" + e.getMessage());
+                } catch (IOException e) {
+                    System.err.println("刪除原有圖片時出錯：" + e.getMessage());
                 }
             }
 
@@ -145,12 +145,15 @@ public class UserProfileController {
 
             // 返回檔案的路徑
             return ResponseEntity.ok().body(jsonResponse);
+        } catch (MalformedURLException e) {
+            System.err.println("URL 格式錯誤：" + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("無效的圖片 URL 格式。");
         } catch (IOException e) {
             e.printStackTrace(); // 打印異常堆疊以幫助調試
-            return ResponseEntity.status(500).body("上傳檔案時發生錯誤。");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("上傳檔案時發生錯誤。");
         } catch (Exception e) {
             e.printStackTrace(); // 處理潛在的其他異常
-            return ResponseEntity.status(500).body("處理請求時發生錯誤。");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("處理請求時發生錯誤。");
         }
     }
 
