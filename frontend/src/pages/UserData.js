@@ -27,7 +27,7 @@ const UserData = () => {
             // });
             if (token) {
                 try {
-                    const response = await fetch('http://niceblog.myvnc.com:8080/blog/api/protected-endpoint', {
+                    const response = await fetch('http://localhost:8080/blog/api/protected-endpoint', {
                         method: 'GET',
                         headers: {
                             'Authorization': `Bearer ${token}`
@@ -57,7 +57,7 @@ const UserData = () => {
 
     return (
         <div class={styles.wrapper}>
-            <ImageUpload id={7}/>
+            <ImageUpload id={userId}/>
             <h1 className={styles.custom_font}>Account Name 的小窩</h1>
             <main class={styles.profile_wrapper}>
                 <div className={styles.profile_container}>

@@ -22,8 +22,7 @@ public class UserProfileService {
     @Autowired
     private UserProfileRepository userProfileRepository;
 
-    // 建立圖片的資料夾路徑
-    private final static String FILE_UPLOAD_PATH = "../../../../../resources/static/Image";
+    
 
     // 上傳圖片
     public void updateUserImagePath(Long id, String imagePath) {
