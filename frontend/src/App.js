@@ -16,61 +16,32 @@ import EmailVerificationPage from './pages/EmailVerificationPage';
 import { useLocation } from 'react-router-dom';
 import React, { useState, useEffect, useRef } from 'react';
 
-
+const MainLayout = ({ children }) => (
+  <main>
+    {children}
+  </main>
+);
 
 const App = () => {
-  // const isLoginPage = window.location.pathname === '/login';
-  // const location = useLocation(); // 获取当前路径
-  // const [animationKey, setAnimationKey] = useState('');
-
-  // useEffect(() => {
-  //   // 检查当前路径是否是登录页面并更新 CSS 类
-  //   const isLoginPage = window.location.pathname === '/login';
-  //   const mainElement = document.querySelector('main');
-  //   setAnimationKey(Date.now());
-  //   if (mainElement) {
-  //     if (isLoginPage) {
-  //       mainElement.classList.add('no-margin');
-  //     } else {
-  //       mainElement.classList.remove('no-margin');
-  //     }
-  //   }
-  // }, []); // 当路径发生变化时触发 useEffect
-
-  const [mainClass, setMainClass] = useState('');
-
-  useEffect(() => {
-    if (window.location.pathname === '/login') {
-      setMainClass('no-margin');
-    } else {
-      setMainClass('');
-    }
-    // 清理样式或者其他副作用
-    return () => {
-      // 可以在这里执行样式清理操作
-    };
-  }, [window.location.pathname]); // 监听路径变化
 
   return (
     <Router>
       <Header />
-      <main className={styles.app}>
         <Routes>
-          <Route path="/" element={<Index />} />
+          <Route path="/" element={<MainLayout><Index /></MainLayout>} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/test1" element={<Test1 />} />
-          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-          <Route path="/reset-password" element={<ResetPasswordPage />} />
-          <Route path="/articlesPage" element={<ArticlesPage />} />
-          <Route path="/singleArticle/:articleId" element={<SingleArticle />} />
-          <Route path='/publish-article' element={<ArticleEditor />} />
-          <Route path="/UserData" element={<UserData />} />
-          <Route path="/edit-article/:articleId" element={<ArticleEditor />} />
-          <Route path="/verify-email" element={<EmailVerificationPage />} />
+          <Route path="/register" element={<MainLayout><Register /></MainLayout>} />
+          <Route path="/test1" element={<MainLayout><Test1 /></MainLayout>} />
+          <Route path="/forgot-password" element={<MainLayout><ForgotPasswordPage /></MainLayout>} />
+          <Route path="/reset-password" element={<MainLayout><ResetPasswordPage /></MainLayout>} />
+          <Route path="/articlesPage" element={<MainLayout><ArticlesPage /></MainLayout>} />
+          <Route path="/singleArticle/:articleId" element={<MainLayout><SingleArticle /></MainLayout>} />
+          <Route path='/publish-article' element={<MainLayout><ArticleEditor /></MainLayout>} />
+          <Route path="/UserData" element={<MainLayout><UserData /></MainLayout>} />
+          <Route path="/edit-article/:articleId" element={<MainLayout><ArticleEditor /></MainLayout>} />
+          <Route path="/verify-email" element={<MainLayout><EmailVerificationPage /></MainLayout>} />
           {/* 你可以在这里添加更多的路由 */}
         </Routes>
-      </main>
       <Footer />
     </Router>
   );

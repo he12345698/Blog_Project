@@ -90,3 +90,7 @@ p {
 .profile {
     text-align: left;
 }
+
+.custom_font {
+    font-family: 'PopGothicCjkTc-Bold', sans-serif; /* Fallback to sans-serif */
+}
