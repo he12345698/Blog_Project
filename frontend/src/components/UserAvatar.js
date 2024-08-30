@@ -8,10 +8,12 @@ const UserAvatar = ({ userId }) => {
 
     // 用來管理用戶資料
     const [userImage, setUserImage] = useState('');
+    const [loading, setLoading] = useState();
 
     // 透過圖片路徑顯示圖片
     // 獲取用戶信息
     useEffect(() => {
+        setLoading(true);
         const fetchUserInfo = async () => {
             const token = localStorage.getItem('token');
             // console.log('Request Headers:', {
@@ -19,7 +21,7 @@ const UserAvatar = ({ userId }) => {
             // });
             if (token) {
                 try {
-                    const response = await fetch('http://niceblog.myvnc.com:8080/blog/api/protected-endpoint', {
+                    const response = await fetch('http://localhost:8080/blog/api/protected-endpoint', {
                         method: 'GET',
                         headers: {
                             'Authorization': `Bearer ${token}`
@@ -93,7 +95,7 @@ const UserAvatar = ({ userId }) => {
                 contentLabel="Crop Avatar"
                 style={customStyles}
             >
-                <ImageCropper src="UserImages/123.JPG"/>
+                <ImageCropper src="UserImages/IMG_20240701_124913.JPG" />
             </Modal>
         </div>
     );

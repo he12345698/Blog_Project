@@ -34,10 +34,14 @@ public class JwtUtil {
                 .getBody();
     }
 
-    // 提取ID，並將其轉換為Long
+    // 提取ID，將id轉換為Long
     public static Long extractId(String token) {
-        String idToString = extractClaims(token).getSubject(); // 獲取ID的字符串形式
-        return Long.parseLong(idToString); // 將字符串轉換為Long
+        // 提取id 作為Object類型，然後轉換為Long
+        Object idObj = extractClaims(token).get("id");
+        if (idObj instanceof Number) {
+            return ((Number) idObj).longValue();
+        }
+        return null; // 或者拋出空值
     }
 
     // 提取用户名
