@@ -97,10 +97,10 @@ public class ArticleVo {
                 + ", contentTEXT=" + contentTEXT + ", publishedAt=" + publishedAt + ", lastEditedAt="
                 + lastEditedAt + "]";
     }
-//
-//    public String getId() {
-//        // TODO Auto-generated method stub
-//        throw new UnsupportedOperationException("Unimplemented method 'getId'");
-//    }
+
+    public Long getId() {
+        // TODO Auto-generated method stub
+        return this.articleId;
+    }
     
 }
