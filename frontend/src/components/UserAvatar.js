@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styles from "../styles/components/UserAvatar.module.css";
 import Modal from 'react-modal';
 import ImageUpload from "../components/ImageUpload";
@@ -9,7 +9,7 @@ const UserAvatar = ({ id }) => {
 
     // 用來管理用戶資料
     const [userData, setUserData] = useState({
-        imagelink:''
+        imagelink: ''
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -27,6 +27,7 @@ const UserAvatar = ({ id }) => {
             .then(data => {
                 console.log("得到的數據", data)
                 setUserData(data);
+
                 setLoading(false);
             })
             .catch(error => {
@@ -43,10 +44,15 @@ const UserAvatar = ({ id }) => {
         setIsModalOpen(true);
     };
 
+    const closeModal = () => {
+        setIsModalOpen(false);
+        window.location.reload(); // 關閉後重新整理頁面
+    };
+
     const customStyles = {
         content: {
-            width: '70%', 
-            height: '70%', 
+            width: '70%',
+            height: '70%',
             top: '50%',
             left: '50%',
             right: 'auto',
@@ -55,7 +61,7 @@ const UserAvatar = ({ id }) => {
             transform: 'translate(-50%, -50%)'
         }
     };
-    
+
 
     return (
         <div className={`${styles.profile_picture_wrapper} text-center`}>
@@ -73,19 +79,19 @@ const UserAvatar = ({ id }) => {
             <button
                 type="button"
                 className={`btn btn-dark ${styles.photo}`}
-            onClick={() => setIsModalOpen(true)}
+                onClick={() => setIsModalOpen(true)}
             >
                 更新頭像
             </button>
 
             <Modal
                 isOpen={isModalOpen}
-                onRequestClose={() => setIsModalOpen(false)}
+                onRequestClose={closeModal}
                 contentLabel="Crop Avatar"
                 style={customStyles}
                 ariaHideApp={false}
             >
-                <ImageUpload id={id}/>
+                <ImageUpload id={id} onClose={closeModal} />
             </Modal>
         </div>
     );

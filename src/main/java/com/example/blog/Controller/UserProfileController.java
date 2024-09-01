@@ -12,6 +12,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Collections;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,8 +24,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.blog.JwtUtil;
 import com.example.blog.Model.AccountVo;
+import com.example.blog.Repository.AccountRepository;
+import com.example.blog.Service.AccountService;
 import com.example.blog.Service.UserProfileService;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -38,6 +47,12 @@ public class UserProfileController {
 
     @Autowired
     private UserProfileService userProfileService;
+
+    @Autowired
+    private AccountService accountService;
+
+    @Autowired
+    private AccountRepository accountRepository;
 
     // 使用相對路徑，上傳目錄將位於專案的根目錄中
     private static final String UPLOAD_DIR = "D:\\Project_ex\\Blog_Project\\frontend\\public\\";
