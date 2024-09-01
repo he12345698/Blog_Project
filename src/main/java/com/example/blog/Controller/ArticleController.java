@@ -1,9 +1,12 @@
 package com.example.blog.Controller;
 
 import com.example.blog.Model.ArticleVo;
+import com.example.blog.Model.TagVo;
 import com.example.blog.Repository.ArticleRepository;
 import com.example.blog.Service.ArticleService;
 import java.lang.String;
+
+import com.example.blog.Service.TagService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -80,5 +83,13 @@ public class ArticleController {
                     return ResponseEntity.ok().<Void>build();
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @Autowired
+    private TagService tagService;
+
+    @GetMapping("/articles/{articleId}/tags")
+    public List<TagVo> getTagsByArticleId(@PathVariable Long articleId) {
+        return tagService.findTagsByArticleId(articleId);
     }
 }

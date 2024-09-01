@@ -31,6 +31,7 @@ import com.example.blog.Model.AccountVo;
 import com.example.blog.PasswordReset.PasswordResetToken;
 import com.example.blog.PasswordReset.PasswordResetTokenRepository;
 import com.example.blog.PasswordReset.PasswordResetTokenService;
+import com.example.blog.Repository.AccountRepository;
 import com.example.blog.Service.AccountService;
 import com.example.blog.Service.EmailService;
 
@@ -75,7 +76,6 @@ public class AccountAction {
 
         ResponseEntity<String> response = accountService.registerUser(vo);
         return response;
-        
     }
 
     @PostMapping("/login")
@@ -137,20 +137,6 @@ public class AccountAction {
         return null;
     }
 
-    
-    private boolean checkAccountLocked(String username) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-
-	@Autowired
-    private EmailService emailService;
-    @Autowired
-    private PasswordResetTokenService prts;
-    @Autowired
-    private PasswordResetTokenRepository tokenRepository;
-    
     @PostMapping("/forgot-password")
     public ResponseEntity<String> forgotPassword(@RequestBody AccountVo vo) {
         // 查找是否存在 AccountVo
@@ -163,33 +149,20 @@ public class AccountAction {
         String token = prts.createPasswordResetTokenForUser(existingVo.get());
 
         // 调用 emailService 的方法来发送邮件
-        emailService.sendResetPasswordEmail(existingVo, token);
+        emailService.sendResetPasswordEmail(existingVo.get(), token);
 
         return ResponseEntity.ok("請檢查您的電子郵件以重設密碼");
     }
 
     @PostMapping("/reset-password")
     public String resetPassword(@RequestParam("token") String token, @RequestParam("newPassword") String newPassword) {
-        PasswordResetToken resetToken = tokenService.validatePasswordResetToken(token);
+        PasswordResetToken resetToken = prts.validatePasswordResetToken(token);
         if (resetToken == null) {
-            return "Invalid or expired token";
+            return "失效或過期的憑證";
         }
         accountService.changePassword(resetToken.getVo(), newPassword);
 
         return "密碼重設完成！";
-    }
-    
-    public void changePassword(AccountVo vo, String newPassword) {
-        // 更新密码的 SQL 语句
-        String sql = "UPDATE account_vo SET password = ? WHERE username = ?";
-
-        // 执行更新操作
-        int rowsAffected = jdbcTemplate.update(sql, newPassword, vo.getUsername());
-
-        // 检查是否成功更新
-        if (rowsAffected == 0) {
-            throw new RuntimeException("用户不存在或更新失败");
-        }
     }
 
     @PostMapping("/logout-notify")
@@ -209,7 +182,6 @@ public class AccountAction {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("message", message));
         }
 
-        // 直接比較提供的密碼與存儲的密碼
-        return password.equals(storedPassword);
+        return ResponseEntity.ok(Collections.singletonMap("message", message));
     }
 }

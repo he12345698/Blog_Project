@@ -77,6 +77,7 @@ public class AccountService {
             vo.setCreatedDate(LocalDateTime.now()); //設置註冊日期
             // 發送郵件
             emailService.sendVerificationEmail(vo, token);
+            accountRepository.save(vo);
             return true;
         } catch (Exception e) {
         	
@@ -155,7 +156,7 @@ public class AccountService {
             account.setIsVerified(true);
             account.setCreatedDate(LocalDateTime.now());
             account.setVerificationToken(null);  // 驗證後移除 token
-            saveAccount(account);
+            accountRepository.save(account);
             return true;
         }
         return false;
