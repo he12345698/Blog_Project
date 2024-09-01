@@ -12,7 +12,7 @@ function EmailVerificationPage() {
         console.log(token)
 
         // 向后端发送请求进行验证
-        fetch(`http://192.168.50.38:8080/blog/ac/verify-email?token=${token}`)
+        fetch(`http://localhost:8080/blog/ac/verify-email?token=${token}`)
             .then(response => response.json())
             .then(data => {
                 if (data.ok) {

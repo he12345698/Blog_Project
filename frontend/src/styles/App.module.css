@@ -1,0 +1,23 @@
+/* App.css */
+body {
+  margin-top: 40px;
+  font-family: Arial, sans-serif;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin-top: 40px;
+}
+
+main {
+  margin-top: 60px; /* 确保这个值与 header 的高度一致 */
+  padding: 20px; /* 可选，增加额外的内边距以美化布局 */
+}
+
+.no-margin {
+  margin-top: 0;
+  padding: 0;
+}
+

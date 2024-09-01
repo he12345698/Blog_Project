@@ -8,10 +8,12 @@ const UserAvatar = ({ userId }) => {
 
     // 用來管理用戶資料
     const [userImage, setUserImage] = useState('');
+    const [loading, setLoading] = useState();
 
     // 透過圖片路徑顯示圖片
     // 獲取用戶信息
     useEffect(() => {
+        setLoading(true);
         const fetchUserInfo = async () => {
             const token = localStorage.getItem('token');
             // console.log('Request Headers:', {
@@ -47,6 +49,26 @@ const UserAvatar = ({ userId }) => {
         fetchUserInfo();
     }, []);
 
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const customStyles = {
+        content: {
+            width: '70%', 
+            height: '70%', 
+            top: '50%',
+            left: '50%',
+            right: 'auto',
+            bottom: 'auto',
+            marginRight: '-50%',
+            transform: 'translate(-50%, -50%)'
+        }
+    };
+    
 
     return (
         <div className={`${styles.profile_picture_wrapper} text-center`}>
@@ -62,18 +84,19 @@ const UserAvatar = ({ userId }) => {
             <button
                 type="button"
                 className={`btn btn-dark ${styles.photo}`}
-                // onClick={() => setIsModalOpen(true)}
+            onClick={() => setIsModalOpen(true)}
             >
                 更新頭像
             </button>
 
-            {/* <Modal
+            <Modal
                 isOpen={isModalOpen}
                 onRequestClose={() => setIsModalOpen(false)}
                 contentLabel="Crop Avatar"
+                style={customStyles}
             >
-
-            </Modal> */}
+                <ImageCropper src="UserImages/IMG_20240701_124913.JPG" />
+            </Modal>
         </div>
     );
 };

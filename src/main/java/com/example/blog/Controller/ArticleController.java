@@ -3,12 +3,14 @@ package com.example.blog.Controller;
 import com.example.blog.Model.ArticleVo;
 import com.example.blog.Repository.ArticleRepository;
 import com.example.blog.Service.ArticleService;
+import java.lang.String;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,8 +25,16 @@ public class ArticleController {
     @Autowired
     private ArticleRepository articleRepository;
 
-    //直接用get方法 取得全部文章的列表
+
     @GetMapping
+    public ResponseEntity<List<ArticleVo>> searchArticles(@RequestParam("query") String query) {
+        List<ArticleVo> articles = articleService.searchByTitleOrAuthor(query);
+        return new ResponseEntity<>(articles, HttpStatus.OK);
+    }
+    
+
+    // 直接用get方法 取得全部文章的列表
+    @GetMapping("/list")
     public Page<ArticleVo> getArticleVo(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -34,17 +44,12 @@ public class ArticleController {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).descending());
         return articleRepository.findAll(pageable);
     }
-    
+
     @GetMapping("/{articleId}")
     public ResponseEntity<ArticleVo> getArticleById(@PathVariable Long articleId) {
         return articleService.getArticleById(articleId)
                 .map(article -> ResponseEntity.ok(article))
                 .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    @GetMapping("/search")
-    public List<ArticleVo> getArticleByTitle(@PathVariable String title) {
-        return articleService.searchArticleByTitle(title);
     }
 
     @PostMapping

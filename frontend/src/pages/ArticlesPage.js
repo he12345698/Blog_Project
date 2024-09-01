@@ -1,69 +1,50 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import SearchBar from '../components/SearchBar';
+import axios from 'axios';
 import '../styles/pages/ArticlesPage.css';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-const ArticlesPage = () => {
-  const [articleVo, setArticleVo] = useState([]);
-  const [currentPage, setCurrentPage] = useState(0);
-  const [totalPages, setTotalPages] = useState(0);
+function ArticlesPage() {
+  const [articles, setArticles] = useState([]);
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    fetch(`http://localhost:8080/blog/api/articles?page=${currentPage}&size=10`)
-      .then(response => response.json())
-      .then(data => {
-        setArticleVo(data.content);
-        setTotalPages(data.totalPages);
-      });
-  }, [currentPage]);
-  
+  // 從 URL 查詢參數中獲取搜索查詢
+  const query = new URLSearchParams(location.search).get('query') || '';
 
-  const handlePageChange = (page) => {
-    if (page >= 0 && page < totalPages) {
-      setCurrentPage(page);
-    }
+  const handleSearch = (query) => {
+    // 更新 URL 查詢參數
+    navigate(`?query=${encodeURIComponent(query)}`);
   };
 
+  useEffect(() => {
+    axios
+      .get('http://localhost:8080/blog/api/articles', {
+        params: { query: query },
+      })
+      .then((response) => {
+        setArticles(response.data);
+      })
+      .catch((error) => {
+        console.error('搜尋文章失敗:', error);
+      });
+  }, [query]); // 依賴於查詢參數變化
+
   return (
-    <main className="content">
-      <section className="article-list">
-        <div className="post-container">
-          {articleVo && articleVo.length > 0 ? (
-            articleVo.map(article => (
-              <article className="post" key={article.articleId}>
-                <Link to={`/edit-article/${article.articleId}`}>
-                  <div>
-                    {article.title} | 作者 : {article.authorId} | 更新於 : {new Date(article.lastEditedAt).toLocaleDateString()}
-                  </div>
-                </Link>
-              </article>
-            ))
-          ) : (
-            <p>正在加載文章...</p> // 可以根據需求顯示加載狀態或提示語
-          )}
-        </div>
-  
-        {/* 分頁導航 */}
-        <nav className="pagination">
-          <Link to="#" onClick={() => handlePageChange(0)} className={currentPage === 0 ? 'active' : ''}>首頁</Link>
-          {Array.from({ length: totalPages }).map((_, index) => (
-            <Link
-              key={index}
-              to="#"
-              onClick={() => handlePageChange(index)}
-              className={index === currentPage ? 'active' : ''}
-            >
-              {index + 1}
-            </Link>
-          ))}
-          <Link to="#" onClick={() => handlePageChange(totalPages - 1)} className={currentPage === totalPages - 1 ? 'active' : ''}>尾頁</Link>
-        </nav>
-      </section>
-  
-      {/* 置頂按鈕 */}
-      <button className="back-to-top">置頂</button>
-    </main>
+    <div>
+      <SearchBar onSearch={handleSearch} />
+      {/* 在這裡渲染文章列表 */}
+      <div>
+        {articles.map((article) => (
+          <div key={article.id}>
+            <h3>{article.title}</h3>
+            <p>{article.content}</p>
+            <p>作者: {article.authorName}</p>
+          </div>
+        ))}
+      </div>
+    </div>
   );
-  
-};
+}
 
 export default ArticlesPage;
