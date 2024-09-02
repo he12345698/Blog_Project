@@ -12,6 +12,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Collections;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,8 +24,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.blog.JwtUtil;
 import com.example.blog.Model.AccountVo;
+import com.example.blog.Repository.AccountRepository;
+import com.example.blog.Service.AccountService;
 import com.example.blog.Service.UserProfileService;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -39,8 +48,14 @@ public class UserProfileController {
     @Autowired
     private UserProfileService userProfileService;
 
+    @Autowired
+    private AccountService accountService;
+
+    @Autowired
+    private AccountRepository accountRepository;
+
     // 使用相對路徑，上傳目錄將位於專案的根目錄中
-    private static final String UPLOAD_DIR = "D:\\Project_ex\\Blog_Project\\frontend\\public\\UserImages\\";
+    private static final String UPLOAD_DIR = "D:\\Project_ex\\Blog_Project\\frontend\\public\\";
 
     // 更新用戶名
     @PutMapping("update-username/{id}")
@@ -68,6 +83,19 @@ public class UserProfileController {
         }
     }
 
+    // 更新密碼
+    @PutMapping("update-password/{id}")
+    public ResponseEntity<String> updatePassword(@PathVariable Long id, @RequestBody Map<String, String> requestBody) {
+        System.out.println(id);
+        String newPassword = requestBody.get("newPassword");
+        boolean update = userProfileService.updatePassword(id, newPassword);
+        if (update) {
+            return ResponseEntity.ok("用戶密碼更新成功");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("用戶密碼更新失敗");
+        }
+    }
+
     // 根據用戶名稱獲取用戶資料
     @GetMapping("/{id}")
     public ResponseEntity<AccountVo> getUserById(@PathVariable(value = "id") Long id) {
@@ -86,7 +114,6 @@ public class UserProfileController {
             return ResponseEntity.badRequest().body("請選擇一個檔案來上傳。");
         }
 
-        // 圖片大小限制在10MB以下
         final long MAX_SIZE = 10 * 1024 * 1024;
         if (file.getSize() > MAX_SIZE) {
             return ResponseEntity.badRequest().body("圖片大小超過10MB限制");
@@ -98,61 +125,52 @@ public class UserProfileController {
             String url = accountVo.getImagelink();
             if (url != null && !url.isEmpty()) {
                 try {
-                    // 解析 URL 並獲取圖片的本地路徑
                     URL urlObj = new URL(url);
                     String path = urlObj.getPath();
                     String localFilePath = UPLOAD_DIR + path.replace('/', File.separatorChar);
 
                     Path existingFilePath = Paths.get(localFilePath);
-                    System.out.println("existingFilePath is " + existingFilePath);
+                    System.out.println("要刪除的檔案路徑: " + existingFilePath);
 
-                    // 如果存在原有的圖片，刪除它
+                    // 檢查文件是否存在
                     if (Files.exists(existingFilePath)) {
                         Files.delete(existingFilePath); // 确保删除原有图片
+                        System.out.println("成功刪除原有圖片：" + existingFilePath);
+                    } else {
+                        System.out.println("原有圖片不存在：" + existingFilePath);
                     }
                 } catch (MalformedURLException e) {
                     System.err.println("圖片 URL 格式錯誤：" + e.getMessage());
                 } catch (IOException e) {
                     System.err.println("刪除原有圖片時出錯：" + e.getMessage());
+                } catch (SecurityException e) {
+                    System.err.println("無法刪除圖片，權限不足：" + e.getMessage());
                 }
             }
 
-            // 生成唯一的檔案名稱
             String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-            Path filePath = Paths.get(UPLOAD_DIR, fileName);
+            Path filePath = Paths.get(UPLOAD_DIR, "UserImages\\", fileName);
             System.out.println("Saving new file to: " + filePath);
 
-            // 確保目錄存在，創建上傳目錄（包括所有父目錄）
             Files.createDirectories(filePath.getParent());
-
-            // 儲存檔案到指定目錄
             Files.write(filePath, file.getBytes());
 
-            // 設置基礎 URL
             String baseUrl = "http://localhost:3000/";
-
-            // 構建相對路徑（保持斜線）
             String relativeImagePath = "UserImages/" + fileName;
-
-            // 組合完整的 URL
             String fullImageUrl = baseUrl + relativeImagePath;
 
-            // 更新資料庫中的圖片路徑
             userProfileService.updateUserImagePath(id, fullImageUrl);
 
-            // 構建返回的 JSON
             String jsonResponse = String.format("{\"filePath\":\"%s\"}", fullImageUrl);
-
-            // 返回檔案的路徑
             return ResponseEntity.ok().body(jsonResponse);
         } catch (MalformedURLException e) {
             System.err.println("URL 格式錯誤：" + e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("無效的圖片 URL 格式。");
         } catch (IOException e) {
-            e.printStackTrace(); // 打印異常堆疊以幫助調試
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("上傳檔案時發生錯誤。");
         } catch (Exception e) {
-            e.printStackTrace(); // 處理潛在的其他異常
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("處理請求時發生錯誤。");
         }
     }

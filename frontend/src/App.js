@@ -14,6 +14,7 @@ import ResetPasswordPage from './ResetPasswordPage ';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import EmailVerificationPage from './pages/EmailVerificationPage';
+import ChangePassword from './pages/ChangePassword';
 
 const MainLayout = ({ children }) => (
   <main className={style.App}>
@@ -29,6 +30,7 @@ const App = () => {
     <Router>
       <Header />
         <Routes>
+          <Route path='/ChangePassword' element={<MainLayout><ChangePassword/></MainLayout>}/>
           <Route path="/" element={<MainLayout><Index /></MainLayout>} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<MainLayout><Register /></MainLayout>} />
