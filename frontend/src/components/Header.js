@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import styles from '../styles/components/Header.module.css';
 import { UserContext } from './UserContext';
 
 const Header = () => {
-  const [username, setUsername] = useState('');
-  const [userImage, setUserImage] = useState('');
+  //const [username, setUsername] = useState('');
+ // const [userImage, setUserImage] = useState('');
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  //const { user, setUser } = UserContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -41,7 +41,7 @@ const Header = () => {
           'Authorization': `Bearer ${window.localStorage.getItem('token')}`, // 如果需要
         },
         body: JSON.stringify({
-          username: username,
+          username: user?.username,
         }),
       });
     } catch (error) {
@@ -71,8 +71,13 @@ const Header = () => {
 
           if (response.ok) {
             const data = await response.json();
-            setUsername(data.username || '訪客1');
-            setUserImage(data.userImage || '/Image/GG'); // 默认头像
+            setUser({
+              username: data.username || '访客1',
+              userImage: data.userImage || '/Image/GG', // 设置默认头像
+              email: data.email
+            });
+            console.log(data)
+            console.log(data.username)
           } else if (response.status === 401) {
             // 如果收到 401 响应，检查是否有新的 token
             const data = await response.json();
@@ -83,24 +88,26 @@ const Header = () => {
               // 使用新的 token 重新发起请求
               return fetchUserInfo(); // 递归调用以重试请求
             } else {
-              // 如果没有新的 token，处理用户未授权情况
-              setUsername(null);
-              setUserImage('/Image/GG'); // 默认头像
+              setUser({
+                username: null,
+                userImage: '/Image/GG' // 设置默认头像
+              });
             }
           } else {
-            // 处理其他响应状态
-            setUsername(null);
-            setUserImage('/Image/GG'); // 默认头像
+            setUser({
+              username: null,
+              userImage: '/Image/GG' // 设置默认头像
+            });
           }
         } catch (error) {
           console.error('Error:', error);
-          setUsername(null);
-          setUserImage('/Image/GG'); // 默认头像
+          setUser({
+            username: null,
+            userImage: '/Image/GG' // 设置默认头像
+          });
         }
       }
     };
-
-
     fetchUserInfo();
   }, [location]);
 
@@ -117,17 +124,17 @@ const Header = () => {
           <Link to="/">首頁</Link>
         </nav>
         <div className={styles["user-login-container"]}>
-          {username ? (
+          {user?.username ? (
             <div className={styles["user-info"]}>
               <img
-                src={userImage}
+                src={user?.userImage}
                 width="50"
                 height="50"
                 alt="User Avatar"
                 className={styles["user-avatar"]}
               />
               <span className={styles.username}>
-                使用者：<span className={styles["username-text"]}>{username}</span>
+                使用者：<span className={styles["username-text"]}>{user?.username}</span>
               </span>
               <div className={styles["menu-container"]}>
                 <button className={styles["hamburger-menu"]} onClick={toggleMenu}>

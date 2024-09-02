@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Collections;
 import java.util.Optional;
@@ -97,10 +98,13 @@ public class UserProfileController {
 
     // 根據用戶名稱獲取用戶資料
     @GetMapping("/{id}")
-    public ResponseEntity<AccountVo> getUserById(@PathVariable(value = "id") Long id) {
-        AccountVo accountVo = userProfileService.getUserById(id);
+    public ResponseEntity<Map<String, Object>> getUserById(@PathVariable(value = "id") Long id) {
+    	AccountVo accountVo = userProfileService.getUserById(id);
         if (accountVo != null) {
-            return ResponseEntity.ok(accountVo);
+            Map<String, Object> response = new HashMap<>();
+            response.put("createdDate", accountVo.getCreatedDate());
+            response.put("lastLoginDate", accountVo.getLastLoginDate());
+            return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

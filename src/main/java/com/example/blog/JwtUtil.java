@@ -14,12 +14,13 @@ public class JwtUtil {
     private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     // 生成JWT token
-    public static String generateToken(Long id, String username, String imageLink, String password) {
+    public static String generateToken(Long id, String username, String imageLink, String password, String email) {
         return Jwts.builder()
                 .setSubject(username)
                 .claim("id", id)
                 .claim("imagelink", imageLink)
                 .claim("password", password)
+                .claim("email", email)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10小时过期
                 .signWith(SECRET_KEY) // 修正簽名方式
@@ -58,6 +59,10 @@ public class JwtUtil {
     // 提取使用者密碼
     public static String extractPassword(String token) {
         return (String) extractClaims(token).get("password");
+    }
+    
+    public static String extractEmail(String token) {
+        return (String) extractClaims(token).get("email");
     }
 
     // 檢查token是否過期

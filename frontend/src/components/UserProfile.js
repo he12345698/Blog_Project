@@ -1,9 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styles from "../styles/components/UserProfile.module.css"
+import { UserContext } from './UserContext';
+import UserData from '../pages/UserData';
 
 // 用來顯示和編輯用戶的基本資料（用戶名、電子郵件、密碼）
 
 const UserProfile = ({ userId }) => {
+
+    const { user, setUser } = useContext(UserContext); // 取得 setUser 方法
+    const username = user?.username;
 
     // 管理不同型態(編輯中 or 顯示中)的編輯狀態
     const [editing, setEditing] = useState({
@@ -11,12 +16,10 @@ const UserProfile = ({ userId }) => {
         email: false,
     });
 
-    // 用來管理用戶資料
+    //用來管理用戶資料
     const [userData, setUserData] = useState({
-        username: '',
-        email: '',
         createdDate: '',
-        lastLoginDate: '',
+        lastLoginDate: ''
     });
 
     // 防止用戶在請求未完成時重複提交
@@ -29,12 +32,12 @@ const UserProfile = ({ userId }) => {
 
         fetch(`http://localhost:8080/blog/api/userProfile/${userId}`)
             .then(response => {
-                console.log('網頁回應:', response);
+                console.log('網頁回應1:', response);
                 return response.json();
             })
             .then(data => {
-                console.log("得到的數據", data)
-                setUserData(data);
+                console.log("得到的數據1", data)
+                setUserData(data); // 設置初始用戶資料到 UserContext 中
                 setLoading(false);
             })
             .catch(error => {
@@ -42,13 +45,13 @@ const UserProfile = ({ userId }) => {
                 setError("獲取用戶資料失敗");
                 setLoading(false);
             })
-    }, [userId]);
+    }, [userId, setUser]);
 
     // 輸入變化
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setUserData(prevData => ({
-            ...prevData, [name]: value
+        setUser(prevUser => ({
+            ...prevUser, [name]: value
         }));
     }
 
@@ -69,7 +72,7 @@ const UserProfile = ({ userId }) => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(
-                { [field]: userData[field] }
+                { [field]: user[field] }
             ),
         })
             .then(response => {
@@ -98,7 +101,7 @@ const UserProfile = ({ userId }) => {
                     id="username"
                     class={`form-control ${styles.text_area}`}
                     name="username"
-                    value={userData.username}
+                    value={username}
                     onChange={handleInputChange}
                     disabled={!editing.username} //根據編輯狀態關閉或開啟
                 />
@@ -126,7 +129,7 @@ const UserProfile = ({ userId }) => {
                     type="email"
                     id="email"
                     name="email"
-                    value={userData.email}
+                    value={user?.email}
                     class={`form-control ${styles.text_area}`}
                     onChange={handleInputChange}
                     disabled={!editing.email}

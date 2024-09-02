@@ -39,6 +39,7 @@ public class UserController {
 	        Long id = JwtUtil.extractId(token);
 	        String userImage = JwtUtil.extractImageLink(token);
 	        String password = JwtUtil.extractPassword(token);
+	        String email = JwtUtil.extractEmail(token);
 
 	        // 检查 token 和 username 的有效性
 	        if (username == null || id == null || !JwtUtil.validateToken(token, username)) {
@@ -61,7 +62,7 @@ public class UserController {
 	        // 检查 token 中的 username 是否与数据库中的一致
 	        if (!username.equals(user.getUsername())) {
 	            // 生成新的 token
-	            String newToken = JwtUtil.generateToken(id,user.getUsername(),userImage,password);
+	            String newToken = JwtUtil.generateToken(id,user.getUsername(),userImage,password,email);
 	            
 	            Map<String, String> responseBody = new HashMap<>();
 	            responseBody.put("message", "用户名已更新，请使用新的令牌");
@@ -75,6 +76,7 @@ public class UserController {
 	        responseBody.put("id", String.valueOf(id));
 	        responseBody.put("userImage", userImage);
 	        responseBody.put("password", password);
+	        responseBody.put("email", email);
 	        return ResponseEntity.ok(responseBody);
 
 	    } catch (Exception e) {

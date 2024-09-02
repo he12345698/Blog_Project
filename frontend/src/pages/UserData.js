@@ -12,7 +12,7 @@ const articles = [
 ];
 
 const UserData = () => {
-
+    
     // 用來管理用戶資料
     const [userId, setUserId] = useState('');
 
@@ -36,8 +36,8 @@ const UserData = () => {
                     if (response.ok) {
                         const data = await response.json();
                         console.log('data:', data);
-                        console.log('id:' + data.id);
-                        console.log('userimage ' + data.userImage)
+                        //console.log('id:' + data.id);
+                        console.log('userId ' + data.id)
                         setUserId(data.id || null);
                     } else {
                         console.log('Response error:', response);
