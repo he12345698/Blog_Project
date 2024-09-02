@@ -44,7 +44,17 @@ public class ArticleVo {
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CommentVo> comments;
+
+    private int likes;
     
+    public int getLikes() {
+        return likes;
+    }
+
+    public void setLikes(int likes) {
+        this.likes = likes;
+    }
+
     // Getters and setters
     public List<CommentVo> getComments() {
         return comments;
@@ -98,9 +108,6 @@ public class ArticleVo {
                 + lastEditedAt + "]";
     }
 
-    public String getId() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getId'");
-    }
+
     
 }

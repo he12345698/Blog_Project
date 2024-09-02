@@ -10,17 +10,26 @@ const SingleArticle = () => {
     const [article, setArticle] = useState(null);
     const [comments, setComments] = useState([]);
     const [likeCount, setLikeCount] = useState(0);
+    const [hasLiked, setHasLiked] = useState(false); // 追蹤是否已按讚
     const [newComment, setNewComment] = useState(''); // 新增留言的 state
 
     useEffect(() => {
-        console.log(articleId);
         const fetchArticle = async () => {
             try {
-                // const response = await axios.get(`http://niceblog.myvnc.com:8080/blog/api/articles/${articleId}`); // 使用動態獲取的 articleId
-                const response = await axios.get(`http://localhost:8080/blog/api/articles/${articleId}`); // 使用動態獲取的 articleId
-                console.log(response.data)
+                const response = await axios.get(`http://localhost:8080/blog/api/articles/${articleId}`);
                 setArticle(response.data);
                 setLikeCount(response.data.likes);
+
+                // 使用 token 檢查當前使用者是否按讚
+                const token = localStorage.getItem('token');
+                if (token) {
+                    const likeResponse = await axios.get(`http://localhost:8080/blog/api/articles/${articleId}/isLiked`, {
+                        headers: {
+                            'Authorization': 'Bearer ' + token
+                        }
+                    });
+                    setHasLiked(likeResponse.data.liked);
+                }
             } catch (error) {
                 console.error("獲取文章失敗", error);
             }
@@ -29,60 +38,126 @@ const SingleArticle = () => {
         const fetchComments = async () => {
             try {
                 const response = await axios.get(`http://localhost:8080/blog/api/comments/article/${articleId}`);
-                setComments(response.data);
+                const fetchedComments = response.data;
+        
+                // 使用 token 檢查當前使用者對每條留言是否按讚
+                const token = localStorage.getItem('token');
+                if (token) {
+                    const updatedComments = await Promise.all(fetchedComments.map(async (comment) => {
+                        const likeResponse = await axios.get(`http://localhost:8080/blog/api/comments/${comment.id}/isLiked`, {
+                            headers: {
+                                'Authorization': 'Bearer ' + token
+                            }
+                        });
+                        return {
+                            ...comment,
+                            hasLiked: likeResponse.data.liked
+                        };
+                    }));
+                    setComments(updatedComments);
+                } else {
+                    // 如果沒有 token，默認每個留言的 hasLiked 為 false
+                    setComments(fetchedComments.map(comment => ({
+                        ...comment,
+                        hasLiked: false
+                    })));
+                }
             } catch (error) {
                 console.error("獲取留言失敗", error);
             }
         };
-
+        
         fetchArticle();
         fetchComments();
-    }, [articleId]); // 當 articleId 改變時重新獲取數據
+    }, [articleId]);
 
-    const likeArticle = async () => {
+    const toggleLike = async () => {
         try {
-            await axios.post(`http://localhost:8080/blog/api/articles/${articleId}/like`);
-            setLikeCount(likeCount + 1);
+            const token = localStorage.getItem('token');
+            
+            if (!token) {
+                throw new Error("未登入或 token 不存在");
+            }
+    
+            const response = await axios.post(`http://localhost:8080/blog/api/articles/${articleId}/like`, {}, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+    
+            if (response.status === 200) {
+                setHasLiked(!hasLiked);
+                setLikeCount(prevCount => hasLiked ? prevCount - 1 : prevCount + 1);
+            } else {
+                console.error(`請求失敗，狀態碼: ${response.status}`);
+            }
         } catch (error) {
-            console.error("按讚失敗", error);
+            console.error("按讚失敗：", error.message || error);
         }
     };
-
-    const likeComment = async (commentId) => {
+    
+    const toggleCommentLike = async (commentId) => {
         try {
-            await axios.post(`http://localhost:8080/blog/api/comments/${commentId}/like`);
-            setComments(comments.map(comment =>
-                comment.id === commentId ? { ...comment, likes: comment.likes + 1 } : comment
-            ));
+            const token = localStorage.getItem('token');
+    
+            if (!token) {
+                console.error("使用者未登入或 token 不存在");
+                return;
+            }
+    
+            const response = await axios.post(`http://localhost:8080/blog/api/comments/${commentId}/like`, {}, {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            });
+    
+            if (response.status === 200) {
+                setComments(comments.map(comment =>
+                    comment.id === commentId ? { 
+                        ...comment, 
+                        likes: comment.hasLiked ? comment.likes - 1 : comment.likes + 1, 
+                        hasLiked: !comment.hasLiked 
+                    } : comment
+                ));
+            } else {
+                console.error(`請求失敗，狀態碼: ${response.status}`);
+            }
         } catch (error) {
             console.error("按讚失敗", error);
         }
     };
 
     const handleNewCommentChange = (e) => {
-        setNewComment(e.target.value); // 更新留言內容
+        setNewComment(e.target.value);
     };
 
     const handleSubmitComment = async (e) => {
         e.preventDefault();
         try {
-            // 構建提交數據
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                console.error("使用者未登入或 token 不存在");
+                return;
+            }
+
             const commentData = {
                 content: newComment,
                 author: 'YourAuthorName', // 這裡你可以替換為實際的作者名
             };
-    
-            // 发送POST请求，传递评论数据和文章ID
-            const response = await axios.post(`http://localhost:8080/blog/api/comments?articleId=${articleId}`, commentData);
-            
-            // 更新评论列表，添加新评论
-            setComments([...comments, response.data]); 
-            setNewComment(''); // 清空输入框
+
+            const response = await axios.post(`http://localhost:8080/blog/api/comments?articleId=${articleId}`, commentData, {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            });
+
+            setComments([...comments, { ...response.data, hasLiked: false }]);
+            setNewComment('');
         } catch (error) {
             console.error("提交留言失敗", error);
         }
     };
-    
 
     if (!article) return <p>加載中...</p>;
 
@@ -104,8 +179,8 @@ const SingleArticle = () => {
                     <p className="content-text">{article.contentTEXT}</p>
                 </div>
                 <div className="like-button">
-                    <button type="button" className="like-btn" onClick={likeArticle}>
-                        按讚 (<span className="like-count">{likeCount}</span>)
+                    <button type="button" className="like-btn" onClick={toggleLike}>
+                        {hasLiked ? '收回讚' : '按讚'} (<span className="like-count">{likeCount}</span>)
                     </button>
                 </div>
                 <button className="back-to-list-btn" onClick={() => window.location.href = '/all-articles'}>
@@ -121,12 +196,12 @@ const SingleArticle = () => {
                             <div className="comment-header">
                                 <img src="/Image/IMG_20240701_124913.JPG" width="40" height="40" alt="留言者頭像" className="commenter-avatar" />
                                 <p className="commenter-name">{comment.author}</p>
-                                <p className="comment-date">{new Date(comment.createdAt).toLocaleString()}</p> {/* 使用 createdAt */}
+                                <p className="comment-date">{new Date(comment.createdAt).toLocaleString()}</p>
                             </div>
                             <p className="comment-text">{comment.content}</p>
                             <div className="like-comment-button">
-                                <button type="button" className="like-comment-btn" onClick={() => likeComment(comment.id)}>
-                                    按讚 (<span className="comment-like-count">{comment.likes}</span>)
+                                <button type="button" className="like-comment-btn" onClick={() => toggleCommentLike(comment.id)}>
+                                    {comment.hasLiked ? '收回讚' : '按讚'} (<span className="comment-like-count">{comment.likes}</span>)
                                 </button>
                             </div>
                         </div>
