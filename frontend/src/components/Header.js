@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import styles from '../styles/components/Header.module.css';
+import { UserContext } from './UserContext';
 
 const Header = () => {
   const [username, setUsername] = useState('');
   const [userImage, setUserImage] = useState('');
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  //const { user, setUser } = UserContext(UserContext);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -17,7 +19,7 @@ const Header = () => {
     const handleClickOutside = (event) => {
       const menuContainer = document.querySelector(`.${styles["menu-container"]}`);
       const dropdownMenu = document.querySelector(`.${styles["dropdown-menu"]}`);
-      
+
       if (menuContainer && !menuContainer.contains(event.target)) {
         setIsMenuOpen(false);
       }
@@ -71,16 +73,33 @@ const Header = () => {
             const data = await response.json();
             setUsername(data.username || '訪客1');
             setUserImage(data.userImage || '/Image/GG'); // 默认头像
+          } else if (response.status === 401) {
+            // 如果收到 401 响应，检查是否有新的 token
+            const data = await response.json();
+            if (data.token) {
+              // 更新本地存储中的 token
+              localStorage.setItem('token', data.token);
+
+              // 使用新的 token 重新发起请求
+              return fetchUserInfo(); // 递归调用以重试请求
+            } else {
+              // 如果没有新的 token，处理用户未授权情况
+              setUsername(null);
+              setUserImage('/Image/GG'); // 默认头像
+            }
           } else {
+            // 处理其他响应状态
             setUsername(null);
-            setUserImage('./UserImage/123.jpg'); // 默认头像
+            setUserImage('/Image/GG'); // 默认头像
           }
         } catch (error) {
+          console.error('Error:', error);
           setUsername(null);
           setUserImage('/Image/GG'); // 默认头像
         }
       }
     };
+
 
     fetchUserInfo();
   }, [location]);
