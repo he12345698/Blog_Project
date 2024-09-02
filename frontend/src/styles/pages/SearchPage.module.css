@@ -1,183 +1,55 @@
-/* 全局樣式 */
-body {
-  font-family: Arial, sans-serif; /* 設定字體 */
-  margin: 0; /* 去掉預設的邊距 */
-  padding: 0; /* 去掉預設的內邊距 */
-  background-color: #f4f4f4; /* 設定背景顏色 */
+/* SearchPage.module.css */
+
+/* 搜尋頁面的樣式 */
+.search_page {
+  padding: 20px;
+  background-color: #f4f4f9; /* 背景顏色 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Arial, sans-serif; /* 字體 */
 }
 
-/* 頂部功能列 */
-header.top-bar {
-  background-color: #333; /* 背景顏色 */
-  color: #fff; /* 字體顏色 */
-  padding: 10px 0; /* 內邊距 */
+/* 搜尋欄的樣式 */
+.search_bar {
+  margin-bottom: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
-/* 頂部容器 */
-.top-container {
-  display: flex; /* Flexbox 排版 */
-  justify-content: space-between; /* 主軸上分佈 */
-  align-items: center; /* 垂直對齊 */
-  max-width: 1200px; /* 最大寬度 */
-  margin: 0 auto; /* 居中 */
-  padding: 0 20px; /* 內邊距 */
-}
-
-/* logo */
-.logo {
-  font-size: 24px; /* 字體大小 */
-}
-
-/* 導航連結 */
-.navigation a {
-  color: #fff; /* 字體顏色 */
-  text-decoration: none; /* 去掉下劃線 */
-  margin: 0 10px; /* 邊距 */
-}
-
-.navigation a:hover {
-  text-decoration: underline; /* 懸停時下劃線 */
-}
-
-/* 使用者登入容器 */
-.user-login-container {
-  display: flex; /* Flexbox 排版 */
-  align-items: center; /* 垂直對齊 */
-}
-
-/* 使用者資訊 */
-.user-info {
-  display: flex; /* Flexbox 排版 */
-  align-items: center; /* 垂直對齊 */
-  margin-right: 20px; /* 右邊距 */
-}
-
-/* 使用者頭像 */
-.user-avatar {
-  border-radius: 50%; /* 圓形邊框 */
-  margin-right: 10px; /* 右邊距 */
-}
-
-/* 登入按鈕 */
-.login-btn button {
-  background-color: #ff6600; /* 背景顏色 */
-  color: #fff; /* 字體顏色 */
-  border: none; /* 去掉邊框 */
-  padding: 8px 16px; /* 內邊距 */
-  border-radius: 4px; /* 圓角邊框 */
-  cursor: pointer; /* 鼠標指針樣式 */
-}
-
-.login-btn button:hover {
-  background-color: #e55b00; /* 懸停時變更背景顏色 */
-}
-
-/* 搜尋列 */
-.search-bar {
-  max-width: 800px; /* 最大寬度 */
-  margin: 20px auto; /* 上下邊距並居中 */
-  padding: 10px; /* 內邊距 */
-  background-color: #fff; /* 背景顏色 */
-  border-radius: 8px; /* 圓角邊框 */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 陰影效果 */
-  display: flex; /* Flexbox 排版 */
-  align-items: center; /* 垂直對齊 */
-}
-
-.search-bar input[type="text"] {
-  flex: 1; /* 輸入框彈性 */
-  padding: 8px; /* 內邊距 */
-  border-radius: 4px; /* 圓角邊框 */
-  border: 1px solid #ddd; /* 邊框顏色 */
-}
-
-.search-bar button {
-  background-color: #007bff; /* 背景顏色 */
-  color: #fff; /* 字體顏色 */
-  border: none; /* 去掉邊框 */
-  padding: 8px 16px; /* 內邊距 */
-  border-radius: 4px; /* 圓角邊框 */
-  cursor: pointer; /* 鼠標指針樣式 */
-  margin-left: 10px; /* 左邊距 */
-}
-
-.search-bar button:hover {
-  background-color: #0056b3; /* 懸停時變更背景顏色 */
-}
-
-/* 主要內容區域 */
-main.content {
-  max-width: 800px; /* 最大寬度 */
-  margin: 20px auto; /* 上下邊距並居中 */
-  padding: 0 20px; /* 內邊距 */
-}
-
-/* 文章列表 */
+/* 文章列表區域 */
 .article-list {
-  background-color: #fff; /* 背景顏色 */
-  padding: 20px; /* 內邊距 */
-  border-radius: 8px; /* 圓角邊框 */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 陰影效果 */
+  width: 80%; /* 調整寬度 */
+  max-width: 800px;
+  background-color: #d7d1d1; /* 淺藍色背景 */
+  padding: 20px;
+  border-radius: 10px; /* 圓角效果 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 陰影效果 */
 }
 
-/* 每篇文章 */
-.post {
-  margin-bottom: 15px; /* 下邊距 */
+/* 單個文章卡片 */
+.article-card {
+  background-color: #f8f8f8; /* 卡片背景顏色 */
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 8px; /* 卡片圓角 */
+  border: 1px solid #bbb; /* 卡片邊框 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
-/* 每篇文章連結 */
-.post a {
-  color: #333; /* 字體顏色 */
-  text-decoration: none; /* 去掉下劃線 */
-  display: block; /* 顯示為區塊元素 */
+/* 文章標題 */
+.article-card h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
 }
 
-.post a:hover {
-  text-decoration: underline; /* 懸停時下劃線 */
-}
-
-/* 分頁導航 */
-.pagination {
-  text-align: center; /* 文字居中 */
-  margin-top: 20px; /* 上邊距 */
-}
-
-.pagination a {
-  color: #007bff; /* 字體顏色 */
-  text-decoration: none; /* 去掉下劃線 */
-  margin: 0 5px; /* 左右邊距 */
-  font-size: 14px; /* 字體大小 */
-}
-
-.pagination a:hover {
-  text-decoration: underline; /* 懸停時下劃線 */
-}
-
-/* 頁腳 */
-.footer {
-  background-color: #333; /* 背景顏色 */
-  color: white; /* 文字顏色 */
-  text-align: center; /* 文字置中 */
-  padding: 10px; /* 上下內邊距 */
-  width: 100%; /* 寬度 100% */
-  bottom: 0; /* 緊貼底部 */
-  position: fixed; /* 固定定位 */
-}
-
-/* 置頂按鈕 */
-.back-to-top {
-  position: fixed; /* 固定定位 */
-  bottom: 20px; /* 距離底部 */
-  right: 20px; /* 距離右邊 */
-  background-color: #007bff; /* 背景顏色 */
-  color: #fff; /* 字體顏色 */
-  border: none; /* 去掉邊框 */
-  padding: 10px 20px; /* 內邊距 */
-  border-radius: 4px; /* 圓角邊框 */
-  cursor: pointer; /* 鼠標指針樣式 */
-  text-align: center; /* 文字居中 */
-}
-
-.back-to-top:hover {
-  background-color: #0056b3; /* 懸停時變更背景顏色 */
+/* 文章內容 */
+.article-card p {
+  font-size: 14px;
+  color: #666;
 }
