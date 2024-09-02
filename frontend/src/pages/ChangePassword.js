@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
+import styles from "../styles/pages/ChangePassword.module.css";
 
 const ChangePassword = () => {
 
@@ -10,6 +12,7 @@ const ChangePassword = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const [password, setPassword] = useState('');
     const [userId, setUserId] = useState('');
+    let navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -101,53 +104,72 @@ const ChangePassword = () => {
         fetchUserInfo();
     }, []);
 
+    const handleClick = () => {
+        setIsSubmitting(true);
+        navigate('/UserData'); // 跳轉到用戶資料頁面
+    }
+
 
     return (
-        <div>
-            <h1>修改密碼</h1>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="currentPassword">當前密碼：</label>
-                    <input
-                        type="text"
-                        id="currentPassword"
-                        name="currentPassword"
-                        value={currentPassword}
-                        onChange={(e) => setCurrentPassword(e.target.value)}
-                        placeholder="請再次輸入當前密碼"
-                        required
-                    />
+        <div className="container-fluid">
+            <h1 className={`text-center mt-4 mb-4 ${styles.h1}`}>修改密碼</h1>
+            <div className="row justify-content-center">
+                <div className="col-lg-4 col-md-6 col-sm-8">
+                    <div className={`card p-4 shadow-sm ${styles.card}`}>
+                        <form onSubmit={handleSubmit}>
+                            <div className="mb-3">
+                                <label htmlFor="currentPassword" className={`${styles.label} form-label`}>當前密碼：</label>
+                                <input
+                                    type="password"
+                                    className="form-control"
+                                    id="currentPassword"
+                                    name="currentPassword"
+                                    value={currentPassword}
+                                    onChange={(e) => setCurrentPassword(e.target.value)}
+                                    placeholder="請再次輸入當前密碼"
+                                    required
+                                />
+                            </div>
+                            <div className="mb-3">
+                                <label htmlFor="newPassword" className={`${styles.label} form-label`}>新密碼：</label>
+                                <input
+                                    type="password"
+                                    className="form-control"
+                                    id="newPassword"
+                                    name="newPassword"
+                                    value={newPassword}
+                                    onChange={(e) => setNewPassword(e.target.value)}
+                                    placeholder="請輸入新密碼"
+                                    required
+                                />
+                            </div>
+                            <div className="mb-3">
+                                <label htmlFor="confirmNewPassword" className={`${styles.label} form-label`}>確認密碼：</label>
+                                <input
+                                    type="password"
+                                    className="form-control"
+                                    id="confirmNewPassword"
+                                    name="confirmNewPassword"
+                                    value={confirmNewPassword}
+                                    onChange={(e) => setConfirmNewPassword(e.target.value)}
+                                    placeholder="請再次輸入新密碼"
+                                    required
+                                />
+                            </div>
+                            <button
+                                type="submit"
+                                className={`btn btn-primary w-100 ${styles.button}`}
+                                disabled={isSubmitting}
+                                onClick={handleClick}
+                            >
+                                {isSubmitting ? '提交中...' : '修改密碼'}
+                            </button>
+                            {errorMessage && <p className="text-danger fw-bold mt-3">{errorMessage}</p>}
+                            {successMessage && <p className="text-success fw-bold mt-3">{successMessage}</p>}
+                        </form>
+                    </div>
                 </div>
-                <div>
-                    <label htmlFor="newPassword">新密碼：</label>
-                    <input
-                        type="text"
-                        id="newPassword"
-                        name="newPassword"
-                        value={newPassword}
-                        onChange={(e) => setNewPassword(e.target.value)}
-                        placeholder="請輸入新密碼"
-                        required
-                    />
-                </div>
-                <div>
-                    <label htmlFor="confirmNewPassword">確認密碼：</label>
-                    <input
-                        type="text"
-                        id="confirmNewPassword"
-                        name="confirmNewPassword"
-                        value={confirmNewPassword}
-                        onChange={(e) => setConfirmNewPassword(e.target.value)}
-                        placeholder="請再次輸入新密碼"
-                        required
-                    />
-                </div>
-                <button type="submit" disabled={isSubmitting}>
-                    {isSubmitting ? '提交中...' : '修改密碼'}
-                </button>
-                {errorMessage && <p style={{ color: 'red', fontWeight: "bold" }}>{errorMessage}</p>}
-                {successMessage && <p style={{ color: 'green', fontWeight: "bold" }}>{successMessage}</p>}
-            </form>
+            </div>
         </div>
     );
 };

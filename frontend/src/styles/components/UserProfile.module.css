@@ -30,8 +30,17 @@
 
 .userProfie_p{
     margin-bottom: 10px;
+    font-weight: bold;
 }
 
 .input_password{
     border: none;
+}
+
+.profile {
+    display: flex;
+}
+
+.button {
+    size: 30px;
 }

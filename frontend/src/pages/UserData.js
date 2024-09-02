@@ -55,19 +55,23 @@ const UserData = () => {
     }, []);
 
     return (
-        <div class={styles.wrapper}>
-            <h1 className={styles.custom_font}>Account Name 的小窩</h1>
-            <main class={styles.profile_wrapper}>
-                <div className={styles.profile_container}>
-                    <div className={styles.grid_container}>
-                        <div className={styles.profile}>
-                            <UserProfile userId={userId} />
-                        </div>
-                        <div className={styles.avatar}>
-                            <UserAvatar id={userId} />
-                        </div>
-                        <div className={styles.full_width}>
-                            {/* <UserArticles articles={articles} /> */}
+        <div className={styles.wrapper}>
+            <h1 className={`text-center ${styles.custom_font}`}>Account Name 的小窩</h1>
+            <main className="container mt-4">
+                <div className="row justify-content-center">
+                    <div className="col-lg-10">
+                        <div className="card p-4 shadow-sm">
+                            <div className="row">
+                                <div className="col-md-6 mb-3">
+                                    <UserProfile userId={userId} />
+                                </div>
+                                <div className="col-md-6 mb-3 text-center d-flex justify-content-center align-items-center">
+                                    <UserAvatar id={userId} />
+                                </div>
+                                <div className="col-12">
+                                    {/* <UserArticles articles={articles} /> */}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
