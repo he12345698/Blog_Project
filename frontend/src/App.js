@@ -3,6 +3,7 @@ import Index from './index0';
 import LoginPage from './pages/LoginPage';
 import Register from './pages/Register';
 import ArticlesPage from './pages/ArticlesPage';
+import SearchPage from './pages/SearchPage';
 import Test1 from './Test1';
 import SingleArticle from './pages/SingleArticle';
 import style from './styles/App.module.css';
@@ -35,6 +36,7 @@ const App = () => {
           <Route path="/forgot-password" element={<MainLayout><ForgotPasswordPage /></MainLayout>} />
           <Route path="/reset-password" element={<MainLayout><ResetPasswordPage /></MainLayout>} />
           <Route path="/articlesPage" element={<MainLayout><ArticlesPage /></MainLayout>} />
+          <Route path="/searchPage" element={<MainLayout><SearchPage /></MainLayout>} />
           <Route path="/singleArticle/:articleId" element={<MainLayout><SingleArticle /></MainLayout>} />
           <Route path='/publish-article' element={<MainLayout><ArticleEditor /></MainLayout>} />
           <Route path="/UserData" element={<MainLayout><UserData /></MainLayout>} />
