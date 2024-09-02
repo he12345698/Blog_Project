@@ -39,5 +39,7 @@ public interface ArticleRepository extends JpaRepository<ArticleVo, Long> {
     @Query("SELECT a FROM ArticleVo a JOIN AccountVo acc ON a.authorId = acc.id WHERE acc.username LIKE %:authorKeyword%")
     Page<ArticleVo> findByAuthorUsernameContaining(@Param("authorKeyword") String authorKeyword, Pageable pageable);
 
-
+    List<ArticleVo> findByTitleContainingIgnoreCase(String title);
+    
+    List<ArticleVo> findByAuthorId(Long authorId);
 }

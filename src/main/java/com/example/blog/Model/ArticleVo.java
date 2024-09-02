@@ -109,5 +109,9 @@ public class ArticleVo {
     }
 
 
+    public Long getId() {
+        // TODO Auto-generated method stub
+        return this.articleId;
+    }
     
 }
