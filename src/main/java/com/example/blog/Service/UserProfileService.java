@@ -60,4 +60,17 @@ public class UserProfileService {
         return false;
     }
 
+    // 更新密碼
+    public boolean updatePassword(Long id, String newPassword) {
+        Optional<AccountVo> optionalAccount = userProfileRepository.findById(id);
+        if (optionalAccount.isPresent()) {
+            AccountVo accountVo = optionalAccount.get();
+            accountVo.setPassword(newPassword);
+            System.out.println(newPassword);
+            userProfileRepository.save(accountVo);
+            return true;
+        }
+        return false;
+    }
+
 }

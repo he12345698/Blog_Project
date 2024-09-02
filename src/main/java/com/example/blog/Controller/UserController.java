@@ -29,6 +29,7 @@ public class UserController {
             String username = JwtUtil.extractUsername(token);
             Long id = JwtUtil.extractId(token);
             String userImage = JwtUtil.extractImageLink(token);
+            String password = JwtUtil.extractPassword(token);
 
             // 檢查 token 和 username 的有效性
             if (username == null || id == null || !JwtUtil.validateToken(token, username)) {
@@ -42,6 +43,7 @@ public class UserController {
             responseBody.put("username", username);
             responseBody.put("id", String.valueOf(id));
             responseBody.put("userImage", userImage);
+            responseBody.put("password", password);
             return ResponseEntity.ok(responseBody);
 
         } catch (Exception e) {
