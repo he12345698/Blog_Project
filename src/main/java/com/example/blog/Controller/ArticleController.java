@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/articles")
@@ -83,5 +84,17 @@ public class ArticleController {
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    // 獲取特定用戶的文章
+    @GetMapping("author/{authorId}")
+    public ResponseEntity<List<ArticleVo>> getArticlesByAuthorId(@PathVariable Long authorId) {
+        List<ArticleVo> articles = articleService.getArticleByAuthorId(authorId);
+        System.out.println(authorId);
+        if (articles.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(articles);
+    }
+    
 }
 

@@ -9,6 +9,16 @@ h2 {
     font-size: small;
     font-weight: bold;
     font-family: Arial, sans-serif;
+    /* 使文本在多行中顯示 */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* 限制顯示的行數 */
+    -webkit-line-clamp: 2; 
+    /* 根據需要調整行高 */
+    line-height: 1.5em; 
+    max-height: 3em; /* 2 行 x 行高 = 3em */
 }
 
 .title {
