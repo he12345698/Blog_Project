@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import styles from './styles/pages/ResetPasswordPage.module.css';
+import styles from '../styles/pages/ResetPasswordPage.module.css';
 
 const ResetPasswordPage = () => {
     const [newPassword, setNewPassword] = useState('');
@@ -21,7 +21,7 @@ const ResetPasswordPage = () => {
         event.preventDefault();
 
         if (newPassword !== confirmPassword) {
-            setErrorMessage('Passwords do not match');
+            setErrorMessage('密碼不一致');
             return;
         }
 
@@ -48,10 +48,10 @@ const ResetPasswordPage = () => {
 
     return (
         <div className={styles.resetPasswordContainer}>
-      <h2 className={styles.title}>Reset Password</h2>
+      <h2 className={styles.title}>重設密碼</h2>
       <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.formGroup}>
-          <label htmlFor="newPassword">New Password</label>
+          <label htmlFor="newPassword">新密碼</label>
           <input
             type="password"
             id="newPassword"
@@ -61,7 +61,7 @@ const ResetPasswordPage = () => {
           />
         </div>
         <div className={styles.formGroup}>
-          <label htmlFor="confirmPassword">Confirm Password</label>
+          <label htmlFor="confirmPassword">確認密碼</label>
           <input
             type="password"
             id="confirmPassword"
@@ -72,8 +72,8 @@ const ResetPasswordPage = () => {
         </div>
         {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
         {successMessage && <p className={styles.successMessage}>{successMessage}</p>}
-        <button type="submit" className={styles.submitButton} disabled={isLoading}>
-          {isLoading ? 'Processing...' : 'Reset Password'}
+        <button type="submit" className={styles["submitButton"]} disabled={isLoading}>
+          {isLoading ? '重設中...' : '確認重設'}
         </button>
       </form>
     </div>

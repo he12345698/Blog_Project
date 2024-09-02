@@ -3,17 +3,36 @@ import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import styles from '../styles/components/Header.module.css';
 
-
 const Header = () => {
-
   const [username, setUsername] = useState('');
   const [userImage, setUserImage] = useState('');
   const location = useLocation();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      const menuContainer = document.querySelector(`.${styles["menu-container"]}`);
+      const dropdownMenu = document.querySelector(`.${styles["dropdown-menu"]}`);
+      
+      if (menuContainer && !menuContainer.contains(event.target)) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [isMenuOpen]);
 
   const notifyLogout = async () => {
     try {
-
-        await fetch('http://localhost:8080/blog/ac/logout-notify', {
+      await fetch('http://localhost:8080/blog/ac/logout-notify', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -30,15 +49,12 @@ const Header = () => {
 
   const handleLogout = () => {
     notifyLogout();
-    // 处理登出逻辑，例如清除本地存储的 token，重定向到登录页面等
     window.localStorage.removeItem('token');
-    //setUsername('未登入');
     setTimeout(() => {
       window.location.href = '/';
     }, 100);
   };
 
-  // 获取用户信息
   useEffect(() => {
     const fetchUserInfo = async () => {
       const token = localStorage.getItem('token');
@@ -53,16 +69,14 @@ const Header = () => {
 
           if (response.ok) {
             const data = await response.json();
-            console.log('username is:', data.username);
-            console.log('userImage is:', data.userImage);
             setUsername(data.username || '訪客1');
             setUserImage(data.userImage || '/Image/GG'); // 默认头像
           } else {
-            console.log('Response error:', response);
+            setUsername(null);
+            setUserImage('./UserImage/123.jpg'); // 默认头像
           }
         } catch (error) {
-          console.error('Error:', error);
-          setUsername('Error222');
+          setUsername(null);
           setUserImage('/Image/GG'); // 默认头像
         }
       }
@@ -93,8 +107,23 @@ const Header = () => {
                 alt="User Avatar"
                 className={styles["user-avatar"]}
               />
-              <span className={styles.username}>使用者：{username}</span>
-              <button onClick={handleLogout} className={styles["logout-btn"]}>登出</button>
+              <span className={styles.username}>
+                使用者：<span className={styles["username-text"]}>{username}</span>
+              </span>
+              <div className={styles["menu-container"]}>
+                <button className={styles["hamburger-menu"]} onClick={toggleMenu}>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </button>
+                <div className={`${styles["dropdown-menu"]} ${isMenuOpen ? styles["open"] : ""}`}>
+                  <Link to="/UserData">個人資料</Link>
+                  <Link to="/settings">設定</Link>
+                  <button onClick={handleLogout} className={styles["logout-btn"]}>
+                    登出
+                  </button>
+                </div>
+              </div>
             </div>
           ) : (
             <div className={styles["login-btn"]}>

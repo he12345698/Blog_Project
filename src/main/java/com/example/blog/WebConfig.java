@@ -7,18 +7,19 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+
 	
-	@Value("${cors.allowed.origins}") //讀取proper裡的cors.allowed.origins設定
-	private String allowedOrigins;  
+//	@Value("${cors.allowed.origins}")//讀取proper裡的cors.allowed.origins設定
+//	private String allowedOrigins;  
 	
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins(allowedOrigins) //全局配置
+                .allowedOrigins("http://localhost:81", "http://192.168.50.38:81") //全局配置
                 .allowedMethods("*") // 允許的方法
                 .allowCredentials(true)
                 .allowedHeaders("*");
-        System.out.println("Allowed Origins: " + allowedOrigins);
+        
     }
     
 }
