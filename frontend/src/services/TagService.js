@@ -3,7 +3,7 @@ import axios from "axios";
 const API_BASE_URL = 'http://localhost:8080/blog/api/tags';
 
 const getArticleTag = async (articleId) => {
-    const response = await axios.get(`${API_BASE_URL}/${articleId}`);
+    const response = await axios.get(`http://localhost:8080/blog/api/articles/${articleId}/tag`);
     return response.data;
 }
 

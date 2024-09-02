@@ -15,24 +15,12 @@ import com.example.blog.Repository.TagRepository;
 public class TagService {
     @Autowired
     TagRepository tagRepository;
-    
-    @Autowired
-    private TagArticleRepository tagArticleVoRepository;
-    // public Optional<TagVo> getArticleTag(Long articleId) {
-    //     return tagRepository.findByArticleId(articleId);
-    // }
 
     public List<TagVo> getAllTags(){
         return tagRepository.findAll();
     }
 
-    public List<TagVo> findTagsByArticleId(Long articleId) {
-        // 查找所有與 articleId 關聯的 TagArticleVo 條目
-        List<TagArticleVo> tagArticleVos = tagArticleVoRepository.findByArticle_Id(articleId);
-
-        // 提取 Tags
-        return tagArticleVos.stream()
-                .map(TagArticleVo::getTag)
-                .collect(Collectors.toList());
+    public TagVo getTagById(Long id) {
+        return tagRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Service: Tag not found \nwith id="+id));
     }
 }

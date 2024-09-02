@@ -18,23 +18,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/articles")
 public class ArticleController {
-    
+
     @Autowired
     private ArticleService articleService;
     @Autowired
     private ArticleRepository articleRepository;
-
 
     @GetMapping
     public ResponseEntity<List<ArticleVo>> searchArticles(@RequestParam("query") String query) {
         List<ArticleVo> articles = articleService.searchByTitleOrAuthor(query);
         return new ResponseEntity<>(articles, HttpStatus.OK);
     }
-    
 
     // 直接用get方法 取得全部文章的列表
     @GetMapping("/list")
@@ -42,7 +41,7 @@ public class ArticleController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "articleId") String sortBy) {
-        
+
         // 使用 Sort 進行排序
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).descending());
         return articleRepository.findAll(pageable);
@@ -56,12 +55,12 @@ public class ArticleController {
     }
 
     @PostMapping
-    public ArticleVo createArticle(@RequestBody ArticleVo article) {
-        return articleService.createOrUpdateArticle(article);
+    public ArticleVo createArticle(@RequestBody ArticleVo article, @RequestParam Long tagId) {
+        return articleService.createOrUpdateArticle(article, tagId);
     }
 
     @PutMapping("/{articleId}")
-    public ResponseEntity<ArticleVo> updateArticle(@PathVariable Long articleId, @RequestBody ArticleVo article) {
+    public ResponseEntity<ArticleVo> updateArticle(@PathVariable Long articleId, @RequestBody ArticleVo article, @RequestParam Long tagId) {
         return articleService.getArticleById(articleId)
                 .map(existingArticle -> {
                     existingArticle.setAuthorId(article.getAuthorId());
@@ -69,7 +68,8 @@ public class ArticleController {
                     existingArticle.setContentTEXT(article.getContentTEXT());
                     existingArticle.setPublishedAt(article.getPublishedAt());
                     existingArticle.setLastEditedAt(article.getLastEditedAt());
-                    ArticleVo updatedArticle = articleService.createOrUpdateArticle(existingArticle);
+                    System.out.println(tagId);
+                    ArticleVo updatedArticle = articleService.createOrUpdateArticle(existingArticle, tagId);
                     return ResponseEntity.ok(updatedArticle);
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());
@@ -85,11 +85,14 @@ public class ArticleController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @Autowired
-    private TagService tagService;
-
-    @GetMapping("/articles/{articleId}/tags")
-    public List<TagVo> getTagsByArticleId(@PathVariable Long articleId) {
-        return tagService.findTagsByArticleId(articleId);
+    @GetMapping("/{articleId}/tag")
+    public ResponseEntity<Long> getTagIdByArticleId(@PathVariable Long articleId) {
+        Long tagId = articleService.getTagIdByArticleId(articleId);
+        if (tagId != null) {
+            return ResponseEntity.ok(tagId);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
+
 }

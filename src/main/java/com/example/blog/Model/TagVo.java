@@ -30,7 +30,9 @@ public class TagVo {
     public void setTag_id(Long tag_id) {
         this.tag_id = tag_id;
     }
-    
+    public Long getTagid() {
+        return tag_id;
+    }
 
     
 

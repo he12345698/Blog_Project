@@ -25,10 +25,10 @@ const ArticleEditor = () => {
                 setContentTEXT(article.contentTEXT);
                 setlikes(article.likes);
             });
-            // tagService.getTag(articleId).then(tag =>{
-            //     settag(tag.tag);
-            //     console.log(tag);
-            // });
+            tagService.getArticleTag(articleId).then(tag => {
+                settag(tag);
+                console.log(tag);
+            });
         }
     }, [articleId]);
 
@@ -77,7 +77,7 @@ const ArticleEditor = () => {
                             <select
                                 id="tag"
                                 name="tag"
-                                value={tag}
+                                value={tag}  // 確保這裡的 tag 是正確的 tag_id
                                 onChange={(e) => settag(e.target.value)}
                                 required
                             >
