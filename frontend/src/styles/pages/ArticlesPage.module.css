@@ -1,0 +1,23 @@
+/* ArticlesPage.module.css */
+
+.articles-page {
+  padding: 20px;
+}
+
+.article-list {
+  margin-bottom: 20px;
+}
+
+.article-card {
+  margin-bottom: 10px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pagination button {
+  padding: 5px 10px;
+}
