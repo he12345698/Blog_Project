@@ -83,6 +83,19 @@ public class UserProfileController {
         }
     }
 
+    // 更新密碼
+    @PutMapping("update-password/{id}")
+    public ResponseEntity<String> updatePassword(@PathVariable Long id, @RequestBody Map<String, String> requestBody) {
+        System.out.println(id);
+        String newPassword = requestBody.get("newPassword");
+        boolean update = userProfileService.updatePassword(id, newPassword);
+        if (update) {
+            return ResponseEntity.ok("用戶密碼更新成功");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("用戶密碼更新失敗");
+        }
+    }
+
     // 根據用戶名稱獲取用戶資料
     @GetMapping("/{id}")
     public ResponseEntity<AccountVo> getUserById(@PathVariable(value = "id") Long id) {
