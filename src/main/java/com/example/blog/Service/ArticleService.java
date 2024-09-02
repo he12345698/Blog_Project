@@ -1,6 +1,8 @@
 package com.example.blog.Service;
 
+import com.example.blog.Model.AccountVo;
 import com.example.blog.Model.ArticleVo;
+import com.example.blog.Repository.AccountRepository;
 import com.example.blog.Repository.ArticleRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,16 +22,21 @@ public class ArticleService {
 
     @Autowired
     private ArticleRepository articleRepository;
+
+        @Autowired
+    private AccountRepository accountRepository;
     
-    public Page<ArticleVo> searchArticles(String keyword, String authorKeyword, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        if (keyword != null && !keyword.isEmpty()) {
-            return articleRepository.findByTitleContaining(keyword, pageable);
+    public List<ArticleVo> searchByTitleOrAuthor(String keyword) {
+        List<ArticleVo> articlesByTitle = articleRepository.findByTitleContainingIgnoreCase(keyword);
+        List<AccountVo> authors = accountRepository.findByUsernameContainingIgnoreCase(keyword);
+        
+        Set<ArticleVo> combinedResults = new HashSet<>(articlesByTitle);
+        
+        for (AccountVo author : authors) {
+            combinedResults.addAll(articleRepository.findByAuthorId(author.getId()));
         }
-        if (authorKeyword != null && !authorKeyword.isEmpty()) {
-            return articleRepository.findByAuthorUsernameContaining(authorKeyword, pageable);
-        }
-        return articleRepository.findAll(pageable);
+
+        return new ArrayList<>(combinedResults);
     }
     
 
