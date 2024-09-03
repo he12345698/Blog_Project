@@ -1,10 +1,10 @@
 # 簡易部落格網頁專案(黑客論壇)
 工作成員
-Ryan：Html/CSS  
-Steven：Java  
-Johnson：Javascript  
-Erica：SQL  
-Paul：Product Manager/Test  
+Ryan：文章列表 
+Steven：文章編輯、發文
+Johnson：登入註冊
+Erica：單一文章內文
+Paul：用戶資料
 
 版本號：MAJOR.MINOR.PATCH (初始版：1.0.0)  
 
