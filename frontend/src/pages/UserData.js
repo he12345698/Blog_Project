@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import UserProfile from "../components/UserProfile";
 import UserAvatar from "../components/UserAvatar";
 import UserArticles from "../components/UserArticles";
 import styles from "../styles/pages/UserData.module.css"
+import { UserContext } from '../components/UserContext';
 
 
 const articles = [
@@ -12,7 +13,8 @@ const articles = [
 ];
 
 const UserData = () => {
-    
+
+    const { user, setUser } = useContext(UserContext); // 取得 setUser 方法
     // 用來管理用戶資料
     const [userId, setUserId] = useState('');
 
@@ -61,10 +63,10 @@ const UserData = () => {
                 <div className={styles.profile_container}>
                     <div className={styles.grid_container}>
                         <div className={styles.profile}>
-                            <UserProfile userId={userId} />
+                            <UserProfile userId={user?.id} />
                         </div>
                         <div className={styles.avatar}>
-                            <UserAvatar id={userId} />
+                            <UserAvatar id={user?.id} />
                         </div>
                         <div className={styles.full_width}>
                             {/* <UserArticles articles={articles} /> */}

@@ -74,10 +74,11 @@ const Header = () => {
             setUser({
               username: data.username || '访客1',
               userImage: data.userImage || '/Image/GG', // 设置默认头像
-              email: data.email
+              email: data.email,
+              id: data.id
             });
             console.log(data)
-            console.log(data.username)
+            console.log('id is ',data.id)
           } else if (response.status === 401) {
             // 如果收到 401 响应，检查是否有新的 token
             const data = await response.json();

@@ -116,12 +116,14 @@ public class AccountAction {
             // 如果验证成功，生成 JWT
             if (checkUserPasswordResponse.getStatusCode() == HttpStatus.OK) {
 
-                String token = JwtUtil.generateToken(
-                		accountRepository.findByUsername(vo.getUsername()).get().getId(),
-                        vo.getUsername(),
-                        accountRepository.findImageLinkByUsername(vo.getUsername()),
-                        vo.getPassword(),accountRepository.findByUsername(vo.getUsername()).get().getEmail());
-                System.out.println("email is " + accountRepository.findByUsername(vo.getUsername()).get().getEmail());
+//                String token = JwtUtil.generateToken(
+//                		accountRepository.findByUsername(vo.getUsername()).get().getId(),
+//                        vo.getUsername(),
+//                        accountRepository.findImageLinkByUsername(vo.getUsername()),
+//                        vo.getPassword(),accountRepository.findByUsername(vo.getUsername()).get().getEmail());
+            	String token = JwtUtil.generateToken(
+                		accountRepository.findByUsername(vo.getUsername()).get().getId());
+                System.out.println("id is(at login) " + accountRepository.findByUsername(vo.getUsername()).get().getId());
                 // 将 JWT 添加到响应头中
                 response.setHeader("Authorization", "Bearer " + token);
                 System.out.println("已生成token:" + token);

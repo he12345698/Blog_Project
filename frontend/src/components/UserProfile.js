@@ -9,6 +9,8 @@ const UserProfile = ({ userId }) => {
 
     const { user, setUser } = useContext(UserContext); // 取得 setUser 方法
     const username = user?.username;
+    const id = userId;
+    console.log('id at userprofile is ', id)
 
     // 管理不同型態(編輯中 or 顯示中)的編輯狀態
     const [editing, setEditing] = useState({
@@ -30,7 +32,7 @@ const UserProfile = ({ userId }) => {
     useEffect(() => {
         setLoading(true);
 
-        fetch(`http://localhost:8080/blog/api/userProfile/${userId}`)
+        fetch(`http://localhost:8080/blog/api/userProfile/${id}`)
             .then(response => {
                 console.log('網頁回應1:', response);
                 return response.json();

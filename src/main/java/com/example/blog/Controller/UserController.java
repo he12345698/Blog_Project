@@ -26,59 +26,34 @@ public class UserController {
 	@GetMapping("/protected-endpoint")
 	public ResponseEntity<Map<String, String>> getProtectedData(@RequestHeader(value = "Authorization", required = false) String authHeader) {
 	    // 检查 Authorization 头是否存在
+		
 	    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
 	        Map<String, String> responseBody = new HashMap<>();
 	        responseBody.put("message", "缺少或无效的 Authorization 头");
 	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
 	    }
-
+	    
 	    try {
 	        // 提取 token
 	        String token = authHeader.replace("Bearer ", "").trim();
-	        String username = JwtUtil.extractUsername(token);
 	        Long id = JwtUtil.extractId(token);
-	        String userImage = JwtUtil.extractImageLink(token);
-	        String password = JwtUtil.extractPassword(token);
-	        String email = JwtUtil.extractEmail(token);
-
+	        
 	        // 检查 token 和 username 的有效性
-	        if (username == null || id == null || !JwtUtil.validateToken(token, username)) {
+	        if (id == null || !JwtUtil.validateToken(token)) {
 	            Map<String, String> responseBody = new HashMap<>();
 	            responseBody.put("message", "无效的令牌");
 	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
 	        }
 
-	        // 从数据库中获取用户信息
-	        AccountVo user = accountRepository.findById(id).orElse(null);
-	        System.out.println("user is " + user);
-	        System.out.println("old username is " + username);
-	        System.out.println("new username is " + user.getUsername());
-	        if (user == null) {
-	            Map<String, String> responseBody = new HashMap<>();
-	            responseBody.put("message", "用户不存在");
-	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
-	        }
-
-	        // 检查 token 中的 username 是否与数据库中的一致
-	        if (!username.equals(user.getUsername())) {
-	            // 生成新的 token
-	            String newToken = JwtUtil.generateToken(id,user.getUsername(),userImage,password,email);
-	            
-	            Map<String, String> responseBody = new HashMap<>();
-	            responseBody.put("message", "用户名已更新，请使用新的令牌");
-	            responseBody.put("token", newToken);
-	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
-	        }
-
 	        // 生成保护的数据
 	        Map<String, String> responseBody = new HashMap<>();
-	        responseBody.put("username", username);
+	        responseBody.put("username", accountRepository.findById(id).get().getUsername());
 	        responseBody.put("id", String.valueOf(id));
-	        responseBody.put("userImage", userImage);
-	        responseBody.put("password", password);
-	        responseBody.put("email", email);
+	        responseBody.put("userImage", accountRepository.findById(id).get().getImagelink());
+	        responseBody.put("password", accountRepository.findById(id).get().getPassword());
+	        responseBody.put("email", accountRepository.findById(id).get().getEmail());
+	        
 	        return ResponseEntity.ok(responseBody);
-
 	    } catch (Exception e) {
 	        // 捕获异常并返回错误信息
 	        Map<String, String> responseBody = new HashMap<>();

@@ -99,6 +99,7 @@ public class UserProfileController {
     // 根據用戶名稱獲取用戶資料
     @GetMapping("/{id}")
     public ResponseEntity<Map<String, Object>> getUserById(@PathVariable(value = "id") Long id) {
+    	System.out.println("id at userprofile is " + id);
     	AccountVo accountVo = userProfileService.getUserById(id);
         if (accountVo != null) {
             Map<String, Object> response = new HashMap<>();
@@ -158,7 +159,7 @@ public class UserProfileController {
             Files.createDirectories(filePath.getParent());
             Files.write(filePath, file.getBytes());
 
-            String baseUrl = "http://localhost:3000/";
+            String baseUrl = "http://localhost:81/";
             String relativeImagePath = "UserImages/" + fileName;
             String fullImageUrl = baseUrl + relativeImagePath;
 
