@@ -65,7 +65,7 @@ const UserProfile = ({ userId }) => {
                 setError("獲取用戶資料失敗");
                 setLoading(false);
             });
-    }, [userId]);
+    }, [userId, user?.username, user?.email]);
 
     // 輸入變化
     const handleInputChange = (e) => {
@@ -208,7 +208,7 @@ const UserProfile = ({ userId }) => {
 
             <div className="col-12 mb-3">
                 <label htmlFor="registrationDate" className="form-label fw-bold">用戶註冊日期：</label>
-                <p className={styles.userProfie_p}>{formattedDate1}</p>
+                <p className='fw-bold'>{formattedDate1}</p>
             </div>
 
             <div className="col-12">

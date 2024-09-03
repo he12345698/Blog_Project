@@ -76,7 +76,8 @@ const Header = () => {
               username: data.username || '访客1',
               userImage: data.userImage || '/Image/GG', // 设置默认头像
               email: data.email,
-              id: data.id
+              id: data.id,
+              password: data.password
             });
             console.log(data)
             console.log('id is ',data.id)

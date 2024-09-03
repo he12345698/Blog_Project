@@ -39,8 +39,8 @@ function ImageUpload({ id, onClose }) {
                 body: formData,
             });
 
-            console.log('API 回應狀態碼:', response.status);
-            console.log('API 回應:', await response.text());
+            // console.log('API 回應狀態碼:', response.status);
+            // console.log('API 回應:', await response.text());
 
             if (response.ok) {
                 alert('圖片已成功上傳');

@@ -22,11 +22,10 @@ public class UserProfileService {
     @Autowired
     private UserProfileRepository userProfileRepository;
 
-    
-
     // 上傳圖片
     public void updateUserImagePath(Long id, String imagePath) {
-        AccountVo accountVo = userProfileRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        AccountVo accountVo = userProfileRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
         accountVo.setImagelink(imagePath); // 假設你的User實體有一個setImageLink的方法
         userProfileRepository.save(accountVo);
     }
@@ -61,15 +60,26 @@ public class UserProfileService {
     }
 
     // 更新密碼
-    public boolean updatePassword(Long id, String newPassword) {
+    public boolean updatePassword(Long id, String newPassword, String currentPassword) {
         Optional<AccountVo> optionalAccount = userProfileRepository.findById(id);
+
         if (optionalAccount.isPresent()) {
             AccountVo accountVo = optionalAccount.get();
+
+            // 驗證當前密碼
+            if (!currentPassword.equals(accountVo.getPassword())) {
+                System.out.println("當前密碼不正確");
+                return false; // 當前密碼不匹配
+            }
+
+            // 更新新密碼
             accountVo.setPassword(newPassword);
-            System.out.println(newPassword);
             userProfileRepository.save(accountVo);
+            System.out.println("密碼更新成功");
             return true;
         }
+
+        System.out.println("用戶不存在");
         return false;
     }
 

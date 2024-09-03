@@ -88,7 +88,8 @@ public class UserProfileController {
     public ResponseEntity<String> updatePassword(@PathVariable Long id, @RequestBody Map<String, String> requestBody) {
         System.out.println(id);
         String newPassword = requestBody.get("newPassword");
-        boolean update = userProfileService.updatePassword(id, newPassword);
+        String currentPassword = requestBody.get("currentPassword");
+        boolean update = userProfileService.updatePassword(id, newPassword, currentPassword);
         if (update) {
             return ResponseEntity.ok("用戶密碼更新成功");
         } else {
@@ -99,8 +100,8 @@ public class UserProfileController {
     // 根據用戶名稱獲取用戶資料
     @GetMapping("/{id}")
     public ResponseEntity<Map<String, Object>> getUserById(@PathVariable(value = "id") Long id) {
-    	System.out.println("id at userprofile is " + id);
-    	AccountVo accountVo = userProfileService.getUserById(id);
+        System.out.println("id at userprofile is " + id);
+        AccountVo accountVo = userProfileService.getUserById(id);
         if (accountVo != null) {
             Map<String, Object> response = new HashMap<>();
             response.put("createdDate", accountVo.getCreatedDate());
