@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Collections;
 import java.util.Optional;
@@ -42,7 +43,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/api/userProfile")
-@CrossOrigin(origins = "http://localhost:3000")
 public class UserProfileController {
 
     @Autowired
@@ -98,10 +98,14 @@ public class UserProfileController {
 
     // 根據用戶名稱獲取用戶資料
     @GetMapping("/{id}")
-    public ResponseEntity<AccountVo> getUserById(@PathVariable(value = "id") Long id) {
-        AccountVo accountVo = userProfileService.getUserById(id);
+    public ResponseEntity<Map<String, Object>> getUserById(@PathVariable(value = "id") Long id) {
+    	System.out.println("id at userprofile is " + id);
+    	AccountVo accountVo = userProfileService.getUserById(id);
         if (accountVo != null) {
-            return ResponseEntity.ok(accountVo);
+            Map<String, Object> response = new HashMap<>();
+            response.put("createdDate", accountVo.getCreatedDate());
+            response.put("lastLoginDate", accountVo.getLastLoginDate());
+            return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -155,7 +159,7 @@ public class UserProfileController {
             Files.createDirectories(filePath.getParent());
             Files.write(filePath, file.getBytes());
 
-            String baseUrl = "http://localhost:3000/";
+            String baseUrl = "http://localhost:81/";
             String relativeImagePath = "UserImages/" + fileName;
             String fullImageUrl = baseUrl + relativeImagePath;
 

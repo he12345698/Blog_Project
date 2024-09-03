@@ -8,11 +8,11 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  margin-top: 40px;
+  margin-top: 60px;
 }
 
 main {
-  margin-top: 60px; /* 确保这个值与 header 的高度一致 */
+  margin-top: 80px; /* 确保这个值与 header 的高度一致 */
   padding: 20px; /* 可选，增加额外的内边距以美化布局 */
 }
 

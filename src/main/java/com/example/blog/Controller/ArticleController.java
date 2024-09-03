@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 
-@CrossOrigin(origins = "http://localhost:3000")
+
 @RestController
 @RequestMapping("/api/articles")
 public class ArticleController {
@@ -40,7 +40,6 @@ public class ArticleController {
         List<ArticleVo> articles = articleService.searchByTitleOrAuthor(query);
         return new ResponseEntity<>(articles, HttpStatus.OK);
     }
-
     // 直接用get方法 取得全部文章的列表
     @GetMapping
     public Page<ArticleVo> getArticleVo(
