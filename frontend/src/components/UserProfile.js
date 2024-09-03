@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import styles from "../styles/components/UserProfile.module.css"
 import { UserContext } from './UserContext';
 import UserData from '../pages/UserData';
+import { useNavigate } from 'react-router-dom';
 
 // 用來顯示和編輯用戶的基本資料（用戶名、電子郵件、密碼）
 
@@ -27,6 +28,7 @@ const UserProfile = ({ userId }) => {
     // 防止用戶在請求未完成時重複提交
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    let navigate = useNavigate();
 
     // 獲取後端資料
     useEffect(() => {
@@ -91,97 +93,111 @@ const UserProfile = ({ userId }) => {
             })
     }
 
+    const handleClick = () => {
+        navigate('/ChangePassword'); // 跳轉到修改密碼頁面
+    }
+
     return (
-        <div class='row'>
+        <div className="row">
             {loading && <p>載入中...</p>}
-            {error && <p className={styles.error}>{error}</p>}
-            <label for="username" className={styles.userProfie_label}>用戶名：</label><br />
+            {error && <p className="text-danger">{error}</p>}
 
-            <div class={styles.inline}>
-                <input
-                    type="text"
-                    id="username"
-                    class={`form-control ${styles.text_area}`}
-                    name="username"
-                    value={username}
-                    onChange={handleInputChange}
-                    disabled={!editing.username} //根據編輯狀態關閉或開啟
-                />
-                {editing.username ? (
-                    <button
-                        type='button'
-                        className={`btn btn-dark ${styles.profile_button}`}
-                        onClick={() => handleSave('username')}
-                    >
-                        儲存
-                    </button>
-                ) : (
-                    <button
-                        type='button'
-                        className={`btn btn-dark ${styles.profile_button}`}
-                        onClick={() => toggleEdit('username')}
-                    >
-                        編輯
-                    </button>
-                )}
-                <br />
-
-                <label for="email" className={styles.userProfie_label}>電子郵件：</label><br />
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={user?.email}
-                    class={`form-control ${styles.text_area}`}
-                    onChange={handleInputChange}
-                    disabled={!editing.email}
-                />
-                {editing.email ? (
-                    <button
-                        type='button'
-                        className={`btn btn-dark ${styles.profile_button}`}
-                        onClick={() => handleSave('email')}
-                    >
-                        儲存
-                    </button>
-                ) : (
-                    <button
-                        type='button'
-                        className={`btn btn-dark ${styles.profile_button}`}
-                        onClick={() => toggleEdit('email')}
-                    >
-                        編輯
-                    </button>
-                )}
-                <br />
+            <div className="col-12 mb-1">
+                <label htmlFor="username" className="form-label fw-bold">用戶名：</label>
+                <div className="d-flex">
+                    <input
+                        type="text"
+                        id="username"
+                        className={`form-control ${styles.text_area}`}
+                        name="username"
+                        value={userData.username}
+                        onChange={handleInputChange}
+                        disabled={!editing.username} //根據編輯狀態關閉或開啟
+                    />
+                    {editing.username ? (
+                        <button
+                            type="button"
+                            className="btn btn-dark ms-2 fw-bold"
+                            onClick={() => handleSave('username')}
+                        >
+                            儲存
+                        </button>
+                    ) : (
+                        <button
+                            type="button"
+                            className="btn btn-dark ms-2 fw-bold"
+                            onClick={() => toggleEdit('username')}
+                        >
+                            編輯
+                        </button>
+                    )}
+                </div>
             </div>
 
-            <div class={styles.inline}>
-                <label for="password" className={styles.userProfie_label}>密碼：</label><br />
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    value="*********"
-                    class={`${styles.text_area} ${styles.input_password}`}
-                    readOnly
-                />
-                    <button
-                        type='button'
-                        className={`btn btn-dark ${styles.profile_button}`}
-                        onClick={() => toggleEdit('password')}
-                    >
-                        編輯
-                    </button>
-                <br />
+            <div className="col-12 mb-3">
+                <label htmlFor="email" className="form-label fw-bold">電子郵件：</label>
+                <div className="d-flex">
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={userData.email}
+                        className={`form-control ${styles.text_area}`}
+                        onChange={handleInputChange}
+                        disabled={!editing.email}
+                    />
+                    {editing.email ? (
+                        <button
+                            type="button"
+                            className="btn btn-dark ms-2 fw-bold"
+                            onClick={() => handleSave('email')}
+                        >
+                            儲存
+                        </button>
+                    ) : (
+                        <button
+                            type="button"
+                            className="btn btn-dark fw-bold ms-2"
+                            onClick={() => toggleEdit('email')}
+                        >
+                            編輯
+                        </button>
+                    )}
+                </div>
             </div>
 
-            <label for="registrationDate" className={styles.userProfie_label}>用戶註冊日期：</label><br />
-            <p className={styles.userProfie_p}>{userData.createdDate}</p>
+            <div className="col-12 mb-3">
+                <label htmlFor="password" className="form-label fw-bold">密碼：</label>
+                <div className="d-flex">
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        value="*********"
+                        className={`form-control ${styles.text_area} ${styles.input_password}`}
+                        readOnly
+                    />
+                    <button
+                        type="button"
+                        className={`btn btn-dark p-1 fw-bold w-30`}
+                        onClick={handleClick}
+                    >
+                        更改密碼
+                    </button>
+                </div>
+            </div>
 
-            <label for="lastLogin" className={styles.userProfie_label}>最後上線時間：</label><br />
-            <p>{userData.lastLoginDate}</p>
+            <div className="col-12 mb-3">
+                <label htmlFor="registrationDate" className="form-label fw-bold">用戶註冊日期：</label>
+                <p className={styles.userProfie_p}>{userData.createdDate}</p>
+            </div>
+
+            <div className="col-12">
+                <label htmlFor="lastLogin" className="form-label fw-bold">最後上線時間：</label>
+                <p className='fw-bold'>{userData.lastLoginDate}</p>
+            </div>
         </div>
+
     );
 }
 

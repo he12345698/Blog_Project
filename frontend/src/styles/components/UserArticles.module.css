@@ -1,18 +1,9 @@
-h2 {
-    font-weight: bold;
-    font-family: Arial, sans-serif;
-    font-size: 2em;
-    margin-bottom: 20px;
-}
-
-.content {
-    font-size: small;
-    font-weight: bold;
-    font-family: Arial, sans-serif;
-}
-
-.title {
-    font-size: 25px;
-    font-weight: bold;
-    font-family: Arial, sans-serif;
+.truncate {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    /* 限制顯示行數 */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* 省略號 */
 }
