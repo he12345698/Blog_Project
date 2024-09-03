@@ -135,4 +135,10 @@ public class ArticleService {
         return article.map(ArticleVo::getTag).map(TagVo::getTag_id).orElse(null);
     }
 
+    // 根據用戶id 獲取特定用戶文章
+    public List<ArticleVo> getArticleByAuthorId(Long authorId) {
+        return articleRepository.findByAuthorId(authorId);
+    }
+
+    
 }
