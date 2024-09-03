@@ -24,13 +24,21 @@ const getArticleByTitle = async (title) => {
 };
 
 const createArticle = async (articleData) => {
-    const response = await axios.post(API_BASE_URL, articleData);
+    console.log(articleData);
+    const tagId = articleData.tag
+    console.log(tagId);
+
+    const response = await axios.post(API_BASE_URL, articleData, { params: { tagId }});
     return response.data;
 };
 
 const updateArticle = async (articleId, articleData) => {
-    const response = await axios.put(`${API_BASE_URL}/${articleId}`, articleData);
+    console.log(articleData);
+    const tagId = articleData.tag;
+    console.log("tag is: "+tagId);
+    const response = await axios.put(`${API_BASE_URL}/${articleId}`, articleData, { params: { tagId }});
     console.log("try fetch...");
+
     return response.data;
 };
 //可加入其他請求API的方法
