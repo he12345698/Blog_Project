@@ -38,10 +38,7 @@ const UserProfile = ({ userId }) => {
     
 
     // 用來管理暫時的編輯資料
-    const [tempUser, setTempUser] = useState({
-        username: user?.username || '',
-        email: user?.email || '',
-    });
+    const [tempUser, setTempUser] = useState('');
 
     // 防止用戶在請求未完成時重複提交
     const [loading, setLoading] = useState(false);
@@ -51,6 +48,11 @@ const UserProfile = ({ userId }) => {
     // 獲取後端資料
     useEffect(() => {
         setLoading(true);
+
+        setTempUser({
+            username: user?.username || '',
+            email: user?.email || '',
+        });
 
         fetch(`http://localhost:8080/blog/api/userProfile/${userId}`)
             .then(response => response.json())
