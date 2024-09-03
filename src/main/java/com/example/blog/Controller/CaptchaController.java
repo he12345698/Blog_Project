@@ -25,7 +25,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/ac")
 public class CaptchaController {

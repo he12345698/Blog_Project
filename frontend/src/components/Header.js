@@ -1,26 +1,47 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import styles from '../styles/components/Header.module.css';
-
+import { UserContext } from './UserContext';
 
 const Header = () => {
-
-  const [username, setUsername] = useState('');
-  const [userImage, setUserImage] = useState('');
+  //const [username, setUsername] = useState('');
+ // const [userImage, setUserImage] = useState('');
   const location = useLocation();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, setUser } = useContext(UserContext);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      const menuContainer = document.querySelector(`.${styles["menu-container"]}`);
+      const dropdownMenu = document.querySelector(`.${styles["dropdown-menu"]}`);
+
+      if (menuContainer && !menuContainer.contains(event.target)) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [isMenuOpen]);
 
   const notifyLogout = async () => {
     try {
-
-        await fetch('http://localhost:8080/blog/ac/logout-notify', {
+      await fetch('http://localhost:8080/blog/ac/logout-notify', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${window.localStorage.getItem('token')}`, // 如果需要
         },
         body: JSON.stringify({
-          username: username,
+          username: user?.username,
         }),
       });
     } catch (error) {
@@ -30,15 +51,12 @@ const Header = () => {
 
   const handleLogout = () => {
     notifyLogout();
-    // 处理登出逻辑，例如清除本地存储的 token，重定向到登录页面等
     window.localStorage.removeItem('token');
-    //setUsername('未登入');
     setTimeout(() => {
       window.location.href = '/';
     }, 100);
   };
 
-  // 获取用户信息
   useEffect(() => {
     const fetchUserInfo = async () => {
       const token = localStorage.getItem('token');
@@ -54,21 +72,44 @@ const Header = () => {
 
           if (response.ok) {
             const data = await response.json();
-            console.log('username is:', data.username);
-            console.log('userImage is:', data.userImage);
-            setUsername(data.username || '訪客1');
-            setUserImage(data.userImage || '/Image/GG'); // 默认头像
+            setUser({
+              username: data.username || '访客1',
+              userImage: data.userImage || '/Image/GG', // 设置默认头像
+              email: data.email,
+              id: data.id
+            });
+            console.log(data)
+            console.log('id is ',data.id)
+          } else if (response.status === 401) {
+            // 如果收到 401 响应，检查是否有新的 token
+            const data = await response.json();
+            if (data.token) {
+              // 更新本地存储中的 token
+              localStorage.setItem('token', data.token);
+
+              // 使用新的 token 重新发起请求
+              return fetchUserInfo(); // 递归调用以重试请求
+            } else {
+              setUser({
+                username: null,
+                userImage: '/Image/GG' // 设置默认头像
+              });
+            }
           } else {
-            console.log('Response error:', response);
+            setUser({
+              username: null,
+              userImage: '/Image/GG' // 设置默认头像
+            });
           }
         } catch (error) {
           console.error('Error:', error);
-          setUsername('Error222');
-          setUserImage('/Image/GG'); // 默认头像
+          setUser({
+            username: null,
+            userImage: '/Image/GG' // 设置默认头像
+          });
         }
       }
     };
-
     fetchUserInfo();
   }, [location]);
 
@@ -85,17 +126,32 @@ const Header = () => {
           <Link to="/">首頁</Link>
         </nav>
         <div className={styles["user-login-container"]}>
-          {username ? (
+          {user?.username ? (
             <div className={styles["user-info"]}>
               <img
-                src={userImage}
+                src={user?.userImage}
                 width="50"
                 height="50"
                 alt="User Avatar"
                 className={styles["user-avatar"]}
               />
-              <span className={styles.username}>使用者：{username}</span>
-              <button onClick={handleLogout} className={styles["logout-btn"]}>登出</button>
+              <span className={styles.username}>
+                使用者：<span className={styles["username-text"]}>{user?.username}</span>
+              </span>
+              <div className={styles["menu-container"]}>
+                <button className={styles["hamburger-menu"]} onClick={toggleMenu}>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </button>
+                <div className={`${styles["dropdown-menu"]} ${isMenuOpen ? styles["open"] : ""}`}>
+                  <Link to="/UserData">個人資料</Link>
+                  <Link to="/settings">設定</Link>
+                  <button onClick={handleLogout} className={styles["logout-btn"]}>
+                    登出
+                  </button>
+                </div>
+              </div>
             </div>
           ) : (
             <div className={styles["login-btn"]}>

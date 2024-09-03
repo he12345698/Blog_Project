@@ -10,7 +10,7 @@ import style from './styles/App.module.css';
 import UserData from './pages/UserData';
 import ArticleEditor from './pages/ArticleEditor';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
-import ResetPasswordPage from './ResetPasswordPage ';
+import ResetPasswordPage from './pages//ResetPasswordPage ';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import EmailVerificationPage from './pages/EmailVerificationPage';
@@ -21,8 +21,6 @@ const MainLayout = ({ children }) => (
     {children}
   </main>
 );
-
-
 
 const App = () => {
 
