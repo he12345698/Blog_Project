@@ -17,11 +17,28 @@ const UserProfile = ({ userId }) => {
         lastLoginDate: ''
     });
 
-    // 用來管理暫時的編輯資料
-    const [tempUser, setTempUser] = useState({
-        username: user?.username || '',
-        email: user?.email || '',
+    // 變換時間格式
+    const formattedDate1 = new Date(userData.createdDate).toLocaleString('zh-TW', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
     });
+
+    const formattedDate2 = new Date(userData.lastLoginDate).toLocaleString('zh-TW', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+    });
+    
+
+    // 用來管理暫時的編輯資料
+    const [tempUser, setTempUser] = useState('');
 
     // 防止用戶在請求未完成時重複提交
     const [loading, setLoading] = useState(false);
@@ -32,7 +49,11 @@ const UserProfile = ({ userId }) => {
     useEffect(() => {
         setLoading(true);
 
-        // fetch(`http://niceblog.myvnc.com:8080/blog/api/userProfile/${userId}`)
+        setTempUser({
+            username: user?.username || '',
+            email: user?.email || '',
+        });
+
         fetch(`http://localhost:8080/blog/api/userProfile/${userId}`)
             .then(response => response.json())
             .then(data => {
@@ -187,12 +208,12 @@ const UserProfile = ({ userId }) => {
 
             <div className="col-12 mb-3">
                 <label htmlFor="registrationDate" className="form-label fw-bold">用戶註冊日期：</label>
-                <p className={styles.userProfie_p}>{userData.createdDate}</p>
+                <p className={styles.userProfie_p}>{formattedDate1}</p>
             </div>
 
             <div className="col-12">
                 <label htmlFor="lastLogin" className="form-label fw-bold">最後上線時間：</label>
-                <p className='fw-bold'>{userData.lastLoginDate}</p>
+                <p className='fw-bold'>{formattedDate2}</p>
             </div>
         </div>
     );
