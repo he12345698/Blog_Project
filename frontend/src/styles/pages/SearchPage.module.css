@@ -1,0 +1,55 @@
+/* SearchPage.module.css */
+
+/* 搜尋頁面的樣式 */
+.search_page {
+  padding: 20px;
+  background-color: #f4f4f9; /* 背景顏色 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Arial, sans-serif; /* 字體 */
+}
+
+/* 搜尋欄的樣式 */
+.search_bar {
+  margin-bottom: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* 文章列表區域 */
+.article-list {
+  width: 80%; /* 調整寬度 */
+  max-width: 800px;
+  background-color: #d7d1d1; /* 淺藍色背景 */
+  padding: 20px;
+  border-radius: 10px; /* 圓角效果 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 陰影效果 */
+}
+
+/* 單個文章卡片 */
+.article-card {
+  background-color: #f8f8f8; /* 卡片背景顏色 */
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 8px; /* 卡片圓角 */
+  border: 1px solid #bbb; /* 卡片邊框 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* 文章標題 */
+.article-card h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+/* 文章內容 */
+.article-card p {
+  font-size: 14px;
+  color: #666;
+}
