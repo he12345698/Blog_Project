@@ -1,53 +1,68 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import articleService from '../services/ArticleService'; // 假設你有一個文章服務
-import tagService from '../services/TagService'
+import articleService from '../services/ArticleService';
+import tagService from '../services/TagService';
+import authService from '../services/AuthService';
 import '../styles/pages/ArticleEditor.css';
+
 const ArticleEditor = () => {
     const [title, setTitle] = useState('');
     const [contentTEXT, setContentTEXT] = useState('');
-    const [tag, settag] = useState('');
-    const [alltags, setalltags] = useState([]);
-    const navigate = useNavigate();//用於跳轉網址
-    const { articleId } = useParams();// 假設用於編輯現有文章
-    const [likes, setlikes] = useState(0);
+    const [tag, setTag] = useState('');
+    const [allTags, setAllTags] = useState([]);
+    const [userId, setUserId] = useState('');
+    const navigate = useNavigate();
+    const { articleId } = useParams();
+    const [likes, setLikes] = useState(0);
 
-    // 加載文章內容（如果是編輯模式）
     useEffect(() => {
-        tagService.getAllTags().then(alltags => {
-            setalltags(alltags);
-            console.log("getAllTags");
-            console.log(alltags);
-        })
-        if (articleId) {
-            articleService.getArticleById(articleId).then(article => {
-                setTitle(article.title);
-                setContentTEXT(article.contentTEXT);
-                setlikes(article.likes);
-            });
-            tagService.getArticleTag(articleId).then(tag => {
-                settag(tag);
-                console.log(tag);
-            });
-        }
-    }, [articleId]);
+        const initialize = async () => {
+            try {
+                const user = await authService.getUserInfo();
+                setUserId(user.id);
+                
+                const tags = await tagService.getAllTags();
+                setAllTags(tags);
+
+                if (articleId) {
+                    const article = await articleService.getArticleById(articleId);
+                    setTitle(article.title);
+                    setContentTEXT(article.contentTEXT);
+                    setLikes(article.likes);
+
+                    // 檢查是否當前用戶為文章作者
+                    if (Number(article.authorId) !== Number(user.id)) {
+                        // 處理無權編輯的邏輯
+                        console.log(article.authorId);
+                        console.log(user.id);
+                        alert("你無權編輯此文章");
+                        navigate('/articlesPage');
+                    } else {
+                        const articleTag = await tagService.getArticleTag(articleId);
+                        setTag(articleTag);
+                    }
+                }
+            } catch (error) {
+                console.error('Error during initialization:', error);
+                navigate('/login');  // 如果無法獲取用戶信息，重定向到登錄頁面
+            }
+        };
+
+        initialize();
+    }, [articleId, navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const articleData = { title, contentTEXT, tag, likes };
+        const articleData = { title, contentTEXT, tag, likes, authorId: userId };
 
         try {
             if (articleId) {
-                // 更新文章 傳入id和內容
-                console.log("updating... id=" + articleId);
                 await articleService.updateArticle(articleId, articleData);
             } else {
-                // 創建新文章 只傳入內容 id自動生成
-                console.log("creating...")
                 await articleService.createArticle(articleData);
             }
             alert("文章提交成功! 將返回文章列表");
-            navigate('/articlesPage'); // 成功後跳轉
+            navigate('/articlesPage');
         } catch (error) {
             alert("文章提交失敗! 請稍後再嘗試");
             console.error('文章提交失敗:', error);
@@ -77,12 +92,12 @@ const ArticleEditor = () => {
                             <select
                                 id="tag"
                                 name="tag"
-                                value={tag}  // 確保這裡的 tag 是正確的 tag_id
-                                onChange={(e) => settag(e.target.value)}
+                                value={tag}
+                                onChange={(e) => setTag(e.target.value)}
                                 required
                             >
                                 <option value="">請選擇分類</option>
-                                {alltags.map((tag) => (
+                                {allTags.map((tag) => (
                                     <option key={tag.tag_id} value={tag.tag_id}>
                                         {tag.name}
                                     </option>
