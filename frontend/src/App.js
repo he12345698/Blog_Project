@@ -22,8 +22,6 @@ const MainLayout = ({ children }) => (
   </main>
 );
 
-
-
 const App = () => {
 
   return (

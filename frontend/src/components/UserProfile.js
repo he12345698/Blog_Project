@@ -1,70 +1,64 @@
 import React, { useState, useEffect, useContext } from 'react';
-import styles from "../styles/components/UserProfile.module.css"
+import styles from "../styles/components/UserProfile.module.css";
 import { UserContext } from './UserContext';
-import UserData from '../pages/UserData';
 import { useNavigate } from 'react-router-dom';
 
 // 用來顯示和編輯用戶的基本資料（用戶名、電子郵件、密碼）
-
 const UserProfile = ({ userId }) => {
-
     const { user, setUser } = useContext(UserContext); // 取得 setUser 方法
-    const username = user?.username;
-    const id = userId;
-    console.log('id at userprofile is ', id)
-
-    // 管理不同型態(編輯中 or 顯示中)的編輯狀態
     const [editing, setEditing] = useState({
         username: false,
         email: false,
     });
 
-    //用來管理用戶資料
+    // 用來管理用戶資料
     const [userData, setUserData] = useState({
         createdDate: '',
         lastLoginDate: ''
     });
 
+    // 用來管理暫時的編輯資料
+    const [tempUser, setTempUser] = useState({
+        username: user?.username || '',
+        email: user?.email || '',
+    });
+
     // 防止用戶在請求未完成時重複提交
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    let navigate = useNavigate();
+    const navigate = useNavigate();
 
     // 獲取後端資料
     useEffect(() => {
         setLoading(true);
 
-        fetch(`http://localhost:8080/blog/api/userProfile/${id}`)
-            .then(response => {
-                console.log('網頁回應1:', response);
-                return response.json();
-            })
+        fetch(`http://localhost:8080/blog/api/userProfile/${userId}`)
+            .then(response => response.json())
             .then(data => {
-                console.log("得到的數據1", data)
-                setUserData(data); // 設置初始用戶資料到 UserContext 中
+                setUserData(data);
                 setLoading(false);
             })
             .catch(error => {
                 console.error("獲取用戶資料失敗", error);
                 setError("獲取用戶資料失敗");
                 setLoading(false);
-            })
-    }, [userId, setUser]);
+            });
+    }, [userId]);
 
     // 輸入變化
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setUser(prevUser => ({
-            ...prevUser, [name]: value
+        setTempUser(prevTempUser => ({
+            ...prevTempUser, [name]: value
         }));
-    }
+    };
 
     // 切換編輯狀態
     const toggleEdit = (field) => {
         setEditing(prev => ({
-            ...prev, [field]: !prev[field]// 取prev狀態的相反
+            ...prev, [field]: !prev[field]
         }));
-    }
+    };
 
     // 處裡保存
     const handleSave = (field) => {
@@ -76,26 +70,28 @@ const UserProfile = ({ userId }) => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(
-                { [field]: user[field] }
+                { [field]: tempUser[field] }
             ),
         })
             .then(response => {
                 if (!response.ok) {
                     throw new Error("保存數據失敗");
                 }
+                // 更新 UserContext
+                setUser(prevUser => ({ ...prevUser, [field]: tempUser[field] }));
                 setLoading(false);
-                toggleEdit(field);// 保存成功後切回顯示模式
+                toggleEdit(field); // 保存成功後切回顯示模式
             })
             .catch(error => {
                 setLoading(false);
-                console.log("保存數據失敗", error);
+                console.error("保存數據失敗", error);
                 setError("保存數據失敗");
-            })
-    }
+            });
+    };
 
     const handleClick = () => {
         navigate('/ChangePassword'); // 跳轉到修改密碼頁面
-    }
+    };
 
     return (
         <div className="row">
@@ -110,9 +106,9 @@ const UserProfile = ({ userId }) => {
                         id="username"
                         className={`form-control ${styles.text_area}`}
                         name="username"
-                        value={userData.username}
+                        value={tempUser.username}
                         onChange={handleInputChange}
-                        disabled={!editing.username} //根據編輯狀態關閉或開啟
+                        disabled={!editing.username} // 根據編輯狀態關閉或開啟
                     />
                     {editing.username ? (
                         <button
@@ -141,7 +137,7 @@ const UserProfile = ({ userId }) => {
                         type="email"
                         id="email"
                         name="email"
-                        value={userData.email}
+                        value={tempUser.email}
                         className={`form-control ${styles.text_area}`}
                         onChange={handleInputChange}
                         disabled={!editing.email}
@@ -197,7 +193,6 @@ const UserProfile = ({ userId }) => {
                 <p className='fw-bold'>{userData.lastLoginDate}</p>
             </div>
         </div>
-
     );
 }
 

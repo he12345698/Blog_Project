@@ -17,6 +17,7 @@ const UserArticles = ({ authorId }) => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
+                setError('');
                 return response.json();
             })
             .then(data => {

@@ -58,15 +58,15 @@ const UserData = () => {
                     <main className="mt-4">
                         <div className="row">
                             <div className="col-md-6 mb-3">
-                                <UserProfile userId={userId} />
+                                <UserProfile userId={user?.id} />
                             </div>
                             <div className="col-md-6 mb-3 d-flex justify-content-center align-items-center">
-                                <UserAvatar id={userId} />
+                                <UserAvatar id={user?.id} />
                             </div>
                         </div>
                         <div className="row">
                             <div className="col-12">
-                                <UserArticles authorId={userId} />
+                                <UserArticles authorId={user?.id} />
                             </div>
                         </div>
                     </main>
