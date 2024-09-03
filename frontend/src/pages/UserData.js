@@ -51,9 +51,9 @@ const UserData = () => {
     return (
         <div className="container mt-2">
             <h1 className="text-center mb-4">Account Name 的小窩</h1>
-            <div className="card mx-auto" style={{ maxWidth: '80%' }}>
+            <div className="card mx-auto" style={{ maxWidth: '70%' }}>
                 <div className="card-body p-1">
-                    <main>
+                    <main className="mt-4">
                         <div className="row">
                             {/* 左上角的 UserProfile 組件 */}
                             <div className="col-md-6 mb-3">
@@ -67,14 +67,13 @@ const UserData = () => {
                         <div className="row">
                             {/* 下方的 UserArticles 組件 */}
                             <div className="col-12">
-                                <UserArticles id={8} />
+                                <UserArticles authorId={userId} />
                             </div>
                         </div>
                     </main>
                 </div>
             </div>
         </div>
-
     );
 }
 

@@ -97,7 +97,7 @@ const UserProfile = ({ userId }) => {
             {loading && <p>載入中...</p>}
             {error && <p className="text-danger">{error}</p>}
 
-            <div className="col-12 mb-3">
+            <div className="col-12 mb-1">
                 <label htmlFor="username" className="form-label fw-bold">用戶名：</label>
                 <div className="d-flex">
                     <input
