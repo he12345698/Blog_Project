@@ -12,7 +12,6 @@ const ForgotPasswordPage = () => {
 
     try {
       const response = await fetch('http://localhost:8080/blog/ac/forgot-password', {
-      //const response = await fetch('http://localhost:8080/blog-0.0.1-SNAPSHOT/ac/forgot-password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

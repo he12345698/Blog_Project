@@ -2,13 +2,15 @@ package com.example.blog.Controller;
 
 import com.example.blog.JwtUtil;
 import com.example.blog.Model.ArticleVo;
-
+import com.example.blog.Model.TagVo;
 import com.example.blog.Repository.ArticleRepository;
 import com.example.blog.Service.ArticleService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.lang.String;
+
+import com.example.blog.Service.TagService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,7 +36,6 @@ public class ArticleController {
     @Autowired
     private ArticleRepository articleRepository;
 
-
     @GetMapping("/search")
     public ResponseEntity<List<ArticleVo>> searchArticles(@RequestParam("query") String query) {
         List<ArticleVo> articles = articleService.searchByTitleOrAuthor(query);
@@ -55,8 +56,8 @@ public class ArticleController {
     @GetMapping("/{articleId}")
     public ResponseEntity<ArticleVo> getArticleById(@PathVariable Long articleId) {
         return articleService.getArticleById(articleId)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .map(article -> ResponseEntity.ok(article))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping("/{articleId}/like")
@@ -120,12 +121,12 @@ public class ArticleController {
 
 
     @PostMapping
-    public ArticleVo createArticle(@RequestBody ArticleVo article) {
-        return articleService.createOrUpdateArticle(article);
+    public ArticleVo createArticle(@RequestBody ArticleVo article, @RequestParam Long tagId) {
+        return articleService.createOrUpdateArticle(article, tagId);
     }
 
     @PutMapping("/{articleId}")
-    public ResponseEntity<ArticleVo> updateArticle(@PathVariable Long articleId, @RequestBody ArticleVo article) {
+    public ResponseEntity<ArticleVo> updateArticle(@PathVariable Long articleId, @RequestBody ArticleVo article, @RequestParam Long tagId) {
         return articleService.getArticleById(articleId)
                 .map(existingArticle -> {
                     existingArticle.setAuthorId(article.getAuthorId());
@@ -133,7 +134,8 @@ public class ArticleController {
                     existingArticle.setContentTEXT(article.getContentTEXT());
                     existingArticle.setPublishedAt(article.getPublishedAt());
                     existingArticle.setLastEditedAt(article.getLastEditedAt());
-                    ArticleVo updatedArticle = articleService.createOrUpdateArticle(existingArticle);
+                    System.out.println(tagId);
+                    ArticleVo updatedArticle = articleService.createOrUpdateArticle(existingArticle, tagId);
                     return ResponseEntity.ok(updatedArticle);
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());
@@ -147,6 +149,16 @@ public class ArticleController {
                     return ResponseEntity.ok().<Void>build();
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+    
+    @GetMapping("/{articleId}/tag")
+    public ResponseEntity<Long> getTagIdByArticleId(@PathVariable Long articleId) {
+        Long tagId = articleService.getTagIdByArticleId(articleId);
+        if (tagId != null) {
+            return ResponseEntity.ok(tagId);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     // 獲取特定用戶的文章
