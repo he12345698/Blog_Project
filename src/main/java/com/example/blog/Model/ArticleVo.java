@@ -50,10 +50,15 @@ public class ArticleVo {
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CommentVo> comments;
 
-    @Column(name = "likes", nullable = false)
-    private int likes = 0;
+    private int likes;
+    
+    public int getLikes() {
+        return likes;
+    }
 
-
+    public void setLikes(int likes) {
+        this.likes = likes;
+    }
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tag_id", nullable = false)
     @JsonIgnore
@@ -62,11 +67,9 @@ public class ArticleVo {
     public TagVo getTag() {
         return tag;
     }
-
     public void setTag(TagVo tag) {
         this.tag = tag;
     }
-
     // Getters and setters
     public List<CommentVo> getComments() {
         return comments;
@@ -131,16 +134,11 @@ public class ArticleVo {
                 + lastEditedAt + "]";
     }
 
+
     public Long getId() {
         return this.articleId;
     }
 
-    public int getLikes() {
-        return likes;
-    }
 
-    public void setLikes(int likes) {
-        this.likes = likes;
-    }
 
 }

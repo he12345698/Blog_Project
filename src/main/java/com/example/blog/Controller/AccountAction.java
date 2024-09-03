@@ -82,8 +82,8 @@ public class AccountAction {
     public ResponseEntity<Map<String, String>> login(@RequestBody AccountVo vo, HttpServletRequest request,
             HttpServletResponse response) {
         try {
-        	ResponseEntity<Map<String, String>> captchaResponse = captchaController.validateCaptcha(vo, request);
-            //回應驗證碼輸入結果
+            ResponseEntity<Map<String, String>> captchaResponse = captchaController.validateCaptcha(vo, request);
+            // 回應驗證碼輸入結果
             if (captchaResponse.getStatusCode() == HttpStatus.FORBIDDEN) {
                 return captchaResponse; // 返回包含错误信息的响应
             }
@@ -117,8 +117,10 @@ public class AccountAction {
             // 如果验证成功，生成 JWT
             if (checkUserPasswordResponse.getStatusCode() == HttpStatus.OK) {
 
-                String token = JwtUtil.generateToken(accountRepository.findByUsername(vo.getUsername()).get().getId(), vo.getUsername(),
-                        accountRepository.findImageLinkByUsername(vo.getUsername()));
+                String token = JwtUtil.generateToken(accountRepository.findByUsername(vo.getUsername()).get().getId(),
+                        vo.getUsername(),
+                        accountRepository.findImageLinkByUsername(vo.getUsername()),
+                        accountRepository.findByUsername(vo.getUsername()).get().getPassword());
                 System.out.println("id is " + accountRepository.findByUsername(vo.getUsername()).get().getId());
                 // 将 JWT 添加到响应头中
                 response.setHeader("Authorization", "Bearer " + token);
@@ -169,8 +171,9 @@ public class AccountAction {
     public ResponseEntity<String> notifyLogout(@RequestBody Map<String, String> payload) {
         String username = payload.get("username");
         // 後臺打印登出通知
-        System.out.println("\033[0;31m" + "使用者：" + username + " 於 " + new Date(System.currentTimeMillis()) + " 登出" + "\033[0m");
-        
+        System.out.println(
+                "\033[0;31m" + "使用者：" + username + " 於 " + new Date(System.currentTimeMillis()) + " 登出" + "\033[0m");
+
         return ResponseEntity.ok("登出通知接收成功");
     }
 

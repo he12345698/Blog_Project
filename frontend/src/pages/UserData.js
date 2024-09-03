@@ -3,8 +3,7 @@ import UserProfile from "../components/UserProfile";
 import UserAvatar from "../components/UserAvatar";
 import UserArticles from "../components/UserArticles";
 import styles from "../styles/pages/UserData.module.css"
-import ImageUpload from "../components/ImageUpload";
-import ImageCropper from "../components/ImageCropper";
+
 
 const articles = [
     { title: '文章標題 1', url: 'article1-url', description: '文章摘要或簡短描述 1' },
@@ -38,7 +37,7 @@ const UserData = () => {
                     if (response.ok) {
                         const data = await response.json();
                         console.log('data:', data);
-                        console.log('id' + data.id);
+                        console.log('id:' + data.id);
                         console.log('userimage ' + data.userImage)
                         setUserId(data.id || null);
                     } else {
@@ -58,7 +57,6 @@ const UserData = () => {
 
     return (
         <div class={styles.wrapper}>
-            <ImageUpload id={userId}/>
             <h1 className={styles.custom_font}>Account Name 的小窩</h1>
             <main class={styles.profile_wrapper}>
                 <div className={styles.profile_container}>
@@ -67,7 +65,7 @@ const UserData = () => {
                             <UserProfile userId={userId} />
                         </div>
                         <div className={styles.avatar}>
-                            <UserAvatar userId={userId} />
+                            <UserAvatar id={userId} />
                         </div>
                         <div className={styles.full_width}>
                             {/* <UserArticles articles={articles} /> */}

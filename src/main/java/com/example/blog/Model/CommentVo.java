@@ -1,6 +1,8 @@
 package com.example.blog.Model;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -10,9 +12,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-// 註解為 JPA 實體類別，對應到資料庫中的 comment 表
+
 @Entity
 @Table(name = "comment")
 public class CommentVo {
@@ -32,8 +36,19 @@ public class CommentVo {
     @JoinColumn(name = "article_id") // 外鍵名稱，指向 ArticleVo 表中的主鍵
     private ArticleVo article;
 
+    // 新增的按讚屬性
+    private int likes = 0;
+
+    @ManyToMany
+    @JoinTable(
+        name = "comment_likes",
+        joinColumns = @JoinColumn(name = "comment_id"),
+        inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<AccountVo> likedBy = new HashSet<>();
+
     public CommentVo() {
-        this.createdAt = LocalDateTime.now(); // 自動設置創建時間
+        this.createdAt = LocalDateTime.now();
     }
 
     // Getters 和 Setters
@@ -77,5 +92,20 @@ public class CommentVo {
     public void setArticle(ArticleVo article) {
         this.article = article;
     }
-}
 
+    public int getLikes() {
+        return likes;
+    }
+
+    public void setLikes(int likes) {
+        this.likes = likes;
+    }
+
+    public Set<AccountVo> getLikedBy() {
+        return likedBy;
+    }
+
+    public void setLikedBy(Set<AccountVo> likedBy) {
+        this.likedBy = likedBy;
+    }
+}

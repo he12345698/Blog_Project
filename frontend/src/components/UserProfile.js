@@ -40,7 +40,7 @@ const UserProfile = ({ userId }) => {
             })
             .catch(error => {
                 console.error("獲取用戶資料失敗", error);
-                setError("獲取用戶資料失敗")
+                setError("獲取用戶資料失敗");
                 setLoading(false);
             })
     }, [userId]);
