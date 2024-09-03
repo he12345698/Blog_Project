@@ -32,7 +32,7 @@ const UserData = () => {
                         console.log('data:', data);
                         console.log('id:' + data.id);
                         console.log('userimage ' + data.userImage)
-                        setUserId(data.id || null);
+                        setUserId(data.id);
                     } else {
                         console.log('Response error:', response);
                         //setUsername('訪客2');
@@ -55,17 +55,14 @@ const UserData = () => {
                 <div className="card-body p-1">
                     <main className="mt-4">
                         <div className="row">
-                            {/* 左上角的 UserProfile 組件 */}
                             <div className="col-md-6 mb-3">
                                 <UserProfile userId={userId} />
                             </div>
-                            {/* 右上角的 UserAvatar 組件 */}
                             <div className="col-md-6 mb-3 d-flex justify-content-center align-items-center">
                                 <UserAvatar id={userId} />
                             </div>
                         </div>
                         <div className="row">
-                            {/* 下方的 UserArticles 組件 */}
                             <div className="col-12">
                                 <UserArticles authorId={userId} />
                             </div>
