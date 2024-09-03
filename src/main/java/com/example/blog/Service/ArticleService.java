@@ -118,4 +118,10 @@ public class ArticleService {
         articleRepository.deleteById(articleId);
     }
 
+    // 根據用戶id 獲取特定用戶文章
+    public List<ArticleVo> getArticleByAuthorId(Long authorId) {
+        return articleRepository.findByAuthorId(authorId);
+    }
+
+    
 }

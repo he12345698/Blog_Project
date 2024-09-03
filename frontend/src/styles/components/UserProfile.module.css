@@ -17,7 +17,7 @@
 }
 
 .text_area {
-    width: 80%;
+    width: 70%;
     height: 2em;
     margin: 0px 5px 5px 5px;
     float: left;
@@ -30,8 +30,17 @@
 
 .userProfie_p{
     margin-bottom: 10px;
+    font-weight: bold;
 }
 
 .input_password{
     border: none;
+}
+
+.profile {
+    display: flex;
+}
+
+.button {
+    size: 30px;
 }

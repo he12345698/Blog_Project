@@ -5,12 +5,6 @@ import UserArticles from "../components/UserArticles";
 import styles from "../styles/pages/UserData.module.css"
 
 
-const articles = [
-    { title: '文章標題 1', url: 'article1-url', description: '文章摘要或簡短描述 1' },
-    { title: '文章標題 2', url: 'article2-url', description: '文章摘要或簡短描述 2' },
-    { title: '文章標題 3', url: 'article3-url', description: '文章摘要或簡短描述 3' },
-];
-
 const UserData = () => {
 
     // 用來管理用戶資料
@@ -38,7 +32,7 @@ const UserData = () => {
                         console.log('data:', data);
                         console.log('id:' + data.id);
                         console.log('userimage ' + data.userImage)
-                        setUserId(data.id || null);
+                        setUserId(data.id);
                     } else {
                         console.log('Response error:', response);
                         //setUsername('訪客2');
@@ -55,23 +49,27 @@ const UserData = () => {
     }, []);
 
     return (
-        <div class={styles.wrapper}>
-            <h1 className={styles.custom_font}>Account Name 的小窩</h1>
-            <main class={styles.profile_wrapper}>
-                <div className={styles.profile_container}>
-                    <div className={styles.grid_container}>
-                        <div className={styles.profile}>
-                            <UserProfile userId={userId} />
+        <div className="container mt-2">
+            <h1 className="text-center mb-4">Account Name 的小窩</h1>
+            <div className="card mx-auto" style={{ maxWidth: '70%' }}>
+                <div className="card-body p-1">
+                    <main className="mt-4">
+                        <div className="row">
+                            <div className="col-md-6 mb-3">
+                                <UserProfile userId={userId} />
+                            </div>
+                            <div className="col-md-6 mb-3 d-flex justify-content-center align-items-center">
+                                <UserAvatar id={userId} />
+                            </div>
                         </div>
-                        <div className={styles.avatar}>
-                            <UserAvatar id={userId} />
+                        <div className="row">
+                            <div className="col-12">
+                                <UserArticles authorId={userId} />
+                            </div>
                         </div>
-                        <div className={styles.full_width}>
-                            {/* <UserArticles articles={articles} /> */}
-                        </div>
-                    </div>
+                    </main>
                 </div>
-            </main>
+            </div>
         </div>
     );
 }
