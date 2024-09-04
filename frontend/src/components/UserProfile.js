@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import styles from "../styles/components/UserProfile.module.css";
 import { UserContext } from './UserContext';
-import { json, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 // 用來顯示和編輯用戶的基本資料（用戶名、電子郵件、密碼）
 const UserProfile = ({ userId }) => {
@@ -85,8 +85,6 @@ const UserProfile = ({ userId }) => {
     // 處裡保存
     const handleSave = (field) => {
         setLoading(true);
-
-
 
         // fetch(`http://niceblog.myvnc.com:8080/blog/api/userProfile/update-${field}/${userId}`, {
         fetch(`http://localhost:8080/blog/api/userProfile/update-${field}/${userId}`, {
