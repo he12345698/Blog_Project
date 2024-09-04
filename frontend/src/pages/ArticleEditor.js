@@ -44,7 +44,7 @@ const ArticleEditor = () => {
                 }
             } catch (error) {
                 console.error('Error during initialization:', error);
-                navigate('/login');  // 如果無法獲取用戶信息，重定向到登錄頁面
+                // navigate('/UserData');  // 如果無法獲取用戶信息，重定向到登錄頁面
             }
         };
 

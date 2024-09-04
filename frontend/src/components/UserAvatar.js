@@ -22,11 +22,11 @@ const UserAvatar = ({ id }) => {
 
         fetch(`http://localhost:8080/blog/api/userProfile/${id}`)
             .then(response => {
-                console.log('網頁回應:', response);
+                // console.log('網頁回應:', response);
                 return response.json();
             })
             .then(data => {
-                console.log("得到的數據", data)
+                // console.log("得到的數據", data)
                 setUserData(data);
 
                 setLoading(false);

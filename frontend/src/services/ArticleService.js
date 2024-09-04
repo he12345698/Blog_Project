@@ -41,6 +41,15 @@ const updateArticle = async (articleId, articleData) => {
 
     return response.data;
 };
+
+const getUserArticleByAuthorId = async (authorId) => {
+    console.log("try to get UserArticleByAuthorId...");
+    const response = await axios.get(`${API_BASE_URL}/author/${authorId}`);
+    console.log(authorId);
+
+    return response.data;
+};
+
 //可加入其他請求API的方法
 const articleService = {
     getAllArticles,
@@ -48,6 +57,7 @@ const articleService = {
     getArticleByTitle,
     updateArticle,
     createArticle,
+    getUserArticleByAuthorId,
 };
 
 export default articleService;
