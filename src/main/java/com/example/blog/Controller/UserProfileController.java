@@ -62,6 +62,12 @@ public class UserProfileController {
     public ResponseEntity<String> updateUsername(@PathVariable(value = "id") Long id,
             @RequestBody Map<String, String> requestBody) {
         String newUsername = requestBody.get("username");
+
+        // 檢查新的用戶名是否已存在
+        if (accountRepository.findByUsername(newUsername).isPresent()) {
+            return ResponseEntity.badRequest().body("該用戶名已被使用!");
+        }
+        
         boolean update = userProfileService.updateUsername(id, newUsername);
         if (update) {
             return ResponseEntity.ok("用戶名更新成功");
@@ -88,8 +94,7 @@ public class UserProfileController {
     public ResponseEntity<String> updatePassword(@PathVariable Long id, @RequestBody Map<String, String> requestBody) {
         System.out.println(id);
         String newPassword = requestBody.get("newPassword");
-        String currentPassword = requestBody.get("currentPassword");
-        boolean update = userProfileService.updatePassword(id, newPassword, currentPassword);
+        boolean update = userProfileService.updatePassword(id, newPassword);
         if (update) {
             return ResponseEntity.ok("用戶密碼更新成功");
         } else {
@@ -160,7 +165,7 @@ public class UserProfileController {
             Files.createDirectories(filePath.getParent());
             Files.write(filePath, file.getBytes());
 
-            String baseUrl = "http://localhost:81/";
+            String baseUrl = "http://localhost:3000/";
             String relativeImagePath = "UserImages/" + fileName;
             String fullImageUrl = baseUrl + relativeImagePath;
 

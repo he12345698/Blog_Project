@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import styles from "../styles/components/UserProfile.module.css";
 import { UserContext } from './UserContext';
-import { useNavigate } from 'react-router-dom';
+import { json, useNavigate } from 'react-router-dom';
 
 // 用來顯示和編輯用戶的基本資料（用戶名、電子郵件、密碼）
 const UserProfile = ({ userId }) => {
@@ -35,7 +35,7 @@ const UserProfile = ({ userId }) => {
         minute: '2-digit',
         second: '2-digit'
     });
-    
+
 
     // 用來管理暫時的編輯資料
     const [tempUser, setTempUser] = useState('');
@@ -86,8 +86,10 @@ const UserProfile = ({ userId }) => {
     const handleSave = (field) => {
         setLoading(true);
 
+
+
         // fetch(`http://niceblog.myvnc.com:8080/blog/api/userProfile/update-${field}/${userId}`, {
-            fetch(`http://localhost:8080/blog/api/userProfile/update-${field}/${userId}`, {
+        fetch(`http://localhost:8080/blog/api/userProfile/update-${field}/${userId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -98,17 +100,23 @@ const UserProfile = ({ userId }) => {
         })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error("保存數據失敗");
+                    return response.text().then(text => {
+                        throw new Error(text); 
+                    });
                 }
+                return response.json(); // 確保正常響應的處理
+            })
+            .then(data => {
                 // 更新 UserContext
                 setUser(prevUser => ({ ...prevUser, [field]: tempUser[field] }));
                 setLoading(false);
                 toggleEdit(field); // 保存成功後切回顯示模式
+                setError("");
             })
             .catch(error => {
                 setLoading(false);
                 console.error("保存數據失敗", error);
-                setError("保存數據失敗");
+                setError(error.message || "保存數據失敗");
             });
     };
 

@@ -60,26 +60,14 @@ public class UserProfileService {
     }
 
     // 更新密碼
-    public boolean updatePassword(Long id, String newPassword, String currentPassword) {
+    public boolean updatePassword(Long id, String newPassword) {
         Optional<AccountVo> optionalAccount = userProfileRepository.findById(id);
-
         if (optionalAccount.isPresent()) {
-            AccountVo accountVo = optionalAccount.get();
-
-            // 驗證當前密碼
-            if (!currentPassword.equals(accountVo.getPassword())) {
-                System.out.println("當前密碼不正確");
-                return false; // 當前密碼不匹配
-            }
-
-            // 更新新密碼
-            accountVo.setPassword(newPassword);
-            userProfileRepository.save(accountVo);
-            System.out.println("密碼更新成功");
+            AccountVo account = optionalAccount.get();
+            account.setEmail(newPassword);
+            userProfileRepository.save(account);
             return true;
         }
-
-        System.out.println("用戶不存在");
         return false;
     }
 

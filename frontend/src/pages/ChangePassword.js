@@ -25,9 +25,14 @@ const ChangePassword = () => {
             setErrorMessage('新密碼與確認密碼不符');
             return;
         }
-        console.log(newPassword.length);
+
         if (newPassword.length < 8) {
             setErrorMessage('密碼必須至少8個字符長');
+            return;
+        }
+
+        if (currentPassword !== user?.password) {
+            setErrorMessage("與當前密碼不符");
             return;
         }
 
