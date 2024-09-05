@@ -14,7 +14,7 @@ function ArticlesPage() {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/blog/search?keyword&page=0&size=10', {
+        const response = await axios.get('http://localhost:8080/blog/search?keyword', {
           params: { page: currentPage }
         });
         console.log('獲取的文章:', response.data);
