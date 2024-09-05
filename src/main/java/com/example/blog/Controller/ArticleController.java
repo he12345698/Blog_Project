@@ -36,11 +36,24 @@ public class ArticleController {
     @Autowired
     private ArticleRepository articleRepository;
 
+
+    // @GetMapping("/search")
+    // public ResponseEntity<List<ArticleVo>> searchArticles(@RequestParam("query") String query) {
+    //     List<ArticleVo> articles = articleService.searchByTitleOrAuthor(query);
+    //     return new ResponseEntity<>(articles, HttpStatus.OK);
+    // }
     @GetMapping("/search")
     public ResponseEntity<List<ArticleVo>> searchArticles(@RequestParam("query") String query) {
         List<ArticleVo> articles = articleService.searchByTitleOrAuthor(query);
-        return new ResponseEntity<>(articles, HttpStatus.OK);
+        return ResponseEntity.ok(articles);
     }
+    
+    @GetMapping("/articles")
+public ResponseEntity<List<ArticleVo>> getArticles(@RequestParam String keyword) {
+    List<ArticleVo> articles = articleService.searchByTitleOrAuthor(keyword);
+    return ResponseEntity.ok(articles);
+}
+
     // 直接用get方法 取得全部文章的列表
     @GetMapping
     public Page<ArticleVo> getArticleVo(
