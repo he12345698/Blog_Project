@@ -37,6 +37,7 @@ const SingleArticle = () => {
 
         const fetchComments = async () => {
             try {
+                // const response = await axios.get(`http://niceblog.myvnc.com:8080/blog/api/comments/article/${articleId}`);
                 const response = await axios.get(`http://localhost:8080/blog/api/comments/article/${articleId}`);
                 const fetchedComments = response.data;
         

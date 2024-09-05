@@ -17,11 +17,28 @@ const UserProfile = ({ userId }) => {
         lastLoginDate: ''
     });
 
-    // 用來管理暫時的編輯資料
-    const [tempUser, setTempUser] = useState({
-        username: user?.username || '',
-        email: user?.email || '',
+    // 變換時間格式
+    const formattedDate1 = new Date(userData.createdDate).toLocaleString('zh-TW', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
     });
+
+    const formattedDate2 = new Date(userData.lastLoginDate).toLocaleString('zh-TW', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+    });
+
+
+    // 用來管理暫時的編輯資料
+    const [tempUser, setTempUser] = useState('');
 
     // 防止用戶在請求未完成時重複提交
     const [loading, setLoading] = useState(false);
@@ -39,6 +56,11 @@ const UserProfile = ({ userId }) => {
 
         setLoading(true);
 
+        setTempUser({
+            username: user?.username || '',
+            email: user?.email || '',
+        });
+
         fetch(`http://localhost:8080/blog/api/userProfile/${userId}`)
             .then(response => response.json())
             .then(data => {
@@ -50,7 +72,7 @@ const UserProfile = ({ userId }) => {
                 setError("獲取用戶資料失敗");
                 setLoading(false);
             });
-    }, [user, userId]); // 添加 userId 以便在 userId 改變時重新獲取資料
+    }, [userId, user?.username, user?.email]);
 
     // 輸入變化
     const handleInputChange = (e) => {
@@ -71,6 +93,7 @@ const UserProfile = ({ userId }) => {
     const handleSave = (field) => {
         setLoading(true);
 
+        // fetch(`http://niceblog.myvnc.com:8080/blog/api/userProfile/update-${field}/${userId}`, {
         fetch(`http://localhost:8080/blog/api/userProfile/update-${field}/${userId}`, {
             method: 'PUT',
             headers: {
@@ -82,17 +105,23 @@ const UserProfile = ({ userId }) => {
         })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error("保存數據失敗");
+                    return response.text().then(text => {
+                        throw new Error(text); 
+                    });
                 }
+                return response.json(); // 確保正常響應的處理
+            })
+            .then(data => {
                 // 更新 UserContext
                 setUser(prevUser => ({ ...prevUser, [field]: tempUser[field] }));
                 setLoading(false);
                 toggleEdit(field); // 保存成功後切回顯示模式
+                setError("");
             })
             .catch(error => {
                 setLoading(false);
                 console.error("保存數據失敗", error);
-                setError("保存數據失敗");
+                setError(error.message || "保存數據失敗");
             });
     };
 
@@ -192,12 +221,12 @@ const UserProfile = ({ userId }) => {
 
             <div className="col-12 mb-3">
                 <label htmlFor="registrationDate" className="form-label fw-bold">用戶註冊日期：</label>
-                <p className={styles.userProfie_p}>{userData.createdDate}</p>
+                <p className='fw-bold'>{formattedDate1}</p>
             </div>
 
             <div className="col-12">
                 <label htmlFor="lastLogin" className="form-label fw-bold">最後上線時間：</label>
-                <p className='fw-bold'>{userData.lastLoginDate}</p>
+                <p className='fw-bold'>{formattedDate2}</p>
             </div>
         </div>
     );

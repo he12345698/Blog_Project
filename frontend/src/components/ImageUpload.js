@@ -33,13 +33,14 @@ function ImageUpload({ id, onClose }) {
         formData.append('file', croppedImage, '.jpg');
 
         try {
+            // const response = await fetch(`http://niceblog.myvnc.com:8080/blog/api/userProfile/upload-image/${id}`, {
             const response = await fetch(`http://localhost:8080/blog/api/userProfile/upload-image/${id}`, {
                 method: 'POST',
                 body: formData,
             });
 
-            console.log('API 回應狀態碼:', response.status);
-            console.log('API 回應:', await response.text());
+            // console.log('API 回應狀態碼:', response.status);
+            // console.log('API 回應:', await response.text());
 
             if (response.ok) {
                 alert('圖片已成功上傳');

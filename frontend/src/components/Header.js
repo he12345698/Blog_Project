@@ -62,7 +62,8 @@ const Header = () => {
       const token = localStorage.getItem('token'); // 從本地存儲獲取 token
       if (token) {
         try {
-          const response = await fetch('http://localhost:8080/blog/api/protected-endpoint', {
+          // const response = await fetch('http://niceblog.myvnc.com:8080/blog/api/protected-endpoint', {
+            const response = await fetch('http://localhost:8080/blog/api/protected-endpoint', {
             method: 'GET',
             headers: {
               'Authorization': `Bearer ${token}`, // 將 token 作為 Authorization header 發送
@@ -75,7 +76,8 @@ const Header = () => {
               username: data.username || '访客1',
               userImage: data.userImage || '/Image/GG', // 設置默認頭像
               email: data.email,
-              id: data.id
+              id: data.id,
+              password: data.password
             });
             console.log('data at header is ',data);
           } else if (response.status === 401) {

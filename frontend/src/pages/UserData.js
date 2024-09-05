@@ -8,47 +8,7 @@ import { UserContext } from '../components/UserContext';
 
 const UserData = () => {
 
-    const { user, setUser } = useContext(UserContext); // 取得 setUser 方法
-    // 用來管理用戶資料
-    const [userId, setUserId] = useState('');
-
-    // 透過圖片路徑顯示圖片
-    // 獲取用戶信息
-    useEffect(() => {
-        const fetchUserInfo = async () => {
-            const token = localStorage.getItem('token');
-            // console.log('Request Headers:', {
-            //   'Authorization': `Bearer ${token}` 
-            // });
-            if (token) {
-                try {
-                    const response = await fetch('http://localhost:8080/blog/api/protected-endpoint', {
-                        method: 'GET',
-                        headers: {
-                            'Authorization': `Bearer ${token}`
-                        }
-                    });
-
-                    if (response.ok) {
-                        const data = await response.json();
-                        console.log('data:', data);
-                        console.log('id:' + data.id);
-                        console.log('userimage ' + data.userImage)
-                        setUserId(data.id);
-                    } else {
-                        console.log('Response error:', response);
-                        //setUsername('訪客2');
-                        //setUserImage('/Image/default-avatar.jpg'); // 默认头像
-                    }
-                } catch (error) {
-                    console.error('Error:', error);
-                }
-            }
-
-        };
-
-        fetchUserInfo();
-    }, []);
+    const { user } = useContext(UserContext); // 取得 setUser 方法
 
     return (
         <div className="container mt-2">
