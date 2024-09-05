@@ -36,11 +36,29 @@
   border-radius: 8px; /* 卡片圓角 */
   border: 1px solid #bbb; /* 卡片邊框 */
   display: flex;
-  flex-direction: column;
+  flex-direction: row; /* 使內容水平排列 */
   align-items: center;
-  text-align: center;
+  justify-content: space-between; /* 在兩側分開 */
+  text-align: left;
 }
 
+/* 內容區域，包含標題、作者和更新時間 */
+.article-content {
+  display: flex;
+  flex-direction: row; /* 水平排列內容 */
+  align-items: center;
+}
+
+/* 標題、作者和更新時間 */
+.article-title {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.article-author,
+.article-updated {
+  margin-right: 10px;
+}
 
 /* 分頁區域 */
 .pagination {

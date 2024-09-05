@@ -1,31 +1,45 @@
-/* src/styles/components/SearchBar.css */
+/* 搜尋跟標籤容器樣式 */
+.container {
+  width: 100%; /* 寬度 100% */
+  display: flex; /* 使用 Flexbox 排版 */
+  flex-direction: column; /* 垂直排列內容 */
+  align-items: center; /* 水平居中對齊內容 */
+}
 
-.search_bar {
-    display: flex;
-    align-items: center;
-    margin: 20px 0;
-  }
-  
-  .search_bar input {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ced4da;
-    border-radius: 4px;
-    font-size: 16px;
-  }
-  
-  .search_bar button {
-    margin-left: 10px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    background-color: #007bff;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  
-  .search_bar button:hover {
-    background-color: #0056b3;
-  }
-  
+/* 搜尋列樣式 */
+.search-bar {
+  display: flex; /* 使用 Flexbox 排版 */
+  width: 100%; /* 寬度 100% */
+  max-width: 600px; /* 最大寬度 */
+  margin-bottom: 20px; /* 下邊距 */
+}
+
+/* 搜尋輸入框樣式 */
+.search-bar input {
+  flex: 1; /* 使輸入框占據可用空間 */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  margin-right: 10px; /* 輸入框和按鈕之間的間距 */
+}
+
+
+
+/* 搜尋按鈕 hover 效果 */
+.search-bar button:hover {
+  background-color: #555;
+}
+
+/* 搜尋按鈕樣式 */
+.search-bar button {
+  background-color: #333;
+  color: #fff;
+  width: 72px; /* 最小寬度 */
+  padding: 8px; /* 調整 padding */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  text-align: center; /* 使文本居中 */
+}
