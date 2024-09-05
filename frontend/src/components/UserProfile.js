@@ -27,9 +27,16 @@ const UserProfile = ({ userId }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    console.log('username is ', user?.username)
 
     // 獲取後端資料
     useEffect(() => {
+        // 設置暫時用戶數據
+        setTempUser({
+            username: user?.username || '',
+            email: user?.email || '',
+        });
+
         setLoading(true);
 
         fetch(`http://localhost:8080/blog/api/userProfile/${userId}`)
@@ -43,7 +50,7 @@ const UserProfile = ({ userId }) => {
                 setError("獲取用戶資料失敗");
                 setLoading(false);
             });
-    }, [userId]);
+    }, [user, userId]); // 添加 userId 以便在 userId 改變時重新獲取資料
 
     // 輸入變化
     const handleInputChange = (e) => {
