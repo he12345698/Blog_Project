@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import ImageCropper from './ImageCropper';
 import styles from "../styles/components/UserAvatar.module.css";
 
@@ -6,7 +6,6 @@ function ImageUpload({ id, onClose }) {
     const [selectedFile, setSelectedFile] = useState(null);
     const [croppedImage, setCroppedImage] = useState(null);
     const [cropperSrc, setCropperSrc] = useState(null); // 用於存儲 Cropper 的圖片來源
-    
 
     const handleFileChange = (event) => {
         const newFile = event.target.files[0];
@@ -34,17 +33,18 @@ function ImageUpload({ id, onClose }) {
         formData.append('file', croppedImage, '.jpg');
 
         try {
+            // const response = await fetch(`http://niceblog.myvnc.com:8080/blog/api/userProfile/upload-image/${id}`, {
             const response = await fetch(`http://localhost:8080/blog/api/userProfile/upload-image/${id}`, {
                 method: 'POST',
                 body: formData,
             });
 
-            console.log('API 回應狀態碼:', response.status);
-            console.log('API 回應:', await response.text());
+            // console.log('API 回應狀態碼:', response.status);
+            // console.log('API 回應:', await response.text());
 
             if (response.ok) {
                 alert('圖片已成功上傳');
-                
+
                 console.log('關閉 Modal');
                 onClose(); // 關閉 Modal
             } else {
@@ -58,11 +58,22 @@ function ImageUpload({ id, onClose }) {
         }
     };
 
-
     return (
         <div>
-            <input type="file" onChange={handleFileChange} />
-            <button onClick={handleUpload}>上傳圖片</button>
+            <div className="input-group mb-3">
+                <input
+                    type="file"
+                    className="form-control"
+                    id="inputGroupFile02"
+                    onChange={handleFileChange} // 處理文件選擇
+                />
+                <button
+                    className="btn btn-secondary input-group-text"
+                    onClick={handleUpload} // 處理上傳
+                >
+                    上傳圖片
+                </button>
+            </div>
             {/* 只有當 cropperSrc 有值時才渲染 ImageCropper 組件 */}
             {cropperSrc && <ImageCropper src={cropperSrc} onCrop={handleCrop} />}
         </div>

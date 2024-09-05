@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Collections;
 import java.util.Optional;
@@ -42,7 +43,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/api/userProfile")
-@CrossOrigin(origins = "http://localhost:3000")
 public class UserProfileController {
 
     @Autowired
@@ -62,6 +62,12 @@ public class UserProfileController {
     public ResponseEntity<String> updateUsername(@PathVariable(value = "id") Long id,
             @RequestBody Map<String, String> requestBody) {
         String newUsername = requestBody.get("username");
+
+        // 檢查新的用戶名是否已存在
+        if (accountRepository.findByUsername(newUsername).isPresent()) {
+            return ResponseEntity.badRequest().body("該用戶名已被使用!");
+        }
+        
         boolean update = userProfileService.updateUsername(id, newUsername);
         if (update) {
             return ResponseEntity.ok("用戶名更新成功");
@@ -98,10 +104,14 @@ public class UserProfileController {
 
     // 根據用戶名稱獲取用戶資料
     @GetMapping("/{id}")
-    public ResponseEntity<AccountVo> getUserById(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<Map<String, Object>> getUserById(@PathVariable(value = "id") Long id) {
+        System.out.println("id at userprofile is " + id);
         AccountVo accountVo = userProfileService.getUserById(id);
         if (accountVo != null) {
-            return ResponseEntity.ok(accountVo);
+            Map<String, Object> response = new HashMap<>();
+            response.put("createdDate", accountVo.getCreatedDate());
+            response.put("lastLoginDate", accountVo.getLastLoginDate());
+            return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

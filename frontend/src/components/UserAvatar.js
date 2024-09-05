@@ -2,10 +2,11 @@ import React, { useState, useEffect, useContext } from 'react';
 import styles from "../styles/components/UserAvatar.module.css";
 import Modal from 'react-modal';
 import ImageUpload from "../components/ImageUpload";
+import { UserContext } from './UserContext';
 
 const UserAvatar = ({ id }) => {
     // const [isModalOpen, setIsModalOpen] = useState(false);// 設定彈跳視窗開關
-
+    const { user } = useContext(UserContext);
 
     // 用來管理用戶資料
     const [userData, setUserData] = useState({
@@ -21,11 +22,11 @@ const UserAvatar = ({ id }) => {
 
         fetch(`http://localhost:8080/blog/api/userProfile/${id}`)
             .then(response => {
-                console.log('網頁回應:', response);
+                // console.log('網頁回應:', response);
                 return response.json();
             })
             .then(data => {
-                console.log("得到的數據", data)
+                // console.log("得到的數據", data)
                 setUserData(data);
 
                 setLoading(false);
@@ -71,7 +72,7 @@ const UserAvatar = ({ id }) => {
             <div className="image-container mb-3">
                 <img
                     id={styles.profile_avatar}
-                    src={userData.imagelink}
+                    src={user?.userImage}
                     alt="頭像"
                     className="img-fluid rounded border border-3 border-dark"
                 />

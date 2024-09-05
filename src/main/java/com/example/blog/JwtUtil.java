@@ -14,12 +14,9 @@ public class JwtUtil {
     private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     // 生成JWT token
-    public static String generateToken(Long id, String username, String imageLink, String password) {
+    public static String generateToken(Long id) {
         return Jwts.builder()
-                .setSubject(username)
-                .claim("id", id)
-                .claim("imagelink", imageLink)
-                .claim("password", password)
+                .setSubject(id.toString())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10小时过期
                 .signWith(SECRET_KEY) // 修正簽名方式
@@ -37,12 +34,8 @@ public class JwtUtil {
 
     // 提取ID，將id轉換為Long
     public static Long extractId(String token) {
-        // 提取id 作為Object類型，然後轉換為Long
-        Object idObj = extractClaims(token).get("id");
-        if (idObj instanceof Number) {
-            return ((Number) idObj).longValue();
-        }
-        return null; // 或者拋出空值
+        String subject = extractClaims(token).getSubject();
+        return Long.parseLong(subject);  // 將 subject 轉換為 Long
     }
 
     // 提取用户名
@@ -59,6 +52,10 @@ public class JwtUtil {
     public static String extractPassword(String token) {
         return (String) extractClaims(token).get("password");
     }
+    
+    public static String extractEmail(String token) {
+        return (String) extractClaims(token).get("email");
+    }
 
     // 檢查token是否過期
     public static boolean isTokenExpired(String token) {
@@ -66,7 +63,9 @@ public class JwtUtil {
     }
 
     // 驗證token是否有效
-    public static boolean validateToken(String token, String username) {
-        return username.equals(extractUsername(token)) && !isTokenExpired(token);
+    public static boolean validateToken(String token) {
+        return !isTokenExpired(token);
     }
+
+    
 }

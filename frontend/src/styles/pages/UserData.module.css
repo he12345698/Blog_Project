@@ -27,6 +27,7 @@ p {
     /* 設置高度為 100% */
     min-height: 100vh;
     /* 確保外部容器最小高度為視窗高度 */
+    max-width: 70%;
 }
 
 /* 主要內容區域樣式 */
@@ -93,4 +94,12 @@ p {
 
 .custom_font {
     font-family: 'PopGothicCjkTc-Bold', sans-serif; /* Fallback to sans-serif */
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
 }

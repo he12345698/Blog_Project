@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import '../styles/pages/LoginPage.css';
 import Maintenanceheader from '../components/Maintenanceheader';
-import { FaSync } from 'react-icons/fa';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
@@ -20,7 +19,7 @@ const LoginPage = () => {
     try {
 
       // const response = await fetch('http://niceblog.myvnc.com:8080/blog/ac/captcha', {
-        const response = await fetch('http://localhost:8080/blog/ac/captcha', {
+      const response = await fetch('http://localhost:8080/blog/ac/captcha', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -89,7 +88,8 @@ const LoginPage = () => {
     e.preventDefault();
     setAnimationKey(Date.now());
     try {
-      const response = await fetch('http://localhost:8080/blog/ac/login', {
+      // const response = await fetch('http://niceblog.myvnc.com:8080/blog/ac/login', {
+        const response = await fetch('http://localhost:8080/blog/ac/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -123,80 +123,83 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="login-container">
-      <div
-        className="custom-cursor"
-        style={{ left: `${cursorPosition.x}px`, top: `${cursorPosition.y}px` }}
-      ></div>
-      {/* <Maintenanceheader />系統維護中跑馬燈 */}
-      <div className="loginform-container">
-        <h2>登入</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="username">使用者名稱</label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="password">密碼</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          <div className="form-group captcha-group">
-            <div className="captcha-container">
-              <img
-                src={captchaUrl}
-                alt="captcha"
-                className="captcha-image"
-                onClick={loadCaptcha}
-              />
-              <button
-                type="button"
-                className="refresh-button"
-                onClick={loadCaptcha}
-                aria-label="刷新验证码"
-              >
-                <FaSync />
-              </button>
+    <div class="section">
+      <div class="container">
+        <div class="row full-height justify-content-center">
+          <div class="col-12 text-center align-self-center py-5">
+            <div class="section pb-5 pt-5 pt-sm-2 text-center">
+              <h6 class="mb-0 pb-3"><span>Log In </span><span>Sign Up</span></h6>
+              <input class="checkbox" type="checkbox" id="reg-log" name="reg-log" />
+              <label for="reg-log"></label>
+              <div class="card-3d-wrap mx-auto">
+                <div class="card-3d-wrapper">
+                  <div class="card-front">
+                    <div class="center-wrap">
+                      <div class="section text-center">
+                        <h4 class="mb-4 pb-3">Log In</h4>
+                        <div class="form-group">
+                          <input type="text" name="username" class="form-style" placeholder="Your Username" id="username" autocomplete="off" value={username}
+                            onChange={(e) => setUsername(e.target.value)} />
+                          <i class="input-icon uil uil-at"></i>
+                        </div>
+                        <div class="form-group mt-2">
+                          <input type="password" name="logpass" class="form-style" placeholder="Your Password" id="logpass" autocomplete="off" value={password}
+                            onChange={(e) => setPassword(e.target.value)} />
+                          <i class="input-icon uil uil-lock-alt"></i>
+                        </div>
+                        <div className="captcha-container">
+                          <label htmlFor="captcha" className="capt">驗證碼</label>
+                          <img
+                            src={captchaUrl}
+                            alt="captcha"
+                            className="captcha-image"
+                            onClick={loadCaptcha}
+                          />
+                          <button type="button" className="btn2 mt-4" onClick={loadCaptcha}>
+                            <i className="uil uil-sync"></i> 刷新驗證碼
+                          </button>
+                        </div>
+                        <div class="form-group mt-3">
+                          <input type="text" name="captcha" class="form-style" placeholder="Enter Captcha" id="captcha" autocomplete="off" value={captcha}
+                            onChange={(e) => setCaptcha(e.target.value)} />
+                          <i class="input-icon uil uil-picture"></i>
+                        </div>
+                        <div className="error-placeholder">
+                          {errorMessage && (
+                            <p key={animationKey} className="error-message shake" style={{ whiteSpace: 'pre-line' }}>
+                              {errorMessage}
+                            </p>
+                          )}
+                        </div>
+                        <button href="#" class="btn mt-3" onClick={handleSubmit}>登入</button>
+                        <p class="mb-0 mt-4 text-center"><a href="/forgot-password" class="link">Forgot your password?</a></p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-back">
+                    <div class="center-wrap">
+                      <div class="section text-center">
+                        <h4 class="mb-4 pb-3">Sign Up</h4>
+                        <div class="form-group">
+                          <input type="text" name="logname" class="form-style" placeholder="Your Full Name" id="logname" autocomplete="off" />
+                          <i class="input-icon uil uil-user"></i>
+                        </div>
+                        <div class="form-group mt-2">
+                          <input type="email" name="logemail" class="form-style" placeholder="Your Email" id="logemail" autocomplete="off" />
+                          <i class="input-icon uil uil-at"></i>
+                        </div>
+                        <div class="form-group mt-2">
+                          <input type="password" name="logpass" class="form-style" placeholder="Your Password" id="logpass" autocomplete="off" />
+                          <i class="input-icon uil uil-lock-alt"></i>
+                        </div>
+                        <a href="#" class="btn mt-4" >submit</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="form-group">
-              <label htmlFor="captcha">驗證碼</label>
-              <input
-                type="text"
-                id="captcha"
-                name="captcha"
-                value={captcha}
-                onChange={(e) => setCaptcha(e.target.value)}
-                required
-              />
-            </div>
           </div>
-          <button type="submit">登入</button>
-          <div className="error-placeholder">
-            {errorMessage && (
-              <p key={animationKey} className="error-message shake" style={{ whiteSpace: 'pre-line' }}>
-                {errorMessage}
-              </p>
-            )}
-          </div>
-        </form>
-        <div className="login-footer">
-          <p>
-            還沒有帳號嗎？<a href="/register">註冊一個吧！</a>
-          </p>
-          <a href="/forgot-password" className="forgot-password">忘記密碼？</a>
         </div>
       </div>
     </div>

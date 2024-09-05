@@ -10,7 +10,7 @@ import style from './styles/App.module.css';
 import UserData from './pages/UserData';
 import ArticleEditor from './pages/ArticleEditor';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
-import ResetPasswordPage from './ResetPasswordPage ';
+import ResetPasswordPage from './pages//ResetPasswordPage ';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import EmailVerificationPage from './pages/EmailVerificationPage';
@@ -22,8 +22,6 @@ const MainLayout = ({ children }) => (
   </main>
 );
 
-
-
 const App = () => {
 
   return (
@@ -32,7 +30,7 @@ const App = () => {
         <Routes>
           <Route path='/ChangePassword' element={<MainLayout><ChangePassword/></MainLayout>}/>
           <Route path="/" element={<MainLayout><Index /></MainLayout>} />
-          <Route path="/login" element={<LoginPage />} />
+          <Route path="/login" element={<MainLayout><LoginPage /></MainLayout>} />
           <Route path="/register" element={<MainLayout><Register /></MainLayout>} />
           <Route path="/test1" element={<MainLayout><Test1 /></MainLayout>} />
           <Route path="/forgot-password" element={<MainLayout><ForgotPasswordPage /></MainLayout>} />

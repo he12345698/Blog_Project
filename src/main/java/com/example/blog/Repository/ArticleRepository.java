@@ -41,4 +41,6 @@ public interface ArticleRepository extends JpaRepository<ArticleVo, Long> {
     
     List<ArticleVo> findByAuthorId(Long authorId);
 
+    @Query("SELECT a.tag.tag_id FROM ArticleVo a WHERE a.articleId = :articleId")
+    Long findTagIdByArticleId(@Param("articleId") Long articleId);
 }
