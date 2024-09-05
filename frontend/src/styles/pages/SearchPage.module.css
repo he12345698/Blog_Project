@@ -1,6 +1,6 @@
 /* SearchPage.module.css */
 
-/* 搜尋頁面的樣式 */
+/* 搜尋頁面整體樣式 */
 .search_page {
   padding: 20px;
   background-color: #f4f4f9; /* 背景顏色 */
@@ -10,7 +10,7 @@
   font-family: Arial, sans-serif; /* 字體 */
 }
 
-/* 搜尋欄的樣式 */
+/* 搜尋欄樣式 */
 .search_bar {
   margin-bottom: 20px;
   width: 100%;
@@ -18,38 +18,74 @@
   justify-content: center;
 }
 
-/* 文章列表區域 */
-.article-list {
+/* 搜尋結果列表區域 */
+.results-list {
   width: 80%; /* 調整寬度 */
   max-width: 800px;
-  background-color: #d7d1d1; /* 淺藍色背景 */
+  background-color: #b9b9b9; /* 淺灰色背景 */
   padding: 20px;
   border-radius: 10px; /* 圓角效果 */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 陰影效果 */
 }
 
-/* 單個文章卡片 */
-.article-card {
+/* 單個搜尋結果卡片 */
+.result-item {
   background-color: #f8f8f8; /* 卡片背景顏色 */
   padding: 15px;
   margin-bottom: 15px;
   border-radius: 8px; /* 卡片圓角 */
   border: 1px solid #bbb; /* 卡片邊框 */
   display: flex;
-  flex-direction: column;
+  flex-direction: row; /* 使內容水平排列 */
   align-items: center;
-  text-align: center;
+  justify-content: space-between; /* 在兩側分開 */
+  text-align: left;
 }
 
-/* 文章標題 */
-.article-card h3 {
-  margin: 0;
-  font-size: 18px;
-  color: #333;
+/* 內容區域，包含標題、作者和更新時間 */
+.result-content {
+  display: flex;
+  flex-direction: row; /* 水平排列內容 */
+  align-items: center;
 }
 
-/* 文章內容 */
-.article-card p {
+/* 標題、作者和更新時間 */
+.result-title {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.result-author,
+.result-updated {
+  margin-right: 10px;
+}
+
+/* 分頁區域 */
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+}
+
+/* 分頁按鈕 */
+.pagination button {
+  background-color: #333;
+  color: #fff;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 0 5px;
   font-size: 14px;
-  color: #666;
+}
+
+.pagination button:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+
+/* 分頁資訊 */
+.pagination span {
+  margin: 0 10px;
+  font-size: 14px;
 }

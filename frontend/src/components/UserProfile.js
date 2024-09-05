@@ -35,7 +35,7 @@ const UserProfile = ({ userId }) => {
         minute: '2-digit',
         second: '2-digit'
     });
-    
+
 
     // 用來管理暫時的編輯資料
     const [tempUser, setTempUser] = useState('');
@@ -44,9 +44,16 @@ const UserProfile = ({ userId }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    console.log('username is ', user?.username)
 
     // 獲取後端資料
     useEffect(() => {
+        // 設置暫時用戶數據
+        setTempUser({
+            username: user?.username || '',
+            email: user?.email || '',
+        });
+
         setLoading(true);
 
         setTempUser({
@@ -65,7 +72,7 @@ const UserProfile = ({ userId }) => {
                 setError("獲取用戶資料失敗");
                 setLoading(false);
             });
-    }, [userId]);
+    }, [userId, user?.username, user?.email]);
 
     // 輸入變化
     const handleInputChange = (e) => {
@@ -87,7 +94,7 @@ const UserProfile = ({ userId }) => {
         setLoading(true);
 
         // fetch(`http://niceblog.myvnc.com:8080/blog/api/userProfile/update-${field}/${userId}`, {
-            fetch(`http://localhost:8080/blog/api/userProfile/update-${field}/${userId}`, {
+        fetch(`http://localhost:8080/blog/api/userProfile/update-${field}/${userId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -98,17 +105,23 @@ const UserProfile = ({ userId }) => {
         })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error("保存數據失敗");
+                    return response.text().then(text => {
+                        throw new Error(text); 
+                    });
                 }
+                return response.json(); // 確保正常響應的處理
+            })
+            .then(data => {
                 // 更新 UserContext
                 setUser(prevUser => ({ ...prevUser, [field]: tempUser[field] }));
                 setLoading(false);
                 toggleEdit(field); // 保存成功後切回顯示模式
+                setError("");
             })
             .catch(error => {
                 setLoading(false);
                 console.error("保存數據失敗", error);
-                setError("保存數據失敗");
+                setError(error.message || "保存數據失敗");
             });
     };
 
@@ -208,7 +221,7 @@ const UserProfile = ({ userId }) => {
 
             <div className="col-12 mb-3">
                 <label htmlFor="registrationDate" className="form-label fw-bold">用戶註冊日期：</label>
-                <p className={styles.userProfie_p}>{formattedDate1}</p>
+                <p className='fw-bold'>{formattedDate1}</p>
             </div>
 
             <div className="col-12">

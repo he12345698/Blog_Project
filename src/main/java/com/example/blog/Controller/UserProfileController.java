@@ -62,6 +62,12 @@ public class UserProfileController {
     public ResponseEntity<String> updateUsername(@PathVariable(value = "id") Long id,
             @RequestBody Map<String, String> requestBody) {
         String newUsername = requestBody.get("username");
+
+        // 檢查新的用戶名是否已存在
+        if (accountRepository.findByUsername(newUsername).isPresent()) {
+            return ResponseEntity.badRequest().body("該用戶名已被使用!");
+        }
+        
         boolean update = userProfileService.updateUsername(id, newUsername);
         if (update) {
             return ResponseEntity.ok("用戶名更新成功");
@@ -99,8 +105,8 @@ public class UserProfileController {
     // 根據用戶名稱獲取用戶資料
     @GetMapping("/{id}")
     public ResponseEntity<Map<String, Object>> getUserById(@PathVariable(value = "id") Long id) {
-    	System.out.println("id at userprofile is " + id);
-    	AccountVo accountVo = userProfileService.getUserById(id);
+        System.out.println("id at userprofile is " + id);
+        AccountVo accountVo = userProfileService.getUserById(id);
         if (accountVo != null) {
             Map<String, Object> response = new HashMap<>();
             response.put("createdDate", accountVo.getCreatedDate());
@@ -159,7 +165,7 @@ public class UserProfileController {
             Files.createDirectories(filePath.getParent());
             Files.write(filePath, file.getBytes());
 
-            String baseUrl = "http://localhost:81/";
+            String baseUrl = "http://localhost:3000/";
             String relativeImagePath = "UserImages/" + fileName;
             String fullImageUrl = baseUrl + relativeImagePath;
 
