@@ -5,12 +5,15 @@ import com.example.blog.Model.ArticleVo;
 import com.example.blog.Repository.AccountRepository;
 import com.example.blog.Repository.ArticleRepository;
 
+import org.hibernate.mapping.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+
+import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -26,19 +29,50 @@ public class ArticleService {
         @Autowired
     private AccountRepository accountRepository;
     
-    public List<ArticleVo> searchByTitleOrAuthor(String keyword) {
-        List<ArticleVo> articlesByTitle = articleRepository.findByTitleContainingIgnoreCase(keyword);
-        List<AccountVo> authors = accountRepository.findByUsernameContainingIgnoreCase(keyword);
-        
-        Set<ArticleVo> combinedResults = new HashSet<>(articlesByTitle);
-        
-        for (AccountVo author : authors) {
-            combinedResults.addAll(articleRepository.findByAuthorId(author.getId()));
-        }
-
-        return new ArrayList<>(combinedResults);
-    }
+    // public List<ArticleVo> searchByTitleOrAuthor(String keyword) {
+    //     // 根據標題查詢文章
+    //     List<ArticleVo> articlesByTitle = articleRepository.findByTitleContainingIgnoreCase(keyword);
     
+    //     // 根據用戶名查詢用戶
+    //     List<AccountVo> authors = accountRepository.findByUsernameContainingIgnoreCase(keyword);
+        
+    //     // 使用 Set 來防止重複的文章
+    //     Set<ArticleVo> combinedResults = new HashSet<>(articlesByTitle);
+    
+    //     // 將根據用戶ID查詢的文章添加到結果集中
+    //     for (AccountVo author : authors) {
+    //         combinedResults.addAll(articleRepository.findByAuthorId(author.getId()));
+    //     }
+    
+    //     return new ArrayList<>(combinedResults);
+    // }
+
+    public List<ArticleVo> searchByTitleOrAuthor(String keyword) {
+        List<ArticleVo> articles = articleRepository.searchByTitleOrAuthor(keyword);
+        
+        return articles;
+    }
+
+    // public List<ArticleVo> searchByTitleOrAuthor(String keyword) {
+    //     List<ArticleVo> articles = articleRepository.findByTitleContainingIgnoreCase(keyword);
+
+    //     // 確保每篇文章都能獲得作者的用戶名
+    //     for (ArticleVo article : articles) {
+    //         if (article.getAuthorId() != null) {
+    //             AccountVo author = accountRepository.findById(article.getAuthorId()).orElse(null);
+    //             if (author != null) {
+    //                 article.setAuthorName(author.getUsername()); // 設置作者名稱
+    //             } else {
+    //                 article.setAuthorName("未知作者"); // 作者 ID 未找到時的預設值
+    //             }
+    //         } else {
+    //             article.setAuthorName("未知作者"); // 沒有作者 ID 時的預設值
+    //         }
+    //     }
+
+    //     return articles;
+    // }
+
 
     //透過ID查詢文章
     public Optional<ArticleVo> getArticleById(Long articleId) {
