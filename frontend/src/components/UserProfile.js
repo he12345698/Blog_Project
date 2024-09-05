@@ -44,9 +44,16 @@ const UserProfile = ({ userId }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    console.log('username is ', user?.username)
 
     // 獲取後端資料
     useEffect(() => {
+        // 設置暫時用戶數據
+        setTempUser({
+            username: user?.username || '',
+            email: user?.email || '',
+        });
+
         setLoading(true);
 
         setTempUser({

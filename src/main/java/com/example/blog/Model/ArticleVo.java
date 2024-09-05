@@ -36,7 +36,7 @@ public class ArticleVo {
 
     private String title;
 
-    @Column(name = "contenttext")
+    @Column(name = "contenttext", columnDefinition = "TEXT")
     private String contentTEXT;
 
     @CreatedDate

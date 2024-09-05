@@ -12,12 +12,12 @@ body {
 }
 
 main {
-  margin-top: 80px; /* 确保这个值与 header 的高度一致 */
-  padding: 20px; /* 可选，增加额外的内边距以美化布局 */
+  margin-top: 60px !important; /* 确保这个值与 header 的高度一致 */
+  padding: 15px !important; /* 可选，增加额外的内边距以美化布局 */
 }
 
-.no-margin {
-  margin-top: 0;
-  padding: 0;
-}
+/* .no-margin {
+  margin-top: 0 !important;
+  padding: 40px !important;
+} */
 

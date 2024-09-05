@@ -6,7 +6,7 @@ import { UserContext } from './UserContext';
 
 const Header = () => {
   //const [username, setUsername] = useState('');
- // const [userImage, setUserImage] = useState('');
+  // const [userImage, setUserImage] = useState('');
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user, setUser } = useContext(UserContext);
@@ -59,14 +59,14 @@ const Header = () => {
 
   useEffect(() => {
     const fetchUserInfo = async () => {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('token'); // 從本地存儲獲取 token
       if (token) {
         try {
           // const response = await fetch('http://niceblog.myvnc.com:8080/blog/api/protected-endpoint', {
             const response = await fetch('http://localhost:8080/blog/api/protected-endpoint', {
             method: 'GET',
             headers: {
-              'Authorization': `Bearer ${token}`,
+              'Authorization': `Bearer ${token}`, // 將 token 作為 Authorization header 發送
             },
           });
 
@@ -74,45 +74,45 @@ const Header = () => {
             const data = await response.json();
             setUser({
               username: data.username || '访客1',
-              userImage: data.userImage || '/Image/GG', // 设置默认头像
+              userImage: data.userImage || '/Image/GG', // 設置默認頭像
               email: data.email,
               id: data.id,
               password: data.password
             });
-            console.log(data)
-            console.log('id is ',data.id)
+            console.log('data at header is ',data);
           } else if (response.status === 401) {
-            // 如果收到 401 响应，检查是否有新的 token
+            // 如果收到 401 響應，檢查是否有新的 token
             const data = await response.json();
             if (data.token) {
-              // 更新本地存储中的 token
+              // 更新本地存儲中的 token
               localStorage.setItem('token', data.token);
 
-              // 使用新的 token 重新发起请求
-              return fetchUserInfo(); // 递归调用以重试请求
+              // 使用新的 token 重新發起請求
+              return fetchUserInfo(); // 遞歸調用以重試請求
             } else {
               setUser({
                 username: null,
-                userImage: '/Image/GG' // 设置默认头像
+                userImage: '/Image/GG' // 設置默認頭像
               });
             }
           } else {
             setUser({
               username: null,
-              userImage: '/Image/GG' // 设置默认头像
+              userImage: '/Image/GG' // 設置默認頭像
             });
           }
         } catch (error) {
           console.error('Error:', error);
           setUser({
             username: null,
-            userImage: '/Image/GG' // 设置默认头像
+            userImage: '/Image/GG' // 設置默認頭像
           });
         }
       }
     };
-    fetchUserInfo();
-  }, [location]);
+
+    fetchUserInfo(); // 初始化時調用函數來設置用戶信息
+  }, [location, setUser]); // location 改變時重新執行
 
   return (
     <header className={styles["top-bar"]}>
