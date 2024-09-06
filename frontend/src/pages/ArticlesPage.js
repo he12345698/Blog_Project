@@ -14,7 +14,7 @@ function ArticlesPage() {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/blog/search?keyword&page=0&size=10', {
+        const response = await axios.get('http://localhost:8080/blog/search?keyword', {
           params: { page: currentPage }
         });
         console.log('獲取的文章:', response.data);
@@ -57,9 +57,12 @@ function ArticlesPage() {
           articles.map((article) => (
             <div key={article.article_id} className={styles['article-card']}>
               <div className={styles['article-content']}>
-                <span className={styles['article-title']}>{article.title}</span>
+                <a href={`/singleArticle/${article.article_id}`} className={styles['article-title']}>{article.title}</a>
                 <span className={styles['article-author']}>| 作者: {article.username || '未知作者'}</span>
                 <span className={styles['article-updated']}>| 更新時間: {article.last_edited_at}</span>
+              </div>
+              <div className={styles['article-excerpt']}>
+                {article.contentTEXT}
               </div>
             </div>
           ))
@@ -81,3 +84,5 @@ function ArticlesPage() {
 }
 
 export default ArticlesPage;
+
+
