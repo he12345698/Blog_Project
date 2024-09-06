@@ -74,7 +74,7 @@ function ArticlesPage() {
         <button onClick={handlePreviousPage} disabled={currentPage === 0}>
           上一頁
         </button>
-        <span>頁 {currentPage + 1} / {totalPages}</span>
+        <span> {currentPage + 1} / {totalPages}頁 </span>
         <button onClick={handleNextPage} disabled={currentPage === totalPages - 1}>
           下一頁
         </button>
