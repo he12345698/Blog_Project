@@ -12,7 +12,6 @@ const SingleArticle = () => {
     const [likeCount, setLikeCount] = useState(0);
     const [hasLiked, setHasLiked] = useState(false); // 追蹤是否已按讚
     const [newComment, setNewComment] = useState(''); // 新增留言的 state
-
     useEffect(() => {
         const fetchArticle = async () => {
             try {
@@ -40,9 +39,12 @@ const SingleArticle = () => {
                 // const response = await axios.get(`http://niceblog.myvnc.com:8080/blog/api/comments/article/${articleId}`);
                 const response = await axios.get(`http://localhost:8080/blog/api/comments/article/${articleId}`);
                 const fetchedComments = response.data;
-        
+
+                console.log('fetchedComments is ', fetchedComments)
+
                 // 使用 token 檢查當前使用者對每條留言是否按讚
                 const token = localStorage.getItem('token');
+
                 if (token) {
                     const updatedComments = await Promise.all(fetchedComments.map(async (comment) => {
                         const likeResponse = await axios.get(`http://localhost:8080/blog/api/comments/${comment.id}/isLiked`, {
@@ -67,7 +69,6 @@ const SingleArticle = () => {
                 console.error("獲取留言失敗", error);
             }
         };
-        
         fetchArticle();
         fetchComments();
     }, [articleId]);
@@ -75,17 +76,17 @@ const SingleArticle = () => {
     const toggleLike = async () => {
         try {
             const token = localStorage.getItem('token');
-            
+
             if (!token) {
                 throw new Error("未登入或 token 不存在");
             }
-    
+
             const response = await axios.post(`http://localhost:8080/blog/api/articles/${articleId}/like`, {}, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             });
-    
+            console.log('token at singarticle is ', token)
             if (response.status === 200) {
                 setHasLiked(!hasLiked);
                 setLikeCount(prevCount => hasLiked ? prevCount - 1 : prevCount + 1);
@@ -96,28 +97,28 @@ const SingleArticle = () => {
             console.error("按讚失敗：", error.message || error);
         }
     };
-    
+
     const toggleCommentLike = async (commentId) => {
         try {
             const token = localStorage.getItem('token');
-    
+
             if (!token) {
                 console.error("使用者未登入或 token 不存在");
                 return;
             }
-    
+
             const response = await axios.post(`http://localhost:8080/blog/api/comments/${commentId}/like`, {}, {
                 headers: {
                     'Authorization': 'Bearer ' + token
                 }
             });
-    
+
             if (response.status === 200) {
                 setComments(comments.map(comment =>
-                    comment.id === commentId ? { 
-                        ...comment, 
-                        likes: comment.hasLiked ? comment.likes - 1 : comment.likes + 1, 
-                        hasLiked: !comment.hasLiked 
+                    comment.id === commentId ? {
+                        ...comment,
+                        likes: comment.hasLiked ? comment.likes - 1 : comment.likes + 1,
+                        hasLiked: !comment.hasLiked
                     } : comment
                 ));
             } else {
@@ -164,7 +165,6 @@ const SingleArticle = () => {
 
     return (
         <main className="content">
-            <Header />
             <section className="single-article">
                 <div className="article-header">
                     <div className="article-author">
@@ -229,7 +229,6 @@ const SingleArticle = () => {
                     </form>
                 </div>
             </section>
-            <Footer />
         </main>
     );
 };

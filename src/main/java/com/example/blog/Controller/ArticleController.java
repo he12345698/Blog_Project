@@ -98,7 +98,7 @@ public ResponseEntity<List<ArticleVo>> getArticles(@RequestParam String keyword)
         System.out.print("認證通過");
         // 使用 userId 進行按讚或收回讚操作
         boolean hasLiked = articleService.toggleArticleLike(articleId, userId);
-
+        System.out.println("123");
         if (hasLiked) {
             return ResponseEntity.ok().build(); // 成功按讚或收回讚後返回200
         } else {
