@@ -57,9 +57,12 @@ function ArticlesPage() {
           articles.map((article) => (
             <div key={article.article_id} className={styles['article-card']}>
               <div className={styles['article-content']}>
-                <span className={styles['article-title']}>{article.title}</span>
+                <a href={`/singleArticle/${article.article_id}`} className={styles['article-title']}>{article.title}</a>
                 <span className={styles['article-author']}>| 作者: {article.username || '未知作者'}</span>
                 <span className={styles['article-updated']}>| 更新時間: {article.last_edited_at}</span>
+              </div>
+              <div className={styles['article-excerpt']}>
+                {article.contentTEXT}
               </div>
             </div>
           ))
@@ -81,3 +84,5 @@ function ArticlesPage() {
 }
 
 export default ArticlesPage;
+
+
