@@ -73,7 +73,7 @@ const Header = () => {
           if (response.ok) {
             const data = await response.json();
             setUser({
-              username: data.username || '访客1',
+              username: data.username || '未登入',
               userImage: data.userImage || '/Image/GG', // 設置默認頭像
               email: data.email,
               id: data.id,
