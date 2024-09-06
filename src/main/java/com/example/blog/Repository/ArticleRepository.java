@@ -16,6 +16,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import org.springframework.stereotype.Repository;
 
+import com.example.blog.Model.ArticleSearchView;
 import com.example.blog.Model.ArticleVo;
 
 @Repository
@@ -31,14 +32,11 @@ public interface ArticleRepository extends JpaRepository<ArticleVo, Long> {
     @Query("SELECT DISTINCT a FROM ArticleVo a LEFT JOIN FETCH a.comments WHERE a.articleId = :articleId")
     Optional<ArticleVo> findByIdWithComments(@Param("articleId") Long articleId);
     
-    // 查找匹配標題關鍵字的文章，支持分頁
-    @Query("SELECT a FROM ArticleVo a WHERE a.title LIKE %:keyword%")
-    Page<ArticleVo> findByTitleContaining(@Param("keyword") String keyword, Pageable pageable);
 
-    // 查找匹配作者關鍵字的文章，支持分頁
-    @Query("SELECT a FROM ArticleVo a JOIN AccountVo acc ON a.authorId = acc.id WHERE acc.username LIKE %:authorKeyword%")
-    Page<ArticleVo> findByAuthorUsernameContaining(@Param("authorKeyword") String authorKeyword, Pageable pageable);
-
+    @Query("SELECT a FROM ArticleVo a JOIN AccountVo u ON a.authorId = u.id " +
+           "WHERE a.title LIKE %:keyword% OR u.username LIKE %:keyword%")
+    List<ArticleVo> searchByTitleOrAuthor(@Param("keyword") String keyword);
+    
     List<ArticleVo> findByTitleContainingIgnoreCase(String title);
     
     List<ArticleVo> findByAuthorId(Long authorId);

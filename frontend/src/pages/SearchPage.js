@@ -1,57 +1,83 @@
+// src/pages/SearchPage.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
-import SearchBar from '../components/SearchBar';
-import styles from '../styles/pages/SearchPage.module.css'; // 導入 CSS 模組
+import SearchBar from '../components/SearchBar'; // 引入 SearchBar 元件
+import styles from '../styles/pages/SearchPage.module.css'; // 引入 CSS 模組
 
 function SearchPage() {
-  const [articles, setArticles] = useState([]); // 用來存放搜尋結果的文章列表
-  const [query, setQuery] = useState(''); // 用來存放搜尋關鍵字
+  const [results, setResults] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
   const navigate = useNavigate();
   const location = useLocation();
+  const query = new URLSearchParams(location.search).get('query') || '';
 
-  // 解析 URL 中的搜尋參數
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const queryParam = params.get('query');
-    if (queryParam) {
-      setQuery(queryParam); // 設定搜尋關鍵字
-      fetchSearchResults(queryParam); // 使用關鍵字取得搜尋結果
-    }
-  }, [location.search]);
+    const fetchResults = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/blog/search?keyword=${encodeURIComponent(query)}&page=${currentPage}&size=10`);
+        console.log('搜尋結果:', response.data);
 
-  // 使用 Axios 發送搜尋請求
-  const fetchSearchResults = async (searchQuery) => {
-    try {
-      const response = await axios.get('http://localhost:8080/blog/api/articles/search', {
-        params: { query: searchQuery } // 傳送搜尋關鍵字作為請求參數
-      });
-      console.log('搜尋結果:', response.data); // 檢查返回的搜尋結果
-      setArticles(response.data); // 更新文章列表
-    } catch (error) {
-      console.error('搜尋失敗:', error); // 搜尋失敗時顯示錯誤訊息
+        if (Array.isArray(response.data.content)) {
+          setResults(response.data.content);
+          setTotalPages(response.data.totalPages);
+        } else {
+          console.error('API 回應不包含有效的結果數組');
+        }
+      } catch (error) {
+        console.error('獲取搜尋結果失敗:', error);
+      }
+    };
+
+    fetchResults();
+  }, [query, currentPage]);
+
+  const handleSearch = (query) => {
+    navigate(`/searchPage?query=${encodeURIComponent(query)}`);
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
     }
   };
 
-  // 處理搜尋操作
-  const handleSearch = (newQuery) => {
-    navigate(`/searchPage?query=${encodeURIComponent(newQuery)}`); // 導航到新的搜尋結果頁面
+  const handleNextPage = () => {
+    if (currentPage < totalPages - 1) {
+      setCurrentPage(currentPage + 1);
+    }
   };
 
   return (
     <div className={styles.search_page}>
-      <SearchBar onSearch={handleSearch} initialQuery={query} /> {/* 搜尋欄位 */}
-      <div className={styles['article-list']}>
-        {articles.length > 0 ? (
-          articles.map((article) => (
-            <div key={article.articleId} className={styles['article-card']}>
-              <h3>{article.title}</h3>
-              <p className={styles['author-name']}>作者: {article.authorId}</p>
+      <SearchBar onSearch={handleSearch} /> {/* 插入 SearchBar */}
+      <div className={styles['results-list']}>
+        {results.length > 0 ? (
+          results.map((result) => (
+            <div key={result.article_id} className={styles['result-item']}>
+              <div className={styles['result-content']}>
+              <a href={`/singleArticle/${result.article_id}`} className={styles['result-title']}>{result.title}</a>
+                <span className={styles['result-author']}>| 作者: {result.username || '未知作者'}</span>
+                <span className={styles['result-updated']}>| 更新時間: {result.last_edited_at}</span>
+              </div>
+              <div className={styles['result-excerpt']}>
+                {result.contentTEXT}
+              </div>
             </div>
           ))
         ) : (
-          <p>沒有找到相關文章</p> // 顯示沒有找到相關文章的訊息
+          <p>沒有找到搜尋結果</p>
         )}
+      </div>
+      <div className={styles.pagination}>
+        <button onClick={handlePreviousPage} disabled={currentPage === 0}>
+          上一頁
+        </button>
+        <span>頁 {currentPage + 1} / {totalPages}</span>
+        <button onClick={handleNextPage} disabled={currentPage === totalPages - 1}>
+          下一頁
+        </button>
       </div>
     </div>
   );
