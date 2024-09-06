@@ -11,6 +11,7 @@ public class ArticleSearchView {
     @Id
     private Long article_id;
     private String title;
+    private String contentTEXT;
     private String username;
     private String last_edited_at;
     
@@ -25,6 +26,12 @@ public class ArticleSearchView {
     }
     public void setTitle(String title) {
         this.title = title;
+    }
+    public String getContentTEXT() {
+        return contentTEXT;
+    }
+    public void setContentTEXT(String contentTEXT) {
+        this.contentTEXT = contentTEXT;
     }
     public String getUsername() {
         return username;
