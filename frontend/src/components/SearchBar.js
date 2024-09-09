@@ -22,7 +22,7 @@ function SearchBar() {
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)} // 更新搜尋詞
-          placeholder="搜尋文章或作者"
+          placeholder="搜尋文章標題或作者"
         />
         <button type="submit">搜尋</button>
       </form>

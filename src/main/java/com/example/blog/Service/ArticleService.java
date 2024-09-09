@@ -141,5 +141,13 @@ public class ArticleService {
         return articleRepository.findByAuthorId(authorId);
     }
 
+    public Optional<ArticleVo> findById(Long articleId) {
+        return articleRepository.findById(articleId);
+    }
+
+
+
+
+
     
 }

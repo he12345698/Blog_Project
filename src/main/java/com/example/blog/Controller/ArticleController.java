@@ -1,9 +1,11 @@
 package com.example.blog.Controller;
 
 import com.example.blog.JwtUtil;
+import com.example.blog.Model.AccountVo;
 import com.example.blog.Model.ArticleVo;
 import com.example.blog.Model.TagVo;
 import com.example.blog.Repository.ArticleRepository;
+import com.example.blog.Service.AccountService;
 import com.example.blog.Service.ArticleService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,8 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/articles")
@@ -35,6 +36,8 @@ public class ArticleController {
     private ArticleService articleService;
     @Autowired
     private ArticleRepository articleRepository;
+    @Autowired
+    private AccountService accountService;
 
 
     // @GetMapping("/search")
@@ -67,11 +70,20 @@ public ResponseEntity<List<ArticleVo>> getArticles(@RequestParam String keyword)
     }
 
     @GetMapping("/{articleId}")
-    public ResponseEntity<ArticleVo> getArticleById(@PathVariable Long articleId) {
-        return articleService.getArticleById(articleId)
-                .map(article -> ResponseEntity.ok(article))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+public ResponseEntity<ArticleVo> getArticleById(@PathVariable Long articleId) {
+    Optional<ArticleVo> articleOpt = articleService.getArticleById(articleId);
+    if (articleOpt.isPresent()) {
+        ArticleVo article = articleOpt.get();
+        Optional<AccountVo> authorOpt = accountService.findById(article.getAuthorId());
+        if (authorOpt.isPresent()) {
+            AccountVo author = authorOpt.get();
+            article.setAuthorName(author.getUsername());  // 將作者名稱設置到文章物件中
+        }
+        return ResponseEntity.ok(article);
+    } else {
+        return ResponseEntity.notFound().build();
     }
+}
 
     @PostMapping("/{articleId}/like")
     public ResponseEntity<Void> toggleArticleLike(@PathVariable Long articleId, HttpServletRequest request) {
@@ -98,19 +110,30 @@ public ResponseEntity<List<ArticleVo>> getArticles(@RequestParam String keyword)
         System.out.print("認證通過");
         // 使用 userId 進行按讚或收回讚操作
         boolean hasLiked = articleService.toggleArticleLike(articleId, userId);
-
+        System.out.println("123");
         if (hasLiked) {
             return ResponseEntity.ok().build(); // 成功按讚或收回讚後返回200
         } else {
-            
+
             return ResponseEntity.ok().build(); // 這裡應該也返回200，表示操作成功
         }
     }
+
+    @GetMapping("/authors/{authorId}")
+public ResponseEntity<AccountVo> getAuthorDetails(@PathVariable Long authorId) {
+    Optional<AccountVo> author = accountService.findById(authorId);  // 這裡使用 findById 方法
+    if (author.isPresent()) {
+        return ResponseEntity.ok(author.get());
+    } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+}
+
     @GetMapping("/{articleId}/isLiked")
     public ResponseEntity<Map<String, Boolean>> isArticleLiked(
             @PathVariable Long articleId,
             HttpServletRequest request) {
-        
+
         // 從請求中提取 JWT token 並驗證
         String authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
@@ -132,14 +155,14 @@ public ResponseEntity<List<ArticleVo>> getArticles(@RequestParam String keyword)
         return ResponseEntity.ok(response);
     }
 
-
     @PostMapping
     public ArticleVo createArticle(@RequestBody ArticleVo article, @RequestParam Long tagId) {
         return articleService.createOrUpdateArticle(article, tagId);
     }
 
     @PutMapping("/{articleId}")
-    public ResponseEntity<ArticleVo> updateArticle(@PathVariable Long articleId, @RequestBody ArticleVo article, @RequestParam Long tagId) {
+    public ResponseEntity<ArticleVo> updateArticle(@PathVariable Long articleId, @RequestBody ArticleVo article,
+            @RequestParam Long tagId) {
         return articleService.getArticleById(articleId)
                 .map(existingArticle -> {
                     existingArticle.setAuthorId(article.getAuthorId());
@@ -163,7 +186,7 @@ public ResponseEntity<List<ArticleVo>> getArticles(@RequestParam String keyword)
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
-    
+
     @GetMapping("/{articleId}/tag")
     public ResponseEntity<Long> getTagIdByArticleId(@PathVariable Long articleId) {
         Long tagId = articleService.getTagIdByArticleId(articleId);
@@ -184,5 +207,5 @@ public ResponseEntity<List<ArticleVo>> getArticles(@RequestParam String keyword)
         }
         return ResponseEntity.ok(articles);
     }
-    
+
 }

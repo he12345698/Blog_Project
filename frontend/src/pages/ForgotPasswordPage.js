@@ -55,7 +55,7 @@ const ForgotPasswordPage = () => {
               required
             />
           </div>
-          <button type="submit">發送重置鏈接</button>
+          <button type="submit">發送重置信件</button>
           <div className="message-container">
             {errorMessage && (
               <p className="error-message shake" style={{ whiteSpace: 'pre-line' }}>

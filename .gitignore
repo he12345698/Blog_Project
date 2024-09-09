@@ -6,6 +6,9 @@ target/
 
 ### Mac ###
 .DS_Store
+frontend/src/.DS_Store
+frontend/src/styles/.DS_Store
+frontend/src/styles/pages/.DS_Store
 
 
 ### React ###
@@ -53,4 +56,5 @@ mvnw.cmd
 
 src\main\resources\application.properties
 
+src/main/resources/application.properties
 src/main/resources/application.properties

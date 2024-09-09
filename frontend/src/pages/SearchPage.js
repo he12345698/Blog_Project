@@ -57,9 +57,12 @@ function SearchPage() {
           results.map((result) => (
             <div key={result.article_id} className={styles['result-item']}>
               <div className={styles['result-content']}>
-                <span className={styles['result-title']}>{result.title}</span>
+              <a href={`/singleArticle/${result.article_id}`} className={styles['result-title']}>{result.title}</a>
                 <span className={styles['result-author']}>| 作者: {result.username || '未知作者'}</span>
                 <span className={styles['result-updated']}>| 更新時間: {result.last_edited_at}</span>
+              </div>
+              <div className={styles['result-excerpt']}>
+                {result.contentTEXT}
               </div>
             </div>
           ))
