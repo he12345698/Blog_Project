@@ -15,6 +15,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import EmailVerificationPage from './pages/EmailVerificationPage';
 import ChangePassword from './pages/ChangePassword';
+import TagPage from './pages/TagPage';
 
 const MainLayout = ({ children }) => (
   <main className={style.App}>
@@ -42,6 +43,7 @@ const App = () => {
           <Route path="/UserData" element={<MainLayout><UserData /></MainLayout>} />
           <Route path="/edit-article/:articleId" element={<MainLayout><ArticleEditor /></MainLayout>} />
           <Route path="/verify-email" element={<MainLayout><EmailVerificationPage /></MainLayout>} />
+          <Route path="/tag/:tagId" element={<MainLayout><TagPage /></MainLayout>} />
           {/* 你可以在这里添加更多的路由 */}
         </Routes>
       <Footer />
