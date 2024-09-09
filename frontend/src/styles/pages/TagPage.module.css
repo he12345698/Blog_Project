@@ -1,0 +1,123 @@
+/* 頁面整體樣式 */
+.tag_page {
+  padding: 20px;
+  background-color: #f4f4f9; /* 背景顏色 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Arial, sans-serif; /* 字體 */
+  min-height: 100vh; /* 使頁面高度至少為視口高度 */
+}
+
+/* 標籤列表區域 */
+.tag_list {
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px; /* 標籤之間的間距 */
+}
+
+/* 標籤按鈕樣式 */
+.tag_button {
+  background-color: #ffffff; /* 按鈕背景顏色 */
+  border: 1px solid #ddd; /* 按鈕邊框 */
+  padding: 10px 20px;
+  border-radius: 5px; /* 圓角效果 */
+  color: #333; /* 文字顏色 */
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.tag_button:hover {
+  background-color: #f0f0f0; /* 懸停時背景顏色 */
+  border-color: #ccc; /* 懸停時邊框顏色 */
+}
+
+/* 文章列表區域 */
+.article-list {
+  width: 80%; /* 調整寬度 */
+  max-width: 800px;
+  background-color: #ffffff; /* 背景 */
+  padding: 20px;
+  border-radius: 10px; /* 圓角效果 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 陰影效果 */
+}
+
+/* 單個文章卡片 */
+.article-card {
+  background-color: #f8f8f8; /* 卡片背景顏色 */
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 8px; /* 卡片圓角 */
+  border: 1px solid #bbb; /* 卡片邊框 */
+  display: flex;
+  flex-direction: column; /* 使內容垂直排列 */
+  text-align: left;
+  color: #333; /* 文字顏色 */
+}
+
+/* 內容區域，包含標題、作者和更新時間 */
+.article-content {
+  display: flex;
+  flex-direction: row; /* 水平排列內容 */
+  align-items: center;
+  margin-bottom: 10px; /* 與內容文本的間距 */
+}
+
+/* 標題、作者和更新時間 */
+.article-title {
+  font-weight: bold;
+  margin-right: 10px;
+  color: #333; /* 標題顏色 */
+  flex: 1; /* 使標題占據可用空間 */
+  white-space: nowrap; /* 不換行 */
+  overflow: hidden; /* 隱藏超出容器的內容 */
+  text-overflow: ellipsis; /* 使用省略號表示被截斷的文字 */
+  font-size: 1.3rem; /* 調整字體大小，可以根據需要修改 */
+}
+
+.article-author,
+.article-updated,
+.article-tag {
+  margin-right: 10px;
+  color: #333; /* 作者、更新時間和標籤顏色 */
+}
+
+/* 文章摘要 */
+.article-excerpt {
+  color: #666; /* 內容顏色 */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2; /* 顯示兩行 */
+  line-height: 1.5; /* 行高，可根據需要調整 */
+}
+
+/* 分頁樣式 */
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pagination button {
+  background-color: #ffffff; /* 按鈕背景顏色 */
+  border: 1px solid #ddd; /* 按鈕邊框 */
+  padding: 10px 20px;
+  border-radius: 5px; /* 圓角效果 */
+  color: #333; /* 文字顏色 */
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s;
+  margin: 0 10px;
+}
+
+.pagination button:hover {
+  background-color: #f0f0f0; /* 懸停時背景顏色 */
+  border-color: #ccc; /* 懸停時邊框顏色 */
+}
+
+.pagination span {
+  font-size: 1rem;
+}
