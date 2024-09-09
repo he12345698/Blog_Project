@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Index from './index0';
 import LoginPage from './pages/LoginPage';
 import Register from './pages/Register';
@@ -44,7 +44,7 @@ const App = () => {
           <Route path="/edit-article/:articleId" element={<MainLayout><ArticleEditor /></MainLayout>} />
           <Route path="/verify-email" element={<MainLayout><EmailVerificationPage /></MainLayout>} />
           <Route path="/tag/:tagId" element={<MainLayout><TagPage /></MainLayout>} />
-          {/* 你可以在这里添加更多的路由 */}
+          {/* 你可以在這裡增加更多路由 */}
         </Routes>
       <Footer />
     </Router>

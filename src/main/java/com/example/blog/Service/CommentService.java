@@ -41,7 +41,9 @@ public class CommentService {
 
 
     public List<CommentVo> getCommentsByArticleId(Long articleId) {
-        return commentRepository.findByArticleArticleId(articleId);
+        List<CommentVo> comments = commentRepository.findByArticleArticleId(articleId);
+        System.out.println("Fetched comments: " + comments.size());
+        return comments;
     }
     
     @Transactional
@@ -76,8 +78,13 @@ public class CommentService {
 
     public boolean isCommentLiked(Long commentId, Long userId) {
         // 使用 commentId 和 userId 從資料庫中檢查是否有對應的按讚紀錄
-        return commentLikeRepository.existsByCommentIdAndUserId(commentId, userId);
+        return commentLikeRepository.existsByCommentIdAndUserIdAndLikedTrue(commentId, userId);
     }
+
+    
+
+
+    
 
 
   

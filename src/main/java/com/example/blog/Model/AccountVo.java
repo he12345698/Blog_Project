@@ -13,8 +13,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "account_vo")
+
+
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class AccountVo {
 	
 	@Id
