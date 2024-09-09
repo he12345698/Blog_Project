@@ -1,11 +1,16 @@
 // src/components/SearchBar.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from '../styles/components/SearchBar.module.css'; // 引入 CSS 模組
 
-function SearchBar() {
-  const [query, setQuery] = useState(''); // 用來儲存使用者輸入的搜尋詞
+function SearchBar({ value }) {
+  const [query, setQuery] = useState(value || ''); // 用來儲存使用者輸入的搜尋詞
   const navigate = useNavigate();
+
+  // 在 value 更新時，更新 query
+  useEffect(() => {
+    setQuery(value);
+  }, [value]);
 
   // 處理搜尋提交
   const handleSearch = (e) => {
