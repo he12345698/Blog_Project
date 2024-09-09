@@ -144,6 +144,7 @@ public class CommentController {
 
         // 使用 service 檢查是否已按讚
         boolean isLiked = commentService.isCommentLiked(commentId, userId);
+        System.out.println(commentId + " isLiked is " + isLiked);
         Map<String, Boolean> response = new HashMap<>();
         response.put("liked", isLiked);
 
