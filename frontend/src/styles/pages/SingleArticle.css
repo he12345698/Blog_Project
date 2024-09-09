@@ -57,6 +57,8 @@ header.top-bar {
 .user-avatar {
     border-radius: 50%; /* 設定圓形邊框 */
     margin-right: 10px; /* 設定右邊距 */
+    width: 20px; /* 設置頭像的寬度 */
+    height: 20px; /* 設置頭像的高度 */
 }
 
 設置登入按鈕樣式
@@ -110,6 +112,9 @@ main.content {
 .author-avatar {
     border-radius: 50%; /* 設定圓形邊框 */
     margin-right: 10px; /* 設定右邊距 */
+    width: 40px; /* 設置頭像的寬度 */
+    height: 40px; /* 設置頭像的高度 */
+    object-fit: cover; /* 確保圖片按比例填充並保持圓形 */
 }
 
 /* 設置文章標題樣式 */

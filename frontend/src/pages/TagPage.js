@@ -1,34 +1,30 @@
-// src/pages/ArticlesPage.js
-
+// src/pages/TagPage.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import SearchBar from '../components/SearchBar';
-import styles from '../styles/pages/ArticlesPage.module.css'; // 引入 CSS 模組
+import styles from '../styles/pages/TagPage.module.css';
 
-function ArticlesPage() {
+function TagPage() {
+  const { tagId } = useParams();
   const [articles, setArticles] = useState([]);
   const [tags, setTags] = useState([]);
-  const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
   const navigate = useNavigate();
+  const location = useLocation();
+  const query = new URLSearchParams(location.search).get('query') || ''; // 取得搜尋參數
 
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/blog/search?keyword', {
-          params: { page: currentPage }
+        const response = await axios.get('http://localhost:8080/blog/articlesByTag', {
+          params: { tagId, page: currentPage, size: 10 }
         });
-        console.log('獲取的文章:', response.data);
-
-        if (Array.isArray(response.data.content)) {
-          setArticles(response.data.content);
-          setTotalPages(response.data.totalPages);
-        } else {
-          console.error('API 回應不包含有效的文章數組');
-        }
+        setArticles(response.data.content);
+        setTotalPages(response.data.totalPages);
       } catch (error) {
-        console.error('獲取文章失敗:', error);
+        console.error('獲取標籤文章失敗:', error);
       }
     };
 
@@ -44,11 +40,7 @@ function ArticlesPage() {
 
     fetchArticles();
     fetchTags();
-  }, [currentPage]);
-
-  const handleSearch = (query) => {
-    navigate(`/searchPage?query=${encodeURIComponent(query)}`);
-  };
+  }, [tagId, currentPage]);
 
   const handlePreviousPage = () => {
     if (currentPage > 0) {
@@ -62,8 +54,8 @@ function ArticlesPage() {
     }
   };
 
-  const handleTagClick = (tagId) => {
-    navigate(`/tag/${tagId}`); // 導航到標籤頁面
+  const handleTagClick = (id) => {
+    navigate(`/tag/${id}?query=${encodeURIComponent(query)}`); // 保留搜尋參數
   };
 
   const getTagNameById = (id) => {
@@ -71,22 +63,25 @@ function ArticlesPage() {
     return tag ? tag.name : '未知標籤';
   };
 
+  const handleSearch = (query) => {
+    navigate(`/searchPage?query=${encodeURIComponent(query)}`);
+  };
+
   return (
-    <div className={styles.articles_page}>
-      <SearchBar onSearch={handleSearch} />
+    <div className={styles.tag_page}>
+      <SearchBar onSearch={handleSearch} value={query} /> {/* 傳遞搜尋參數 */}
       
-      <div className={styles['tag-list']}>
-        {tags.map(tag => (
+      <div className={styles.tag_list}>
+        {tags.map((tag) => (
           <button
             key={tag.tag_id}
-            className={styles['tag-item']}
             onClick={() => handleTagClick(tag.tag_id)}
+            className={styles.tag_button}
           >
             {tag.name}
           </button>
         ))}
       </div>
-
       <div className={styles['article-list']}>
         {articles.length > 0 ? (
           articles.map((article) => (
@@ -106,7 +101,6 @@ function ArticlesPage() {
           <p>沒有找到文章</p>
         )}
       </div>
-
       <div className={styles.pagination}>
         <button onClick={handlePreviousPage} disabled={currentPage === 0}>
           上一頁
@@ -120,4 +114,4 @@ function ArticlesPage() {
   );
 }
 
-export default ArticlesPage;
+export default TagPage;
