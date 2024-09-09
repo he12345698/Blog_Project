@@ -32,4 +32,10 @@ public class ArticleSearchService {
         Pageable pageable = PageRequest.of(page, size);
         return repository.findAll(pageable);
     }
+    
+    // 根據標籤 ID 查詢文章
+    public Page<ArticleSearchView> findByTagId(Long tagId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return repository.findByTagId(tagId, pageable);
+    }
 }

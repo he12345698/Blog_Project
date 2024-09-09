@@ -12,6 +12,7 @@ public class ArticleSearchView {
     private Long article_id;
     private String title;
     private String contentTEXT;
+    private Integer tag_id; // 使用包裝類型 Integer 來處理可能為 NULL 的值
     private String username;
     private String last_edited_at;
     
@@ -32,6 +33,12 @@ public class ArticleSearchView {
     }
     public void setContentTEXT(String contentTEXT) {
         this.contentTEXT = contentTEXT;
+    }
+    public Integer getTag_id() {
+        return tag_id;
+    }
+    public void setTag_id(Integer tag_id) {
+        this.tag_id = tag_id;
     }
     public String getUsername() {
         return username;
