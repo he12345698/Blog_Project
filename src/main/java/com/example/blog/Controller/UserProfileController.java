@@ -55,7 +55,8 @@ public class UserProfileController {
     private AccountRepository accountRepository;
 
     // 使用相對路徑，上傳目錄將位於專案的根目錄中
-    private static final String UPLOAD_DIR = "D:\\Project_ex\\Blog_Project\\frontend\\public\\";
+    //private static final String UPLOAD_DIR = "D:\\Project_ex\\Blog_Project\\frontend\\public\\";
+    private static final String UPLOAD_DIR = "E:\\Blog_Project\\frontend\\public\\";
 
     // 更新用戶名
     @PutMapping("update-username/{id}")
@@ -164,8 +165,9 @@ public class UserProfileController {
 
             Files.createDirectories(filePath.getParent());
             Files.write(filePath, file.getBytes());
-
-            String baseUrl = "http://localhost:3000/";
+            
+            //String baseUrl = "http://localhost:3000/";
+            String baseUrl = "http://localhost:81/";
             String relativeImagePath = "UserImages/" + fileName;
             String fullImageUrl = baseUrl + relativeImagePath;
 

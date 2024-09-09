@@ -18,6 +18,7 @@ const SingleArticle = () => {
     const [author, setAuthor] = useState(null); // 儲存作者資訊
 
     useEffect(() => {
+        
         const fetchArticle = async () => {
             if (id) {
                 try {
@@ -51,22 +52,26 @@ const SingleArticle = () => {
                 const fetchedComments = response.data;
 
                 console.log('fetchedComments is ', fetchedComments)
+                console.log('fetchedComments.likes is ', fetchedComments[0].likes)
 
                 // 使用 token 檢查當前使用者對每條留言是否按讚
                 const token = localStorage.getItem('token');
 
                 if (token) {
                     const updatedComments = await Promise.all(fetchedComments.map(async (comment) => {
+                        console.log('comment.id', comment)
                         const likeResponse = await axios.get(`http://localhost:8080/blog/api/comments/${comment.id}/isLiked`, {
                             headers: {
                                 'Authorization': 'Bearer ' + token
                             }
                         });
+                        console.log('likeResponse.data.liked is ', likeResponse.data.liked)
                         return {
                             ...comment,
                             hasLiked: likeResponse.data.liked
                         };
                     }));
+                    
                     setComments(updatedComments);
                 } else {
                     // 如果沒有 token，默認每個留言的 hasLiked 為 false
@@ -79,6 +84,9 @@ const SingleArticle = () => {
                 console.error("獲取留言失敗", error.response ? error.response.data : error.message);  // 詳細錯誤日誌
             }
         };
+        console.log('comments.hasLiked is ', comments.hasLiked)
+        console.log('comments is ', comments)
+        
         fetchArticle();
         fetchComments();
     }, [id, articleId]);  // 確保 articleId 變化時重新加載
