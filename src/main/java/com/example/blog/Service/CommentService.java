@@ -78,7 +78,7 @@ public class CommentService {
 
     public boolean isCommentLiked(Long commentId, Long userId) {
         // 使用 commentId 和 userId 從資料庫中檢查是否有對應的按讚紀錄
-        return commentLikeRepository.existsByCommentIdAndUserId(commentId, userId);
+        return commentLikeRepository.existsByCommentIdAndUserIdAndLikedTrue(commentId, userId);
     }
 
     
