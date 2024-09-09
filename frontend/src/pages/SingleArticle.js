@@ -16,34 +16,37 @@ const SingleArticle = () => {
     const { user } = useContext(UserContext); // 取得 setUser 方法
     const id = user?.id;
     const [author, setAuthor] = useState(null); // 儲存作者資訊
+    const [editingComment, setEditingComment] = useState(null);  // 用於儲存正在編輯的留言
+    const [editedCommentText, setEditedCommentText] = useState('');  // 編輯後的留言內容
+
 
     useEffect(() => {
-        
+
         const fetchArticle = async () => {
-            if (id) {
-                try {
-                    const response = await axios.get(`http://localhost:8080/blog/api/articles/${articleId}`);
-                    setArticle(response.data);
-                    setLikeCount(response.data.likes);
 
-                    // 獲取作者詳細資料
-                    const authorResponse = await axios.get(`http://localhost:8080/blog/api/articles/authors/${response.data.authorId}`);
-                    setAuthor(authorResponse.data);
+            try {
+                const response = await axios.get(`http://localhost:8080/blog/api/articles/${articleId}`);
+                setArticle(response.data);
+                setLikeCount(response.data.likes);
 
-                    const token = localStorage.getItem('token');
-                    if (token) {
-                        const likeResponse = await axios.get(`http://localhost:8080/blog/api/articles/${articleId}/isLiked`, {
-                            headers: {
-                                'Authorization': 'Bearer ' + token
-                            }
-                        });
-                        setHasLiked(likeResponse.data.liked);
-                        console.log("Author Name:", response.data.authorName);
-                    }
-                } catch (error) {
-                    console.error("獲取文章或作者資料失敗", error);
+                // 獲取作者詳細資料
+                const authorResponse = await axios.get(`http://localhost:8080/blog/api/articles/authors/${response.data.authorId}`);
+                setAuthor(authorResponse.data);
+
+                const token = localStorage.getItem('token');
+                if (token) {
+                    const likeResponse = await axios.get(`http://localhost:8080/blog/api/articles/${articleId}/isLiked`, {
+                        headers: {
+                            'Authorization': 'Bearer ' + token
+                        }
+                    });
+                    setHasLiked(likeResponse.data.liked);
+                    console.log("Author Name:", response.data.authorName);
                 }
+            } catch (error) {
+                console.error("獲取文章或作者資料失敗", error);
             }
+
         };
 
         const fetchComments = async () => {
@@ -71,7 +74,7 @@ const SingleArticle = () => {
                             hasLiked: likeResponse.data.liked
                         };
                     }));
-                    
+
                     setComments(updatedComments);
                 } else {
                     // 如果沒有 token，默認每個留言的 hasLiked 為 false
@@ -86,7 +89,7 @@ const SingleArticle = () => {
         };
         console.log('comments.hasLiked is ', comments.hasLiked)
         console.log('comments is ', comments)
-        
+
         fetchArticle();
         fetchComments();
     }, [id, articleId]);  // 確保 articleId 變化時重新加載
@@ -146,27 +149,56 @@ const SingleArticle = () => {
         try {
             const token = localStorage.getItem('token');
             if (!token) return;
-    
+
             const commentData = {
                 content: newComment,
                 authorId: user.id  // 傳遞當前用戶的 ID 作為作者
             };
-    
+
             console.log("Comment data being sent: ", commentData);  // 調試：檢查數據
-    
+
             // 調試：確認 articleId 是否正確
             console.log("Article ID being used for comment submission: ", articleId);
-    
+
             const response = await axios.post(`http://localhost:8080/blog/api/comments?articleId=${articleId}`, commentData, {
                 headers: { 'Authorization': 'Bearer ' + token }
             });
-    
+
             setComments([...comments, { ...response.data, hasLiked: false }]);
             setNewComment('');
         } catch (error) {
             console.error("提交留言失敗", error.response ? error.response.data : error.message);  // 調試：打印具體錯誤信息
         }
     };
+
+    const handleEditComment = (comment) => {
+        setEditingComment(comment.id);  // 設定要編輯的留言
+        setEditedCommentText(comment.content);  // 初始化編輯框內容為當前留言的內容
+    };
+
+    const handleSaveEditedComment = async (commentId) => {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            const updatedComment = { content: editedCommentText };
+
+            const response = await axios.put(`http://localhost:8080/blog/api/comments/${commentId}`, updatedComment, {
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+
+            if (response.status === 200) {
+                // 更新留言列表，替換掉編輯過的留言
+                setComments(comments.map(comment =>
+                    comment.id === commentId ? { ...comment, content: editedCommentText } : comment
+                ));
+                setEditingComment(null);  // 退出編輯模式
+            }
+        } catch (error) {
+            console.error("更新留言失敗", error);
+        }
+    };
+
 
     if (!article || !author) return <p>加載中...</p>;
 
@@ -203,19 +235,40 @@ const SingleArticle = () => {
                     {comments.map(comment => (
                         <div className="comment" key={comment.id}>
                             <div className="comment-header">
-                                <img src="/Image/IMG_20240701_124913.JPG" width="40" height="40" alt="留言者頭像" className="commenter-avatar" />
                                 <p className="commenter-name">{comment.author ? comment.author.username : '匿名'}</p>
-
                                 <p className="comment-date">{new Date(comment.createdAt).toLocaleString()}</p>
                             </div>
-                            <p className="comment-text">{comment.content}</p>
+                            {editingComment === comment.id ? (
+                                <textarea
+                                    value={editedCommentText}
+                                    onChange={(e) => setEditedCommentText(e.target.value)}
+                                />
+                            ) : (
+                                <p className="comment-text">{comment.content}</p>
+                            )}
                             <div className="like-comment-button">
                                 <button type="button" className="like-comment-btn" onClick={() => toggleCommentLike(comment.id)}>
                                     {comment.hasLiked ? '收回讚' : '按讚'} (<span className="comment-like-count">{comment.likes}</span>)
                                 </button>
+                                {Number.parseInt(comment.author.id) === Number.parseInt(user.id) && (
+
+                                    <>
+                                        {editingComment === comment.id ? (// 顯示「編輯」按鈕給留言作者
+                                            <button type="button" className="save-edit-btn" onClick={() => handleSaveEditedComment(comment.id)}>
+                                                保存
+                                            </button>
+                                        ) : (
+                                            <button type="button" className="edit-comment-btn" onClick={() => handleEditComment(comment)}>
+                                                編輯
+                                            </button>
+                                        )}
+                                    </>
+                                )}
                             </div>
                         </div>
                     ))}
+
+
 
                 </div>
                 <div className="comment-form">
