@@ -17,6 +17,30 @@
   justify-content: center;
 }
 
+/* 標籤列表區域 */
+.tag-list {
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px; /* 標籤之間的間距 */
+}
+
+/* 標籤項目樣式 */
+.tag-item {
+  background-color: #ffffff; /* 項目背景顏色 */
+  border: 1px solid #ddd; /* 項目邊框 */
+  padding: 10px 20px;
+  border-radius: 5px; /* 圓角效果 */
+  color: #333; /* 文字顏色 */
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.tag-item:hover {
+  background-color: #f0f0f0; /* 懸停時背景顏色 */
+  border-color: #ccc; /* 懸停時邊框顏色 */
+}
+
 /* 文章列表區域 */
 .article-list {
   width: 80%; /* 調整寬度 */
@@ -54,16 +78,17 @@
   margin-right: 10px;
   color: #333; /* 標題顏色 */
   flex: 1; /* 使標題占據可用空間 */
-  white-space: nowrap;        /* 不換行 */
-  overflow: hidden;           /* 隱藏超出容器的內容 */
-  text-overflow: ellipsis;    /* 使用省略號表示被截斷的文字 */
-  font-size: 1.3rem;         /* 調整字體大小，可以根據需要修改 */
+  white-space: nowrap; /* 不換行 */
+  overflow: hidden; /* 隱藏超出容器的內容 */
+  text-overflow: ellipsis; /* 使用省略號表示被截斷的文字 */
+  font-size: 1.3rem; /* 調整字體大小，可以根據需要修改 */
 }
 
 .article-author,
-.article-updated {
+.article-updated,
+.article-tag {
   margin-right: 10px;
-  color: #333; /* 作者和更新時間顏色 */
+  color: #333; /* 作者、更新時間和標籤顏色 */
 }
 
 /* 文章摘要 */
@@ -75,4 +100,32 @@
   text-overflow: ellipsis;
   -webkit-line-clamp: 2; /* 顯示兩行 */
   line-height: 1.5; /* 行高，可根據需要調整 */
+}
+
+/* 分頁樣式 */
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pagination button {
+  background-color: #ffffff; /* 按鈕背景顏色 */
+  border: 1px solid #ddd; /* 按鈕邊框 */
+  padding: 10px 20px;
+  border-radius: 5px; /* 圓角效果 */
+  color: #333; /* 文字顏色 */
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s;
+  margin: 0 10px;
+}
+
+.pagination button:hover {
+  background-color: #f0f0f0; /* 懸停時背景顏色 */
+  border-color: #ccc; /* 懸停時邊框顏色 */
+}
+
+.pagination span {
+  font-size: 1rem;
 }

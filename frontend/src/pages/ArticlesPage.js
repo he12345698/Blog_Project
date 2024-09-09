@@ -1,4 +1,5 @@
 // src/pages/ArticlesPage.js
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -7,6 +8,7 @@ import styles from '../styles/pages/ArticlesPage.module.css'; // 引入 CSS 模�
 
 function ArticlesPage() {
   const [articles, setArticles] = useState([]);
+  const [tags, setTags] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const navigate = useNavigate();
@@ -30,7 +32,18 @@ function ArticlesPage() {
       }
     };
 
+    const fetchTags = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/blog/api/tags/all');
+        const sortedTags = response.data.sort((a, b) => a.tag_id - b.tag_id);
+        setTags(sortedTags);
+      } catch (error) {
+        console.error('獲取標籤失敗:', error);
+      }
+    };
+
     fetchArticles();
+    fetchTags();
   }, [currentPage]);
 
   const handleSearch = (query) => {
@@ -49,9 +62,31 @@ function ArticlesPage() {
     }
   };
 
+  const handleTagClick = (tagId) => {
+    navigate(`/tag/${tagId}`); // 導航到標籤頁面
+  };
+
+  const getTagNameById = (id) => {
+    const tag = tags.find(tag => tag.tag_id === id);
+    return tag ? tag.name : '未知標籤';
+  };
+
   return (
     <div className={styles.articles_page}>
       <SearchBar onSearch={handleSearch} />
+      
+      <div className={styles['tag-list']}>
+        {tags.map(tag => (
+          <button
+            key={tag.tag_id}
+            className={styles['tag-item']}
+            onClick={() => handleTagClick(tag.tag_id)}
+          >
+            {tag.name}
+          </button>
+        ))}
+      </div>
+
       <div className={styles['article-list']}>
         {articles.length > 0 ? (
           articles.map((article) => (
@@ -60,6 +95,7 @@ function ArticlesPage() {
                 <a href={`/singleArticle/${article.article_id}`} className={styles['article-title']}>{article.title}</a>
                 <span className={styles['article-author']}>| 作者: {article.username || '未知作者'}</span>
                 <span className={styles['article-updated']}>| 更新時間: {article.last_edited_at}</span>
+                <span className={styles['article-tag']}>| {getTagNameById(article.tag_id)}</span>
               </div>
               <div className={styles['article-excerpt']}>
                 {article.contentTEXT}
@@ -70,6 +106,7 @@ function ArticlesPage() {
           <p>沒有找到文章</p>
         )}
       </div>
+
       <div className={styles.pagination}>
         <button onClick={handlePreviousPage} disabled={currentPage === 0}>
           上一頁
@@ -84,5 +121,3 @@ function ArticlesPage() {
 }
 
 export default ArticlesPage;
-
-
