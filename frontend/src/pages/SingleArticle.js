@@ -29,6 +29,7 @@ const SingleArticle = () => {
                     // 獲取作者詳細資料
                     const authorResponse = await axios.get(`http://localhost:8080/blog/api/articles/authors/${response.data.authorId}`);
                     setAuthor(authorResponse.data);
+                    
 
                     const token = localStorage.getItem('token');
                     if (token) {
@@ -175,7 +176,7 @@ const SingleArticle = () => {
             <section className="single-article">
                 <div className="article-header">
                     <div className="article-author">
-                        <img src="http://localhost:8080/UserImages/chipichapa.gif" alt="作者頭像" />
+                        <img src={author.imagelink}width="60" height="60" alt="作者頭像" />
 
                         <div className="article-meta">
                             <p className="author">作者 : {article?.authorName}</p>
@@ -203,7 +204,7 @@ const SingleArticle = () => {
                     {comments.map(comment => (
                         <div className="comment" key={comment.id}>
                             <div className="comment-header">
-                                <img src="/Image/IMG_20240701_124913.JPG" width="40" height="40" alt="留言者頭像" className="commenter-avatar" />
+                                <img src={author.imagelink} width="40" height="40" alt="留言者頭像" className="commenter-avatar" />
                                 <p className="commenter-name">{comment.author ? comment.author.username : '匿名'}</p>
 
                                 <p className="comment-date">{new Date(comment.createdAt).toLocaleString()}</p>
