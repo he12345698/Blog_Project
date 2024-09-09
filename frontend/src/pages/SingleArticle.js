@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import '../styles/pages/SingleArticle.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { UserContext } from '../components/UserContext';
 
 const SingleArticle = () => {
     const { articleId } = useParams(); // 從 URL 中獲取 articleId
@@ -12,6 +13,8 @@ const SingleArticle = () => {
     const [likeCount, setLikeCount] = useState(0);
     const [hasLiked, setHasLiked] = useState(false); // 追蹤是否已按讚
     const [newComment, setNewComment] = useState(''); // 新增留言的 state
+    const { user } = useContext(UserContext);
+
     useEffect(() => {
         const fetchArticle = async () => {
             try {
