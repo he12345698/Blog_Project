@@ -52,7 +52,15 @@ public class ArticleVo {
     private List<CommentVo> comments;
 
     private int likes;
+    private String authorName;
     
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
+    }
     public int getLikes() {
         return likes;
     }
@@ -61,7 +69,7 @@ public class ArticleVo {
         this.likes = likes;
     }
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tag_id", nullable = false)
+    @JoinColumn(name = "tag_id", nullable = true)
     @JsonIgnore
     private TagVo tag;
 

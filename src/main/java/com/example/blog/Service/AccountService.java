@@ -20,6 +20,10 @@ public class AccountService {
     @Autowired
     private EmailService emailService;
     
+    public Optional<AccountVo> findById(Long id) {
+        return accountRepository.findById(id);
+    }
+    
     // 檢查用戶名是否已存在
     public boolean checkId(String username) {
         return accountRepository.findByUsername(username).isPresent();

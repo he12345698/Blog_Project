@@ -26,17 +26,19 @@ public class CommentVo {
     private Long id;
 
     private String content;
-    private String author;
-    
+
+    @ManyToOne
+    @JoinColumn(name = "author_id")  // 外鍵對應到 AccountVo 表中的 id
+    private AccountVo author;
+
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "article_id") // 外鍵名稱，指向 ArticleVo 表中的主鍵
-    private ArticleVo article;
+    private ArticleVo article;  // 將 Optional<ArticleVo> 改為 ArticleVo
 
-    // 新增的按讚屬性
     private int likes = 0;
 
     @ManyToMany
@@ -69,11 +71,11 @@ public class CommentVo {
         this.content = content;
     }
 
-    public String getAuthor() {
+    public AccountVo getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(AccountVo author) {
         this.author = author;
     }
 
