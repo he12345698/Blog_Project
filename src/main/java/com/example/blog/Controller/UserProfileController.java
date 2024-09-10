@@ -103,8 +103,21 @@ public class UserProfileController {
         }
     }
 
+    @GetMapping("/{identifier}")
+    public ResponseEntity<Map<String, Object>> getUserByIdentifier(@PathVariable("identifier") String identifier) {
+        try {
+            // 尝试将 identifier 转换为 Long，如果成功则按 ID 查询
+        	System.out.println("identifier is " + identifier);
+            Long id = Long.parseLong(identifier);
+            return getUserById(id);
+        } catch (NumberFormatException e) {
+            // 如果不能转换为 Long，则按用户名查询
+            return getUserByName(identifier);
+        }
+    }
+    
     // 根據用戶名稱獲取用戶資料
-    @GetMapping("/{id}")
+    //@GetMapping("/{id:[0-9]+}")  // 匹配长整型数字的路径变量
     public ResponseEntity<Map<String, Object>> getUserById(@PathVariable(value = "id") Long id) {
         System.out.println("id at userprofile is " + id);
         AccountVo accountVo = userProfileService.getUserById(id);
@@ -114,6 +127,25 @@ public class UserProfileController {
             response.put("email", accountVo.getEmail());
             response.put("createdDate", accountVo.getCreatedDate());
             response.put("lastLoginDate", accountVo.getLastLoginDate());
+            response.put("imagelink", accountVo.getImagelink());
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    //@GetMapping("/{username:[a-zA-Z0-9._-]+}")  // 匹配字符串的路径变量
+    public ResponseEntity<Map<String, Object>> getUserByName(@PathVariable(value = "username") String username) {
+        AccountVo accountVo = userProfileService.getUserByUsername(username);
+        System.out.println("user at UPC is " + accountVo);
+        if (accountVo != null) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("username", accountVo.getUsername());
+            response.put("id", accountVo.getId());
+            response.put("email", accountVo.getEmail());
+            response.put("createdDate", accountVo.getCreatedDate());
+            response.put("lastLoginDate", accountVo.getLastLoginDate());
+            response.put("imagelink", accountVo.getImagelink());
             return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

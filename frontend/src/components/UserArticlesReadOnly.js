@@ -13,6 +13,7 @@ const UserArticlesReadOnly = ({ authorId }) => {
 
     // 獲取文章資料
     useEffect(() => {
+        console.log('authord id is ', authorId)
         const initialize = async () => {
             try {
                 const userArticles = await articleService.getUserArticleByAuthorId(authorId);

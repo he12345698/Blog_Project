@@ -34,6 +34,10 @@ public class UserProfileService {
     public AccountVo getUserById(Long id) {
         return userProfileRepository.findById(id).orElse(null);
     }
+    
+    public AccountVo getUserByUsername(String username) {
+    	return userProfileRepository.findByUsername(username);
+	}
 
     // 更新用戶名
     public boolean updateUsername(Long id, String newUsername) {
