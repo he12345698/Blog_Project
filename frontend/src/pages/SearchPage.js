@@ -86,7 +86,7 @@ function SearchPage() {
             <div key={result.article_id} className={styles['result-item']}>
               <div className={styles['result-content']}>
                 <a href={`/singleArticle/${result.article_id}`} className={styles['result-title']}>{result.title}</a>
-                <span className={styles['result-author']}>| 作者: {result.username || '未知作者'}</span>
+                <a href={`/UserData/${result.author_id}`} className={styles['result-author']}>| 作者: {result.username || '未知作者'}</a>
                 <span className={styles['result-updated']}>| 更新時間: {result.last_edited_at}</span>
                 <span className={styles['result-tag']}>| {getTagNameById(result.tag_id)}</span>
               </div>
