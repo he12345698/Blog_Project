@@ -27,7 +27,7 @@ const UserAvatarReadOnly = ({ id }) => {
             .then(data => {
                 // console.log("得到的數據", data)
                 setUserData(data);
-
+                console.log('userData.imagelink is ', data);
                 setLoading(false);
             })
             .catch(error => {

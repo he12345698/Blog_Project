@@ -80,7 +80,6 @@ public class UserProfileController {
     // 更新電子郵件
     @PutMapping("update-email/{id}")
     public ResponseEntity<String> updateEmail(@PathVariable Long id, @RequestBody Map<String, String> requestBody) {
-        System.out.println(id);
         String newEmail = requestBody.get("email");
         boolean update = userProfileService.updateEmail(id, newEmail);
         if (update) {
@@ -93,7 +92,6 @@ public class UserProfileController {
     // 更新密碼
     @PutMapping("update-password/{id}")
     public ResponseEntity<String> updatePassword(@PathVariable Long id, @RequestBody Map<String, String> requestBody) {
-        System.out.println(id);
         String newPassword = requestBody.get("newPassword");
         boolean update = userProfileService.updatePassword(id, newPassword);
         if (update) {
@@ -103,10 +101,21 @@ public class UserProfileController {
         }
     }
 
-    // 根據用戶名稱獲取用戶資料
-    @GetMapping("/{id}")
+    @GetMapping("/{identifier}")
+    public ResponseEntity<Map<String, Object>> getUserByIdentifier(@PathVariable("identifier") String identifier) {
+        try {
+            // 嘗試將 identifier 轉換為 Long，如果成功則按 ID 查詢
+            Long id = Long.parseLong(identifier);
+            return getUserById(id);
+        } catch (NumberFormatException e) {
+            // 如果不能轉換為 Long，則按用戶名查詢
+            return getUserByName(identifier);
+        }
+    }
+    
+    // 根據用戶名稱獲取用戶資料				
+    //@GetMapping("/{id:[0-9]+}")  // 匹配長整型數字的路徑變量
     public ResponseEntity<Map<String, Object>> getUserById(@PathVariable(value = "id") Long id) {
-        System.out.println("id at userprofile is " + id);
         AccountVo accountVo = userProfileService.getUserById(id);
         if (accountVo != null) {
             Map<String, Object> response = new HashMap<>();
@@ -114,6 +123,24 @@ public class UserProfileController {
             response.put("email", accountVo.getEmail());
             response.put("createdDate", accountVo.getCreatedDate());
             response.put("lastLoginDate", accountVo.getLastLoginDate());
+            response.put("imagelink", accountVo.getImagelink());
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    //@GetMapping("/{username:[a-zA-Z0-9._-]+}")  // 匹配字符串的路徑變量
+    public ResponseEntity<Map<String, Object>> getUserByName(@PathVariable(value = "username") String username) {
+        AccountVo accountVo = userProfileService.getUserByUsername(username);
+        if (accountVo != null) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("username", accountVo.getUsername());
+            response.put("id", accountVo.getId());
+            response.put("email", accountVo.getEmail());
+            response.put("createdDate", accountVo.getCreatedDate());
+            response.put("lastLoginDate", accountVo.getLastLoginDate());
+            response.put("imagelink", accountVo.getImagelink());
             return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

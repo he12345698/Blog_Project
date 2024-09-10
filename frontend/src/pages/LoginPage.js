@@ -12,7 +12,10 @@ const LoginPage = () => {
   const [animationKey, setAnimationKey] = useState(Date.now());
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+  const [rePassword, setRePassword] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [countdown, setCountdown] = useState(3); // 倒數計時初始值（秒）
+  const [email, setEmail] = useState('');
 
   // 加載驗證碼圖片
   const loadCaptcha = async () => {
@@ -46,45 +49,10 @@ const LoginPage = () => {
     // 初始化載入 CAPTCHA 圖片
     loadCaptcha();
 
-    const handleMouseMove = (e) => {
-      setCursorPosition({ x: e.pageX, y: e.pageY });
-    }
-    document.addEventListener('mousemove', handleMouseMove);
-
-    const initialUsername = searchParams.get('username');
-    const initialPassword = searchParams.get('password');
-
-    if (initialUsername && initialPassword) {
-      fetch('http://localhost:8080/blog/ac/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: initialUsername,
-          password: initialPassword,
-          //captcha: captcha,
-        }),
-        //credentials: 'include',
-      })
-        .then(response => {
-          if (response.ok) {
-            return response.json();
-          }
-          throw new Error('Login failed');
-        })
-        .then(data => {
-          localStorage.setItem('token', data.token);
-          navigate('/');
-        })
-        .catch(error => {
-          setErrorMessage(error.message || '登入失敗，請重試。');
-        });
-    }
   }, [searchParams, navigate]);
 
   // 用於處理登入邏輯
-  const handleSubmit = async (e) => {
+  const handleLoginSubmit = async (e) => {
     e.preventDefault();
     setAnimationKey(Date.now());
     try {
@@ -120,6 +88,96 @@ const LoginPage = () => {
       // 伺服器錯誤時刷新驗證碼
       loadCaptcha();
     };
+  };
+/*  註冊  */ 
+  const handlePasswordChange = (e) => {
+    const newPassword = e.target.value;
+    setPassword(newPassword);
+    checkPasswordLength(newPassword);
+    // 這裡不直接檢查相同性，因為可能還沒輸入確認密碼
+  };
+
+  // const handleRePasswordChange = (e) => {
+  //   const newRePassword = e.target.value;
+  //   setRePassword(newRePassword);
+  //   checkPasswordsMatch(password, newRePassword);
+  // };
+
+  const checkPasswordLength = (password) => {
+    setTimeout(() => {
+      if (password.length < 8) {
+        setErrorMessage('密碼至少需8位數');
+      } else {
+        // 如果長度檢查通過，可以清除錯誤訊息
+        setErrorMessage((prev) => (prev === '密碼至少需8位數' ? '' : prev));
+      }
+    }, 750); // 設定 1 秒的延遲
+  };
+
+  const checkPasswordsMatch = (password, rePassword) => {
+    setTimeout(() => {
+      if (password !== rePassword) {
+        setErrorMessage('密碼不相同');
+      } else {
+        setErrorMessage((prev) => (prev === '密碼不相同' ? '' : prev));
+      }
+    }, 750);
+  };
+
+const handleSubmit = async (event) => {
+  event.preventDefault();
+  setAnimationKey(Date.now());
+  const missingFields = [];
+  if (!username) missingFields.push('用戶名');
+  if (!email) missingFields.push('電子郵件');
+  if (!password) missingFields.push('密碼');
+  //if (!rePassword) missingFields.push('確認密碼');
+  // 如果有任何字段沒填寫，顯示錯誤訊息
+  if (missingFields.length > 0) {
+    setErrorMessage(`請填寫：${missingFields.join('、')}`);
+    return;
+  }
+  
+  const userData = {
+    username,
+    email,
+    password,
+  };
+  try {
+    // const response = await fetch('http://niceblog.myvnc.com:8080/blog/ac/register', {
+    const response = await fetch('http://localhost:8080/blog/ac/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userData),
+    });
+    if (response.ok) {
+      const message = await response.text(); 
+      console.log(message);
+      setSuccessMessage(message);
+      setErrorMessage('');
+
+      const timer = setInterval(() => {
+        setCountdown((prevCountdown) => {
+          if (prevCountdown <= 1) {
+            clearInterval(timer);
+            window.location.href = `/login?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
+          }
+          return prevCountdown - 1;
+        });
+      }, 1000);
+
+    } else {
+      const errorMessage = await response.text();
+      setSuccessMessage('');
+      setErrorMessage(errorMessage || '註冊失敗，請重試。');
+    }
+  } catch (error) {
+      console.error('Error:', error);
+      setSuccessMessage('');
+      setErrorMessage('註冊失敗，請重試。');
+    }
   };
 
   return (
@@ -164,14 +222,7 @@ const LoginPage = () => {
                             onChange={(e) => setCaptcha(e.target.value)} />
                           <i class="input-icon uil uil-picture"></i>
                         </div>
-                        <div className="error-placeholder">
-                          {errorMessage && (
-                            <p key={animationKey} className="error-message shake" style={{ whiteSpace: 'pre-line' }}>
-                              {errorMessage}
-                            </p>
-                          )}
-                        </div>
-                        <button href="#" class="btn mt-3" onClick={handleSubmit}>登入</button>
+                        <button class="btn mt-3" onClick={handleLoginSubmit}>登入</button>
                         <p class="mb-0 mt-4 text-center"><a href="/forgot-password" class="link">Forgot your password?</a></p>
                       </div>
                     </div>
@@ -181,18 +232,25 @@ const LoginPage = () => {
                       <div class="section text-center">
                         <h4 class="mb-4 pb-3">Sign Up</h4>
                         <div class="form-group">
-                          <input type="text" name="logname" class="form-style" placeholder="Your Full Name" id="logname" autocomplete="off" />
+                          <input type="text" name="logname" class="form-style" placeholder="Your Full Name" id="logname" autocomplete="off" onChange={(e) => setUsername(e.target.value)} />
                           <i class="input-icon uil uil-user"></i>
                         </div>
                         <div class="form-group mt-2">
-                          <input type="email" name="logemail" class="form-style" placeholder="Your Email" id="logemail" autocomplete="off" />
+                          <input type="email" name="logemail" class="form-style" placeholder="Your Email" id="logemail" autocomplete="off" onChange={(e) => setEmail(e.target.value)}/>
                           <i class="input-icon uil uil-at"></i>
                         </div>
                         <div class="form-group mt-2">
-                          <input type="password" name="logpass" class="form-style" placeholder="Your Password" id="logpass" autocomplete="off" />
+                          <input type="password" name="logpass" class="form-style" placeholder="Your Password" id="logpass" autocomplete="off" onChange={handlePasswordChange}/>
                           <i class="input-icon uil uil-lock-alt"></i>
                         </div>
-                        <a href="#" class="btn mt-4" >submit</a>
+                        <div className="error-placeholder">
+                          {errorMessage && (
+                            <p key={animationKey} className="error-message shake" style={{ whiteSpace: 'pre-line' }}>
+                              {errorMessage}
+                            </p>
+                          )}
+                        </div>
+                        <a href="#" class="btn mt-4" onClick={handleSubmit}>submit</a>
                       </div>
                     </div>
                   </div>

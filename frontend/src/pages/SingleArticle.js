@@ -20,6 +20,10 @@ const SingleArticle = () => {
     const [editedCommentText, setEditedCommentText] = useState('');  // 編輯後的留言內容
 
 
+    const handleBack = () => {
+        window.history.back(); // 返回到上一个页面
+    };
+
     useEffect(() => {
 
         const fetchArticle = async () => {
@@ -55,14 +59,14 @@ const SingleArticle = () => {
                 const fetchedComments = response.data;
 
                 console.log('fetchedComments is ', fetchedComments)
-                console.log('fetchedComments.likes is ', fetchedComments[0].likes)
+                console.log('fetchedComments.0 is ', fetchedComments[0].author.imagelink)
+                console.log('comments imagelink is ', fetchedComments[0].author.imagelink)
+                console.log('fetchedComments whit id is ', fetchedComments[fetchedComments.id])
 
                 // 使用 token 檢查當前使用者對每條留言是否按讚
                 const token = localStorage.getItem('token');
-
                 if (token) {
                     const updatedComments = await Promise.all(fetchedComments.map(async (comment) => {
-                        console.log('comment.id', comment)
                         const likeResponse = await axios.get(`http://localhost:8080/blog/api/comments/${comment.id}/isLiked`, {
                             headers: {
                                 'Authorization': 'Bearer ' + token
@@ -163,7 +167,6 @@ const SingleArticle = () => {
             const response = await axios.post(`http://localhost:8080/blog/api/comments?articleId=${articleId}`, commentData, {
                 headers: { 'Authorization': 'Bearer ' + token }
             });
-
             setComments([...comments, { ...response.data, hasLiked: false }]);
             setNewComment('');
         } catch (error) {
@@ -207,7 +210,7 @@ const SingleArticle = () => {
             <section className="single-article">
                 <div className="article-header">
                     <div className="article-author">
-                        <img src={author.imagelink}width="60" height="60" alt="作者頭像" />
+                        <img src={author.imagelink} width="60" height="60" alt="作者頭像" />
 
                         <div className="article-meta">
                             <p className="author">作者 : {article?.authorName}</p>
@@ -224,7 +227,7 @@ const SingleArticle = () => {
                         {hasLiked ? '收回讚' : '按讚'} (<span className="like-count">{likeCount}</span>)
                     </button>
                 </div>
-                <button className="back-to-list-btn" onClick={() => window.location.href = '/all-articles'}>
+                <button className="back-to-list-btn" onClick={handleBack}>
                     返回文章列表
                 </button>
             </section>
@@ -236,7 +239,7 @@ const SingleArticle = () => {
                         <div className="comment" key={comment.id}>
                             <div className="comment-header">
                                 <img src={comment.author.imagelink} width="40" height="40" alt="留言者頭像" className="commenter-avatar" />
-                                <p className="commenter-name">{comment.author ? comment.author.username : '匿名'}</p>
+                                <a className="commenter-name" href={`http://localhost:81/UserData/${comment.author.id}`}>{comment.author ? comment.author.username : '匿名'}</a>
                                 <p className="comment-date">{new Date(comment.createdAt).toLocaleString()}</p>
                             </div>
                             {editingComment === comment.id ? (
