@@ -110,6 +110,8 @@ public class UserProfileController {
         AccountVo accountVo = userProfileService.getUserById(id);
         if (accountVo != null) {
             Map<String, Object> response = new HashMap<>();
+            response.put("username", accountVo.getUsername());
+            response.put("email", accountVo.getEmail());
             response.put("createdDate", accountVo.getCreatedDate());
             response.put("lastLoginDate", accountVo.getLastLoginDate());
             return ResponseEntity.ok(response);

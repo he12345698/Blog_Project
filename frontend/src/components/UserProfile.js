@@ -135,7 +135,7 @@ const UserProfile = ({ userId }) => {
             {error && <p className="text-danger">{error}</p>}
 
             <div className="col-12 mb-1">
-                <label htmlFor="username" className="form-label fw-bold">用戶名：</label>
+                <label htmlFor="username" className={`form-label fw-bold ${styles.label}`}>用戶名：</label>
                 <div className="d-flex">
                     <input
                         type="text"
@@ -149,7 +149,7 @@ const UserProfile = ({ userId }) => {
                     {editing.username ? (
                         <button
                             type="button"
-                            className="btn btn-dark ms-2 fw-bold"
+                            className="btn btn-dark ms-2"
                             onClick={() => handleSave('username')}
                         >
                             儲存
@@ -157,7 +157,7 @@ const UserProfile = ({ userId }) => {
                     ) : (
                         <button
                             type="button"
-                            className="btn btn-dark ms-2 fw-bold"
+                            className="btn btn-dark ms-2"
                             onClick={() => toggleEdit('username')}
                         >
                             編輯
@@ -167,7 +167,7 @@ const UserProfile = ({ userId }) => {
             </div>
 
             <div className="col-12 mb-3">
-                <label htmlFor="email" className="form-label fw-bold">電子郵件：</label>
+                <label htmlFor="email" className={`form-label fw-bold ${styles.label}`}>電子郵件：</label>
                 <div className="d-flex">
                     <input
                         type="email"
@@ -199,7 +199,7 @@ const UserProfile = ({ userId }) => {
             </div>
 
             <div className="col-12 mb-3">
-                <label htmlFor="password" className="form-label fw-bold">密碼：</label>
+                <label htmlFor="password" className={`form-label fw-bold ${styles.label}`}>密碼：</label>
                 <div className="d-flex">
                     <input
                         type="password"
@@ -211,7 +211,7 @@ const UserProfile = ({ userId }) => {
                     />
                     <button
                         type="button"
-                        className={`btn btn-dark p-1 fw-bold w-30`}
+                        className={`btn btn-dark p-1 fw-bold w-30 ${styles.profile_button}`}
                         onClick={handleClick}
                     >
                         更改密碼
@@ -220,13 +220,13 @@ const UserProfile = ({ userId }) => {
             </div>
 
             <div className="col-12 mb-3">
-                <label htmlFor="registrationDate" className="form-label fw-bold">用戶註冊日期：</label>
-                <p className='fw-bold'>{formattedDate1}</p>
+                <label htmlFor="registrationDate" className={`form-label fw-bold ${styles.label}`}>用戶註冊日期：</label>
+                <p className={`fw-bold ${styles.time}`}>{formattedDate1}</p>
             </div>
 
             <div className="col-12">
-                <label htmlFor="lastLogin" className="form-label fw-bold">最後上線時間：</label>
-                <p className='fw-bold'>{formattedDate2}</p>
+                <label htmlFor="lastLogin" className={`form-label fw-bold ${styles.label}`}>最後上線時間：</label>
+                <p className={`fw-bold ${styles.time}`}>{formattedDate2}</p>
             </div>
         </div>
     );

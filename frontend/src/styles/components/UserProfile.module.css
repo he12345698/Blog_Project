@@ -1,17 +1,15 @@
 .profile_button {
     font-weight: bold;
     font-size: 15px;
-    width: 15%;
-    height: 2em;
-    background-color: #333;
-    color: #fff;
+    width: 20%;
+    height: 50px;
     border: none;
     padding: 5px;
     border-radius: 5px;
-    float: right;
+    margin-left: 10px;
 }
 
-.userProfie_label {
+.userProfile_label {
     font-weight: bold;
     margin: 10px 0px 10px 0px;
 }
@@ -23,9 +21,21 @@
     float: left;
 }
 
+.label {
+    color: black;
+    font-size: large;
+    margin-left: 10px;
+}
+
+.time {
+    color: black;
+    font-size: large;
+    margin-left: 10px;
+}
 
 .error{
     font-weight: bold;
+    color: black;
 }
 
 .userProfile_p{
@@ -39,8 +49,4 @@
 
 .profile {
     display: flex;
-}
-
-.button {
-    size: 30px;
 }
