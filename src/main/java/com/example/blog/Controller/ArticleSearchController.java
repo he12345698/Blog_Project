@@ -31,4 +31,11 @@ public class ArticleSearchController {
                                                   @RequestParam(defaultValue = "10") int size) {
         return service.searchArticles(keyword, page, size);
     }
+    // 根據標籤 ID 查詢文章，支持分頁
+    @GetMapping("/articlesByTag")
+    public Page<ArticleSearchView> getArticlesByTag(@RequestParam Long tagId,
+                                                    @RequestParam(defaultValue = "0") int page,
+                                                    @RequestParam(defaultValue = "10") int size) {
+        return service.findByTagId(tagId, page, size);
+    }
 }

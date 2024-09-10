@@ -18,4 +18,9 @@ public interface ArticleSearchViewRepository extends JpaRepository<ArticleSearch
     List<ArticleSearchView> searchArticles(@Param("keyword") String keyword);
 
     Page<ArticleSearchView> findByTitleContainingIgnoreCaseOrUsernameContainingIgnoreCase(String titleKeyword, String usernameKeyword, Pageable pageable);
+
+
+    // 添加根據標籤 ID 查詢的方法
+    @Query("SELECT a FROM ArticleSearchView a WHERE a.tag_id = :tagId")
+    Page<ArticleSearchView> findByTagId(@Param("tagId") Long tagId, Pageable pageable);
 }

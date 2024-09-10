@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.hibernate.annotations.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +24,7 @@ import com.example.blog.JwtUtil;
 import com.example.blog.Model.AccountVo;
 import com.example.blog.Model.ArticleVo;
 import com.example.blog.Model.CommentVo;
+import com.example.blog.Repository.CommentRepository;
 import com.example.blog.Service.AccountService;
 import com.example.blog.Service.ArticleService;
 import com.example.blog.Service.CommentService;
@@ -41,11 +44,14 @@ public class CommentController {
     @Autowired
     private ArticleService articleService;
 
+    @Autowired
+    private CommentRepository commentRepository;
+
     // 創建新留言
     @PostMapping
     public ResponseEntity<CommentVo> createComment(
-            @RequestParam Long articleId,  // 從請求參數中取得 articleId
-            @RequestBody CommentVo commentVo, 
+            @RequestParam Long articleId, // 從請求參數中取得 articleId
+            @RequestBody CommentVo commentVo,
             HttpServletRequest request) {
         // 從 header 中提取 token 並驗證
         String authorizationHeader = request.getHeader("Authorization");
@@ -55,15 +61,15 @@ public class CommentController {
 
         String token = authorizationHeader.substring(7); // 移除 Bearer 前綴
         Long userId = JwtUtil.extractId(token);
-        
+
         // 驗證使用者存在
         AccountVo author = accountService.findById(userId)
                 .orElseThrow(() -> new RuntimeException("使用者不存在"));
 
         // 設置作者和文章
         commentVo.setAuthor(author);
-        Optional<ArticleVo> article = articleService.findById(articleId); 
-        article.ifPresent(commentVo::setArticle);  // 只有在文章存在時才設置
+        Optional<ArticleVo> article = articleService.findById(articleId);
+        article.ifPresent(commentVo::setArticle); // 只有在文章存在時才設置
 
         commentVo.setCreatedAt(LocalDateTime.now());
 
@@ -150,4 +156,23 @@ public class CommentController {
 
         return ResponseEntity.ok(response);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CommentVo> updateComment(@PathVariable Long id, @RequestBody CommentVo commentData) {
+        Optional<CommentVo> commentOptional = commentRepository.findById(id);
+        if (commentOptional.isPresent()) {
+            CommentVo comment = commentOptional.get();
+            System.out.println("\n\n\n\n\nisPresent");
+            // 檢查當前用戶是否是留言的作者
+            System.out.println(comment.getAuthor().isPresent());
+
+            System.out.println("\n\n\n\n\nhaveAuthor");
+            comment.setContent(commentData.getContent());
+            commentRepository.save(comment);
+            return ResponseEntity.ok(comment);
+        } else {
+            return ResponseEntity.notFound().build(); // 如果找不到留言，返回 404
+        }
+    }
+
 }
