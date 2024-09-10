@@ -16,7 +16,11 @@ function SearchBar({ value }) {
   const handleSearch = (e) => {
     e.preventDefault(); // 阻止頁面重新載入
     if (query.trim()) {
-      navigate(`/searchPage?query=${encodeURIComponent(query)}`); // 導航到搜尋結果頁面
+      navigate(`/searchPage?query=${encodeURIComponent(query.trim())}`); // 導航到搜尋結果頁面
+    } else {
+      console.error('搜尋條件不可為空');
+      // 可以在這裡顯示一個錯誤消息給用戶
+      alert('請輸入搜尋條件');
     }
   };
 
