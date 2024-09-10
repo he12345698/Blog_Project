@@ -50,7 +50,7 @@ const UserArticles = ({ authorId }) => {
                     <li className="list-group-item mb-3 p-3 border rounded shadow-sm" key={index}>
                         <div className="d-flex flex-column">
                             <h4 className="mb-2">
-                                <a href={`/singleArticle/${article.articleId}`} className="text-decoration-none text-dark fw-bold">
+                                <a href={`/singleArticle/${article.articleId}`} className={`text-decoration-none fw-bold ${styles.title}`}>
                                     {article.title}
                                 </a>
                             </h4>

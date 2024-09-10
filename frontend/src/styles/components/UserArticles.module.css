@@ -7,3 +7,11 @@
     text-overflow: ellipsis;
     /* 省略號 */
 }
+
+.title {
+    color: black;
+}
+
+.title:hover {
+    color: rgb(4, 128, 230);
+}
