@@ -16,11 +16,11 @@ const SingleArticle = () => {
     const { user } = useContext(UserContext); // 取得 setUser 方法
     const id = user?.id;
     const [author, setAuthor] = useState(null); // 儲存作者資訊
+    const [commentImage, setCommentImage] = useState(null); // 儲存作者資訊
 
     useEffect(() => {
         
         const fetchArticle = async () => {
-            if (id) {
                 try {
                     const response = await axios.get(`http://localhost:8080/blog/api/articles/${articleId}`);
                     setArticle(response.data);
@@ -43,7 +43,6 @@ const SingleArticle = () => {
                 } catch (error) {
                     console.error("獲取文章或作者資料失敗", error);
                 }
-            }
         };
 
         const fetchComments = async () => {
@@ -52,14 +51,15 @@ const SingleArticle = () => {
                 const fetchedComments = response.data;
 
                 console.log('fetchedComments is ', fetchedComments)
-                console.log('fetchedComments.likes is ', fetchedComments[0].likes)
+                console.log('fetchedComments.0 is ', fetchedComments[0].author.imagelink)
+                console.log('comments imagelink is ', fetchedComments[0].author.imagelink)
+                console.log('fetchedComments whit id is ', fetchedComments[fetchedComments.id])
+                setCommentImage(fetchedComments[3].author.imagelink);
 
                 // 使用 token 檢查當前使用者對每條留言是否按讚
                 const token = localStorage.getItem('token');
-
                 if (token) {
                     const updatedComments = await Promise.all(fetchedComments.map(async (comment) => {
-                        console.log('comment.id', comment)
                         const likeResponse = await axios.get(`http://localhost:8080/blog/api/comments/${comment.id}/isLiked`, {
                             headers: {
                                 'Authorization': 'Bearer ' + token
@@ -160,7 +160,6 @@ const SingleArticle = () => {
             const response = await axios.post(`http://localhost:8080/blog/api/comments?articleId=${articleId}`, commentData, {
                 headers: { 'Authorization': 'Bearer ' + token }
             });
-    
             setComments([...comments, { ...response.data, hasLiked: false }]);
             setNewComment('');
         } catch (error) {
@@ -192,7 +191,7 @@ const SingleArticle = () => {
                         {hasLiked ? '收回讚' : '按讚'} (<span className="like-count">{likeCount}</span>)
                     </button>
                 </div>
-                <button className="back-to-list-btn" onClick={() => window.location.href = '/all-articles'}>
+                <button className="back-to-list-btn" onClick={() => window.location.href = '/UserData'}>
                     返回文章列表
                 </button>
             </section>
@@ -203,9 +202,8 @@ const SingleArticle = () => {
                     {comments.map(comment => (
                         <div className="comment" key={comment.id}>
                             <div className="comment-header">
-                                <img src="/Image/IMG_20240701_124913.JPG" width="40" height="40" alt="留言者頭像" className="commenter-avatar" />
+                                <img src={comment.author.imagelink} width="40" height="40" alt="留言者頭像" className="commenter-avatar" />
                                 <p className="commenter-name">{comment.author ? comment.author.username : '匿名'}</p>
-
                                 <p className="comment-date">{new Date(comment.createdAt).toLocaleString()}</p>
                             </div>
                             <p className="comment-text">{comment.content}</p>

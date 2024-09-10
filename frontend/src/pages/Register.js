@@ -106,7 +106,6 @@ const handleSubmit = async (event) => {
 
   return (
     <div className="rswrapper">
-      <Header />
       <main className="login-register-container">
         <div className="rsform-container">
           <h2>註冊</h2>
@@ -163,7 +162,6 @@ const handleSubmit = async (event) => {
           </div>
         </div>
       </main>
-      <Footer />
     </div>
   );
 };

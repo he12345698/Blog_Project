@@ -12,7 +12,7 @@ const UserData = () => {
 
     return (
         <div className="container mt-2">
-            <h1 className="text-center mb-4">Account Name 的小窩</h1>
+            <h1 className="text-center mb-4">{user?.username} 的小窩</h1>
             <div className="card mx-auto" style={{ maxWidth: '70%' }}>
                 <div className="card-body p-1">
                     <main className="mt-4">
