@@ -10,6 +10,7 @@ public class ArticleSearchView {
 
     @Id
     private Long article_id;
+    private Long author_id;
     private String title;
     private String contentTEXT;
     private Integer tag_id; // 使用包裝類型 Integer 來處理可能為 NULL 的值
@@ -21,6 +22,12 @@ public class ArticleSearchView {
     }
     public void setArticle_id(Long article_id) {
         this.article_id = article_id;
+    }
+    public Long getAuthor_id() {
+        return author_id;
+    }
+    public void setAuthor_id(Long author_id) {
+        this.author_id = author_id;
     }
     public String getTitle() {
         return title;

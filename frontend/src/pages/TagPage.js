@@ -88,7 +88,7 @@ function TagPage() {
             <div key={article.article_id} className={styles['article-card']}>
               <div className={styles['article-content']}>
                 <a href={`/singleArticle/${article.article_id}`} className={styles['article-title']}>{article.title}</a>
-                <span className={styles['article-author']}>| 作者: {article.username || '未知作者'}</span>
+                <a href={`/UserData/${article.author_id}`} className={styles['article-author']}>| 作者: {article.username || '未知作者'}</a>
                 <span className={styles['article-updated']}>| 更新時間: {article.last_edited_at}</span>
                 <span className={styles['article-tag']}>| {getTagNameById(article.tag_id)}</span>
               </div>
