@@ -97,11 +97,11 @@ const LoginPage = () => {
     // 這裡不直接檢查相同性，因為可能還沒輸入確認密碼
   };
 
-  const handleRePasswordChange = (e) => {
-    const newRePassword = e.target.value;
-    setRePassword(newRePassword);
-    checkPasswordsMatch(password, newRePassword);
-  };
+  // const handleRePasswordChange = (e) => {
+  //   const newRePassword = e.target.value;
+  //   setRePassword(newRePassword);
+  //   checkPasswordsMatch(password, newRePassword);
+  // };
 
   const checkPasswordLength = (password) => {
     setTimeout(() => {
@@ -222,13 +222,6 @@ const handleSubmit = async (event) => {
                             onChange={(e) => setCaptcha(e.target.value)} />
                           <i class="input-icon uil uil-picture"></i>
                         </div>
-                        <div className="error-placeholder">
-                          {errorMessage && (
-                            <p key={animationKey} className="error-message shake" style={{ whiteSpace: 'pre-line' }}>
-                              {errorMessage}
-                            </p>
-                          )}
-                        </div>
                         <button class="btn mt-3" onClick={handleLoginSubmit}>登入</button>
                         <p class="mb-0 mt-4 text-center"><a href="/forgot-password" class="link">Forgot your password?</a></p>
                       </div>
@@ -249,6 +242,13 @@ const handleSubmit = async (event) => {
                         <div class="form-group mt-2">
                           <input type="password" name="logpass" class="form-style" placeholder="Your Password" id="logpass" autocomplete="off" onChange={handlePasswordChange}/>
                           <i class="input-icon uil uil-lock-alt"></i>
+                        </div>
+                        <div className="error-placeholder">
+                          {errorMessage && (
+                            <p key={animationKey} className="error-message shake" style={{ whiteSpace: 'pre-line' }}>
+                              {errorMessage}
+                            </p>
+                          )}
                         </div>
                         <a href="#" class="btn mt-4" onClick={handleSubmit}>submit</a>
                       </div>

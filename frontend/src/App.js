@@ -45,11 +45,11 @@ const App = () => {
           <Route path="/verify-email" element={<MainLayout><EmailVerificationPage /></MainLayout>} />
           <Route path="/tag/:tagId" element={<MainLayout><TagPage /></MainLayout>} />
           <Route path="/UserData/:userId" element={<MainLayout><UserDataReadOnly /></MainLayout>} />
+          <Route path="/login" element={<MainLayout><LoginPage /></MainLayout>} />
           {/* 你可以在這裡增加更多路由 */}
         </Routes>
       <Footer />
     </Router>
   );
-
-
+}
 export default App;
