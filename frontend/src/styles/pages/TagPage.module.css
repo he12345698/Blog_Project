@@ -1,5 +1,5 @@
 /* 頁面整體樣式 */
-.articles_page {
+.tag_page {
   padding: 20px;
   background-color: #f4f4f9; /* 背景顏色 */
   display: flex;
@@ -9,26 +9,18 @@
   min-height: 100vh; /* 使頁面高度至少為視口高度 */
 }
 
-/* 搜尋欄樣式 */
-.search_bar {
-  margin-bottom: 20px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
 /* 標籤列表區域 */
-.tag-list {
+.tag_list {
   margin-bottom: 20px;
   display: flex;
   flex-wrap: wrap;
   gap: 10px; /* 標籤之間的間距 */
 }
 
-/* 標籤項目樣式 */
-.tag-item {
-  background-color: #ffffff; /* 項目背景顏色 */
-  border: 1px solid #ddd; /* 項目邊框 */
+/* 標籤按鈕樣式 */
+.tag_button {
+  background-color: #ffffff; /* 按鈕背景顏色 */
+  border: 1px solid #ddd; /* 按鈕邊框 */
   padding: 10px 20px;
   border-radius: 5px; /* 圓角效果 */
   color: #333; /* 文字顏色 */
@@ -36,7 +28,7 @@
   transition: background-color 0.3s, border-color 0.3s;
 }
 
-.tag-item:hover {
+.tag_button:hover {
   background-color: #f0f0f0; /* 懸停時背景顏色 */
   border-color: #ccc; /* 懸停時邊框顏色 */
 }
