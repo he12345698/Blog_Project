@@ -28,7 +28,7 @@ const UserAvatar = ({ id }) => {
             .then(data => {
                 // console.log("得到的數據", data)
                 setUserData(data);
-
+                setError("");
                 setLoading(false);
             })
             .catch(error => {

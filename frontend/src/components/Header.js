@@ -117,18 +117,18 @@ const Header = () => {
   return (
     <header className={styles["top-bar"]}>
       <div className={styles["top-container"]}>
-        <div className={styles.logo}>xxx部落格</div>
+        <div className={styles.logo}>NICE BLOG</div>
         <nav className={styles.navigation}>
-          <Link to="/articlesPage">所有文章</Link>
-          <Link to="/edit-article">編輯文章</Link>
-          <Link to="/publish-article">發表文章</Link>
-          <Link to="/about">關於我們</Link>
-          <Link to="/UserData">帳戶管理</Link>
-          <Link to="/">首頁</Link>
+          <Link to="/edit-article" className={styles.navigation}>編輯文章</Link>
+          <Link to="/publish-article" className={styles.navigation}>發表文章</Link>
+          <Link to="/about" className={styles.navigation}>關於我們</Link>
+          <Link to="/UserData" className={styles.navigation}>帳戶管理</Link>
+          <Link to="/" className={styles.navigation}>首頁</Link>
         </nav>
         <div className={styles["user-login-container"]}>
           {user?.username ? (
             <div className={styles["user-info"]}>
+              <a href="/UserData">
               <img
                 src={user?.userImage}
                 width="50"
@@ -136,6 +136,7 @@ const Header = () => {
                 alt="User Avatar"
                 className={styles["user-avatar"]}
               />
+              </a>
               <span className={styles.username}>
                 使用者：<span className={styles["username-text"]}>{user?.username}</span>
               </span>
