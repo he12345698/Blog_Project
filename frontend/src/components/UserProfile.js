@@ -66,6 +66,7 @@ const UserProfile = ({ userId }) => {
             .then(data => {
                 setUserData(data);
                 setLoading(false);
+                setError('');
             })
             .catch(error => {
                 console.error("獲取用戶資料失敗", error);

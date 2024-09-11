@@ -31,12 +31,11 @@ const App = () => {
       <Header />
       <Routes>
         <Route path='/ChangePassword' element={<MainLayout><ChangePassword /></MainLayout>} />
-        <Route path="/" element={<MainLayout><Index /></MainLayout>} />
         <Route path="/register" element={<MainLayout><Register /></MainLayout>} />
         <Route path="/test1" element={<MainLayout><Test1 /></MainLayout>} />
         <Route path="/forgot-password" element={<MainLayout><ForgotPasswordPage /></MainLayout>} />
         <Route path="/reset-password" element={<MainLayout><ResetPasswordPage /></MainLayout>} />
-        <Route path="/articlesPage" element={<MainLayout><ArticlesPage /></MainLayout>} />
+        <Route path="/" element={<MainLayout><ArticlesPage /></MainLayout>} />
         <Route path="/searchPage" element={<MainLayout><SearchPage /></MainLayout>} />
         <Route path="/singleArticle/:articleId" element={<MainLayout><SingleArticle /></MainLayout>} />
         <Route path='/publish-article' element={<MainLayout><ArticleEditor /></MainLayout>} />
