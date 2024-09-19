@@ -1,0 +1,288 @@
+.bell-icon {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    background: #666464;
+    border-radius: 50%;
+    display: flex;
+
+    svg {
+        margin: auto;
+        position: relative;
+        right: 2%;
+        width: 80%;
+        height: 80%;
+        stroke: rgba(0, 0, 0, 0.75);
+    }
+
+    .bell-icon__group {
+        transform-origin: 50% 2px;
+        transform: rotate(-8deg);
+        animation-fill-mode: both;
+        animation-iteration-count: 1;
+        animation-timing-function: ease-in-out;
+    }
+
+    .bell-icon__ball {
+        transform-origin: 50% 2px;
+        transform: translateX(-6.5%);
+        animation-fill-mode: both;
+        animation-iteration-count: 1;
+        animation-timing-function: ease-in-out;
+    }
+
+    &:focus,
+    &:hover {
+        outline: none;
+        box-shadow: 0 0 12px -8px rgba(0, 0, 0, 0.6);
+    }
+
+    &.animate {
+        .bell-icon__group {
+            animation: animateGroup 2.3s;
+        }
+
+        .bell-icon__ball {
+            animation: animateBall 2.3s;
+        }
+
+        .notification-amount {
+            opacity: 1;
+            visibility: visible;
+
+            &::before {
+                animation-name: bounce;
+                animation-delay: 450ms;
+                animation-fill-mode: forwards;
+            }
+        }
+    }
+}
+
+.notification-amount {
+    position: absolute;
+    top: 4%;
+    right: -22%;
+    width: 25px;
+    height: 25px;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Copse", serif;
+    font-size: 14px;
+    background-color: #f72918;
+    /* 这是默认的背景颜色 */
+    opacity: 1;
+    /* 确保动画结束后保持可见 */
+    visibility: visible;
+
+    span {
+        position: relative;
+        z-index: 1;
+        /* 确保数字在最上层 */
+    }
+
+    &::before {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: #f72918;
+        border-radius: 50%;
+        z-index: 0;
+        transform: scale(0);
+        /* 初始缩放 */
+        animation-duration: 800ms;
+        animation-fill-mode: both;
+        animation-name: bounce;
+        /* 绑定动画 */
+    }
+
+    /* 当收到新通知时触发动画 */
+    &.animate {
+        &::before {
+            animation-name: bounce;
+        }
+    }
+}
+
+$frameLength: 0.8771;
+
+@keyframes animateGroup {
+
+    0%,
+    100% {
+        transform: rotate(-8deg);
+    }
+
+    #{$frameLength * 20%} {
+        transform: rotate(0deg);
+    }
+
+    #{$frameLength * 40%} {
+        transform: rotate(-20deg);
+    }
+
+    #{$frameLength * 55%} {
+        transform: rotate(20deg);
+    }
+
+    #{$frameLength * 65%} {
+        transform: rotate(-20deg);
+    }
+
+    #{$frameLength * 74%} {
+        transform: rotate(8deg);
+    }
+
+    #{$frameLength * 85%} {
+        transform: rotate(-15deg);
+    }
+
+    #{$frameLength * 90%} {
+        transform: rotate(-7deg);
+    }
+}
+
+@keyframes animateBall {
+
+    0%,
+    100% {
+        transform: translateX(-6.5%);
+    }
+
+    #{$frameLength * 20%} {
+        transform: translateX(0%);
+    }
+
+    #{$frameLength * 25%} {
+        transform: translateX(-1%);
+    }
+
+    #{$frameLength * 40%} {
+        transform: translateX(11%);
+    }
+
+    #{$frameLength * 55%} {
+        transform: translateX(-11%);
+    }
+
+    #{$frameLength * 60%} {
+        transform: translateX(0%);
+    }
+
+    #{$frameLength * 68%} {
+        transform: translateX(10%);
+    }
+
+    #{$frameLength * 78%} {
+        transform: translateX(-11%);
+    }
+
+    #{$frameLength * 90%} {
+        transform: translateX(11%);
+    }
+
+    #{$frameLength * 98%} {
+        transform: translateX(-11%);
+    }
+}
+
+@keyframes bounce {
+    0% {
+        transform: scale(0);
+        /* 开始时背景缩小 */
+    }
+
+    14% {
+        transform: scale(1.15);
+        /* 放大 */
+    }
+
+    28% {
+        transform: scale(1);
+        /* 回到正常 */
+    }
+
+    42% {
+        transform: scale(1.15);
+        /* 再次放大 */
+    }
+
+    70% {
+        transform: scale(1);
+        /* 回到正常 */
+    }
+
+    100% {
+        transform: scale(1);
+        /* 结束时保持正常大小 */
+    }
+}
+
+.notifications-menu {
+    margin-right: 1%;
+    position: absolute;
+    top: 108%;
+    /* Position the menu below the bell icon */
+    right: 0;
+    background: #504c4c;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 250px;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    visibility: hidden;
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+
+    &.open {
+        margin-right: 1%;
+        opacity: 1;
+        visibility: visible;
+        transform: scaleY(1);
+    }
+}
+
+.notification-item {
+    padding: 10px;
+    font-size: 14px;
+    background-color: #fff;
+    color: #333;
+    /* 确保文本颜色与背景对比鲜明 */
+    border-bottom: 1px solid #ddd;
+
+    &:last-child {
+        border-bottom: none;
+    }
+}
+
+.header {
+    margin-right: -18.5%;
+    position: relative;
+}
+/* 针对 WebKit 浏览器的滚动条样式 */
+.notifications-menu::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .notifications-menu::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  .notifications-menu::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+  }
+  
+  .notifications-menu::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }

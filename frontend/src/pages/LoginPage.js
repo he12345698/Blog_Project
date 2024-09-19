@@ -21,7 +21,7 @@ const LoginPage = () => {
   const loadCaptcha = async () => {
     try {
 
-      // const response = await fetch('http://niceblog.myvnc.com:8080/blog/ac/captcha', {
+      //const response = await fetch('http://niceblog.myvnc.com:8080/blog/ac/captcha', {
       const response = await fetch('http://localhost:8080/blog/ac/captcha', {
         method: 'GET',
         headers: {
@@ -56,7 +56,7 @@ const LoginPage = () => {
     e.preventDefault();
     setAnimationKey(Date.now());
     try {
-      // const response = await fetch('http://niceblog.myvnc.com:8080/blog/ac/login', {
+      //const response = await fetch('http://niceblog.myvnc.com:8080/blog/ac/login', {
         const response = await fetch('http://localhost:8080/blog/ac/login', {
         method: 'POST',
         headers: {

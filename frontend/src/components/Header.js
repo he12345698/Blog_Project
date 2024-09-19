@@ -1,27 +1,100 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import styles from '../styles/components/Header.module.css';
 import { UserContext } from './UserContext';
+import { connectWebSocket, disconnectWebSocket } from '../services/websocketClient'; // 更新为你的路径
+import '../styles/components/notification.scss'
+import { fetchUnreadNotifications } from '../services/NotificationService';
 
 const Header = () => {
-  //const [username, setUsername] = useState('');
-  // const [userImage, setUserImage] = useState('');
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [showNotifications, setShowNotifications] = useState(false);
   const { user, setUser } = useContext(UserContext);
+  const [unreadCount, setUnreadCount] = useState(0); // 未读通知数量
+  const bellRef = useRef(null);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    if (user) {
+      // 获取初始未读通知
+      fetchUnreadNotifications(user?.id).then(data => {
+        setNotifications(data);
+      }).catch(error => {
+        console.error('获取未读通知失败:', error);
+      });
+
+      // 连接 WebSocket
+      const handleMessage = (message) => {
+        // 处理收到的通知
+        setNotifications(prevNotifications => [...prevNotifications, message]);
+        triggerAnimation();
+      };
+
+      connectWebSocket(user?.id, handleMessage);
+
+      // 清理 WebSocket 连接
+      return () => {
+        disconnectWebSocket();
+      };
+    }
+  }, [user?.id]);
+
+  const handleNotificationClick = async (notificationId) => {
+    try {
+      await markNotificationAsRead(notificationId);
+      setNotifications(prevNotifications =>
+        prevNotifications.filter(notification => notification.id !== notificationId)
+      );
+    } catch (error) {
+      console.error('标记通知为已读失败:', error);
+    }
+  };
+
+  const markNotificationAsRead = async (notificationId) => {
+    try {
+      const response = await fetch(`http://localhost:8080/blog/notifications/read/${notificationId}`, {
+        method: 'POST',
+      });
+      if (response.ok) {
+        // 更新通知状态或从通知列表中移除已读通知
+        setNotifications(prevNotifications =>
+          prevNotifications.filter(notification => notification.id !== notificationId)
+        );
+      } else {
+        console.error('标记通知为已读失败');
+      }
+    } catch (error) {
+      console.error('网络错误:', error);
+    }
+  };
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const toggleNotifications = () => {
+    setUnreadCount(0);
+    setShowNotifications((prev) => !prev);
   };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       const menuContainer = document.querySelector(`.${styles["menu-container"]}`);
       const dropdownMenu = document.querySelector(`.${styles["dropdown-menu"]}`);
+      const notificationsDropdown = document.querySelector(`.${styles["notifications-dropdown"]}`);
 
       if (menuContainer && !menuContainer.contains(event.target)) {
         setIsMenuOpen(false);
+      }
+      if (notificationsDropdown && !notificationsDropdown.contains(event.target)) {
+        setShowNotifications(false);
+      }
+      if (bellRef.current && !bellRef.current.contains(event.target) && 
+          menuRef.current && !menuRef.current.contains(event.target)) {
+        setShowNotifications(false);
       }
     };
 
@@ -30,7 +103,22 @@ const Header = () => {
     return () => {
       document.removeEventListener('click', handleClickOutside);
     };
-  }, [isMenuOpen]);
+  }, []);
+
+  const triggerAnimation = () => {
+    const bellIcon = document.querySelector('.bell-icon');
+    const notificationAmount = document.querySelector('.notification-amount');
+    if (bellIcon) {
+      bellIcon.classList.add('animate');
+      setTimeout(() => {
+        bellIcon.classList.remove('animate');
+      }, 2300); // Duration of the animation
+    }
+    if (notificationAmount) {
+      notificationAmount.style.opacity = '1';
+      notificationAmount.style.visibility = 'visible';
+    }
+  };
 
   const notifyLogout = async () => {
     try {
@@ -38,7 +126,7 @@ const Header = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${window.localStorage.getItem('token')}`, // 如果需要
+          'Authorization': `Bearer ${window.localStorage.getItem('token')}`,
         },
         body: JSON.stringify({
           username: user?.username,
@@ -59,14 +147,13 @@ const Header = () => {
 
   useEffect(() => {
     const fetchUserInfo = async () => {
-      const token = localStorage.getItem('token'); // 從本地存儲獲取 token
+      const token = localStorage.getItem('token');
       if (token) {
         try {
-          // const response = await fetch('http://niceblog.myvnc.com:8080/blog/api/protected-endpoint', {
-            const response = await fetch('http://localhost:8080/blog/api/protected-endpoint', {
+          const response = await fetch('http://localhost:8080/blog/api/protected-endpoint', {
             method: 'GET',
             headers: {
-              'Authorization': `Bearer ${token}`, // 將 token 作為 Authorization header 發送
+              'Authorization': `Bearer ${token}`,
             },
           });
 
@@ -74,45 +161,40 @@ const Header = () => {
             const data = await response.json();
             setUser({
               username: data.username || '未登入',
-              userImage: data.userImage || '/Image/GG', // 設置默認頭像
+              userImage: data.userImage || '/Image/GG',
               email: data.email,
               id: data.id,
-              password: data.password
+              password: data.password,
             });
-            console.log('data at header is ',data);
           } else if (response.status === 401) {
-            // 如果收到 401 響應，檢查是否有新的 token
             const data = await response.json();
             if (data.token) {
-              // 更新本地存儲中的 token
               localStorage.setItem('token', data.token);
-
-              // 使用新的 token 重新發起請求
-              return fetchUserInfo(); // 遞歸調用以重試請求
+              return fetchUserInfo();
             } else {
               setUser({
                 username: null,
-                userImage: '/Image/GG' // 設置默認頭像
+                userImage: '/Image/GG',
               });
             }
           } else {
             setUser({
               username: null,
-              userImage: '/Image/GG' // 設置默認頭像
+              userImage: '/Image/GG',
             });
           }
         } catch (error) {
           console.error('Error:', error);
           setUser({
             username: null,
-            userImage: '/Image/GG' // 設置默認頭像
+            userImage: '/Image/GG',
           });
         }
       }
     };
 
-    fetchUserInfo(); // 初始化時調用函數來設置用戶信息
-  }, [location, setUser]); // location 改變時重新執行
+    fetchUserInfo();
+  }, [location, setUser]);
 
   return (
     <header className={styles["top-bar"]}>
@@ -126,6 +208,32 @@ const Header = () => {
           <Link to="/UserData">帳戶管理</Link>
           <Link to="/">首頁</Link>
         </nav>
+        <div className="header">
+          <div className="bell-icon" tabindex="0" ref={bellRef} onClick={toggleNotifications}>
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="50px" height="30px" viewBox="0 0 50 30" enable-background="new 0 0 50 30" xmlSpace="preserve">
+              <g className="bell-icon__group">
+                <path className="bell-icon__ball" id="ball" fill-rule="evenodd" stroke-width="1.5" clip-rule="evenodd" fill="none" stroke="#currentColor" stroke-miterlimit="10" d="M28.7,25 c0,1.9-1.7,3.5-3.7,3.5s-3.7-1.6-3.7-3.5s1.7-3.5,3.7-3.5S28.7,23,28.7,25z" />
+                <path className="bell-icon__shell" id="shell" fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" stroke="#currentColor" stroke-width="2" stroke-miterlimit="10" d="M35.9,21.8c-1.2-0.7-4.1-3-3.4-8.7c0.1-1,0.1-2.1,0-3.1h0c-0.3-4.1-3.9-7.2-8.1-6.9c-3.7,0.3-6.6,3.2-6.9,6.9h0 c-0.1,1-0.1,2.1,0,3.1c0.6,5.7-2.2,8-3.4,8.7c-0.4,0.2-0.6,0.6-0.6,1v1.8c0,0.2,0.2,0.4,0.4,0.4h22.2c0.2,0,0.4-0.2,0.4-0.4v-1.8 C36.5,22.4,36.3,22,35.9,21.8L35.9,21.8z" />
+              </g>
+            </svg>
+            
+              <div className="notification-amount">
+                <span>{notifications.length > 0 && <span className="notification-badge">{notifications.length}</span>}</span>
+              </div>
+         
+          </div>
+          <div className={`notifications-menu ${showNotifications ? 'open' : ''}`} ref={menuRef}>
+            {notifications.length > 0 ? (
+              notifications.map((notification, index) => (
+                <div key={index} className="notification-item" onClick={() => handleNotificationClick(index)}>
+                  {notification.content}
+                </div>
+              ))
+            ) : (
+              <div className="notification-item">沒有新通知</div>
+            )}
+          </div>
+        </div>
         <div className={styles["user-login-container"]}>
           {user?.username ? (
             <div className={styles["user-info"]}>
@@ -153,6 +261,7 @@ const Header = () => {
                   </button>
                 </div>
               </div>
+
             </div>
           ) : (
             <div className={styles["login-btn"]}>

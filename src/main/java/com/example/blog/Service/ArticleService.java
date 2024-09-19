@@ -40,7 +40,13 @@ public class ArticleService {
 
     @Autowired
     private TagRepository tagRepository;
-
+    
+    
+    public ArticleVo getArticleById1(Long articleId) {
+        return articleRepository.findById(articleId)
+            .orElseThrow(() -> new RuntimeException("Article not found"));
+    }
+    
     public List<ArticleVo> searchByTitleOrAuthor(String keyword) {
         List<ArticleVo> articlesByTitle = articleRepository.findByTitleContainingIgnoreCase(keyword);
         List<AccountVo> authors = accountRepository.findByUsernameContainingIgnoreCase(keyword);

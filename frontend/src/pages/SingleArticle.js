@@ -32,7 +32,7 @@ const SingleArticle = () => {
                 const response = await axios.get(`http://localhost:8080/blog/api/articles/${articleId}`);
                 setArticle(response.data);
                 setLikeCount(response.data.likes);
-
+                console.log('article is ', article);
                 // 獲取作者詳細資料
                 const authorResponse = await axios.get(`http://localhost:8080/blog/api/articles/authors/${response.data.authorId}`);
                 setAuthor(authorResponse.data);
@@ -58,11 +58,6 @@ const SingleArticle = () => {
                 const response = await axios.get(`http://localhost:8080/blog/api/comments/article/${articleId}`);
                 const fetchedComments = response.data;
 
-                console.log('fetchedComments is ', fetchedComments)
-                console.log('fetchedComments.0 is ', fetchedComments[0].author.imagelink)
-                console.log('comments imagelink is ', fetchedComments[0].author.imagelink)
-                console.log('fetchedComments whit id is ', fetchedComments[fetchedComments.id])
-
                 // 使用 token 檢查當前使用者對每條留言是否按讚
                 const token = localStorage.getItem('token');
                 if (token) {
@@ -72,7 +67,7 @@ const SingleArticle = () => {
                                 'Authorization': 'Bearer ' + token
                             }
                         });
-                        console.log('likeResponse.data.liked is ', likeResponse.data.liked)
+
                         return {
                             ...comment,
                             hasLiked: likeResponse.data.liked
@@ -91,8 +86,6 @@ const SingleArticle = () => {
                 console.error("獲取留言失敗", error.response ? error.response.data : error.message);  // 詳細錯誤日誌
             }
         };
-        console.log('comments.hasLiked is ', comments.hasLiked)
-        console.log('comments is ', comments)
 
         fetchArticle();
         fetchComments();
@@ -214,7 +207,7 @@ const SingleArticle = () => {
 
                         <div className="article-meta">
                             <p className="author">作者 : {article?.authorName}</p>
-                            <p className="date">更新於 : {new Date(article.updatedAt).toLocaleString()}</p>
+                            <p className="date">更新於 : {new Date(article.publishedAt).toLocaleString()}</p>
                         </div>
                     </div>
                 </div>
@@ -230,6 +223,9 @@ const SingleArticle = () => {
                 <button className="back-to-list-btn" onClick={handleBack}>
                     返回文章列表
                 </button>
+                <div className="article-meta">
+                    <p className="date">最後編輯於 : {new Date(article.lastEditedAt).toLocaleString()}</p>
+                </div>
             </section>
 
             <section className="comments-section">

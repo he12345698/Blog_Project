@@ -3,10 +3,12 @@ package com.example.blog.Controller;
 import com.example.blog.JwtUtil;
 import com.example.blog.Model.AccountVo;
 import com.example.blog.Model.ArticleVo;
+import com.example.blog.Model.Notification;
 import com.example.blog.Model.TagVo;
 import com.example.blog.Repository.ArticleRepository;
 import com.example.blog.Service.AccountService;
 import com.example.blog.Service.ArticleService;
+import com.example.blog.Service.NotificationService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -38,6 +40,8 @@ public class ArticleController {
     private ArticleRepository articleRepository;
     @Autowired
     private AccountService accountService;
+    @Autowired
+    private NotificationService notificationService;
 
 
     // @GetMapping("/search")
@@ -108,13 +112,17 @@ public ResponseEntity<ArticleVo> getArticleById(@PathVariable Long articleId) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Token 無效
         }
         System.out.print("認證通過");
+        
+        ArticleVo articleVo = articleService.getArticleById1(articleId);  // 假設你有這樣的方法
+        AccountVo userVo = accountService.getAccountById(userId);  // 假設你有這樣的方法
         // 使用 userId 進行按讚或收回讚操作
         boolean hasLiked = articleService.toggleArticleLike(articleId, userId);
-        System.out.println("123");
+        
         if (hasLiked) {
+        	notificationService.createArticleNotification(userVo, articleVo);
+        	
             return ResponseEntity.ok().build(); // 成功按讚或收回讚後返回200
         } else {
-
             return ResponseEntity.ok().build(); // 這裡應該也返回200，表示操作成功
         }
     }

@@ -15,10 +15,15 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:3000","http://localhost:81") //全局配置
+                .allowedOrigins("http://localhost:3000","http://localhost:81","http://niceblog.myvnc.com:81") //全局配置
                 .allowedMethods("*") // 允許的方法
                 .allowCredentials(true)
-                .allowedHeaders("*");
+                .allowedHeaders("*")
+        		.exposedHeaders("access-control-allow-headers",
+                        "access-control-allow-methods",
+                        "access-control-allow-origin",
+                        "access-control-max-age",
+                        "X-Frame-Options");
         
     }
     

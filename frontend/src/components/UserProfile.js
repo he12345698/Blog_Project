@@ -66,10 +66,11 @@ const UserProfile = ({ userId }) => {
             .then(data => {
                 setUserData(data);
                 setLoading(false);
+                setError("");
             })
             .catch(error => {
                 console.error("獲取用戶資料失敗", error);
-                setError("獲取用戶資料失敗");
+                setError("獲取用戶資料失敗1");
                 setLoading(false);
             });
     }, [userId, user?.username, user?.email]);

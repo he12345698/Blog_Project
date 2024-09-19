@@ -20,6 +20,11 @@ public class AccountService {
     @Autowired
     private EmailService emailService;
     
+    public AccountVo getAccountById(Long userId) {
+        return accountRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+    
     public Optional<AccountVo> findById(Long id) {
         return accountRepository.findById(id);
     }
