@@ -159,14 +159,17 @@ public class AccountAction {
     }
 
     @PostMapping("/reset-password")
-    public String resetPassword(@RequestParam("token") String token, @RequestParam("newPassword") String newPassword) {
+    public ResponseEntity<String> resetPassword(@RequestParam("token") String token, @RequestParam("newPassword") String newPassword) {
         PasswordResetToken resetToken = prts.validatePasswordResetToken(token);
+        
         if (resetToken == null) {
-            return "失效或過期的憑證";
+            return ResponseEntity.badRequest().body("失效或過期的憑證");
         }
+        
         accountService.changePassword(resetToken.getVo(), newPassword);
+        prts.deleteToken(resetToken);
 
-        return "密碼重設完成！";
+        return new ResponseEntity<>("密碼重設完成！", HttpStatus.OK);
     }
 
     @PostMapping("/logout-notify")

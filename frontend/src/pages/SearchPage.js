@@ -17,7 +17,7 @@ function SearchPage() {
   useEffect(() => {
     const fetchResults = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/blog/search?keyword=${encodeURIComponent(query)}&page=${currentPage}&size=10`);
+        const response = await axios.get(`http://niceblog.myvnc.com:8080/blog/search?keyword=${encodeURIComponent(query)}&page=${currentPage}&size=10`);
         setResults(response.data.content);
         setTotalPages(response.data.totalPages);
       } catch (error) {
@@ -27,7 +27,7 @@ function SearchPage() {
 
     const fetchTags = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/blog/api/tags/all');
+        const response = await axios.get('http://niceblog.myvnc.com:8080/blog/api/tags/all');
         const sortedTags = response.data.sort((a, b) => a.tag_id - b.tag_id);
         setTags(sortedTags);
       } catch (error) {

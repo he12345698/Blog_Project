@@ -93,7 +93,7 @@ html, body {
 h2 {
     margin-top: 0; /* 去除上邊距 */
     text-align: center; /* 文字置中 */
-    color: #2B2D42; /* 文字顏色 */
+    color: #ffffff; /* 文字顏色 */
 }
 
 .rsform-group {
@@ -158,7 +158,7 @@ button[type="submit"]:hover {
     100% { transform: translateX(0); }
 }
 
-.succ-message {
+.success-message {
     color: green;
     font-weight: bold; /* 你可以添加更多樣式來自定義外觀 */
 }

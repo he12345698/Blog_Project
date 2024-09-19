@@ -17,11 +17,13 @@ const Header = () => {
   const bellRef = useRef(null);
   const menuRef = useRef(null);
 
+
   useEffect(() => {
     if (user) {
       // 获取初始未读通知
       fetchUnreadNotifications(user?.id).then(data => {
         setNotifications(data);
+        setUnreadCount(data.length)
       }).catch(error => {
         console.error('获取未读通知失败:', error);
       });
@@ -30,6 +32,13 @@ const Header = () => {
       const handleMessage = (message) => {
         // 处理收到的通知
         setNotifications(prevNotifications => [...prevNotifications, message]);
+        fetchUnreadNotifications(user?.id).then(data => {
+          setNotifications(data);
+          setUnreadCount(data.length)
+        }).catch(error => {
+          console.error('获取未读通知失败:', error);
+        });
+
         triggerAnimation();
       };
 
@@ -42,20 +51,10 @@ const Header = () => {
     }
   }, [user?.id]);
 
-  const handleNotificationClick = async (notificationId) => {
-    try {
-      await markNotificationAsRead(notificationId);
-      setNotifications(prevNotifications =>
-        prevNotifications.filter(notification => notification.id !== notificationId)
-      );
-    } catch (error) {
-      console.error('标记通知为已读失败:', error);
-    }
-  };
-
   const markNotificationAsRead = async (notificationId) => {
     try {
-      const response = await fetch(`http://localhost:8080/blog/notifications/read/${notificationId}`, {
+      const response = await fetch(`http://niceblog.myvnc.com:8080/blog/notifications/read/${notificationId}`, {
+      //const response = await fetch(`http://niceblog.myvnc.com:8080/blog/notifications/read/${notificationId}`, {
         method: 'POST',
       });
       if (response.ok) {
@@ -63,6 +62,8 @@ const Header = () => {
         setNotifications(prevNotifications =>
           prevNotifications.filter(notification => notification.id !== notificationId)
         );
+        setUnreadCount(prevCount => Math.max(prevCount - 1, 0)); // 更新未读数量
+        
       } else {
         console.error('标记通知为已读失败');
       }
@@ -71,12 +72,21 @@ const Header = () => {
     }
   };
 
+  useEffect(() => {
+    console.log('Unread count changed:', unreadCount);
+  }, [unreadCount]);
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
   const toggleNotifications = () => {
-    setUnreadCount(0);
+    fetchUnreadNotifications(user?.id).then(data => {
+      setNotifications(data);
+      setUnreadCount(data.length)
+    }).catch(error => {
+      console.error('获取未读通知失败:', error);
+    });
     setShowNotifications((prev) => !prev);
   };
 
@@ -92,8 +102,8 @@ const Header = () => {
       if (notificationsDropdown && !notificationsDropdown.contains(event.target)) {
         setShowNotifications(false);
       }
-      if (bellRef.current && !bellRef.current.contains(event.target) && 
-          menuRef.current && !menuRef.current.contains(event.target)) {
+      if (bellRef.current && !bellRef.current.contains(event.target) &&
+        menuRef.current && !menuRef.current.contains(event.target)) {
         setShowNotifications(false);
       }
     };
@@ -122,7 +132,8 @@ const Header = () => {
 
   const notifyLogout = async () => {
     try {
-      await fetch('http://localhost:8080/blog/ac/logout-notify', {
+      await fetch('http://niceblog.myvnc.com:8080/blog/ac/logout-notify', {
+      //await fetch('http://niceblog.myvnc.com:8080/blog/ac/logout-notify', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -150,7 +161,8 @@ const Header = () => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          const response = await fetch('http://localhost:8080/blog/api/protected-endpoint', {
+          const response = await fetch('http://niceblog.myvnc.com:8080/blog/api/protected-endpoint', {
+          //const response = await fetch('http://niceblog.myvnc.com:8080/blog/api/protected-endpoint', {
             method: 'GET',
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -161,7 +173,7 @@ const Header = () => {
             const data = await response.json();
             setUser({
               username: data.username || '未登入',
-              userImage: data.userImage || '/Image/GG',
+              userImage: data.userImage || 'http://niceblog.myvnc.com:81/UserImages/Guest.png',
               email: data.email,
               id: data.id,
               password: data.password,
@@ -216,16 +228,14 @@ const Header = () => {
                 <path className="bell-icon__shell" id="shell" fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" stroke="#currentColor" stroke-width="2" stroke-miterlimit="10" d="M35.9,21.8c-1.2-0.7-4.1-3-3.4-8.7c0.1-1,0.1-2.1,0-3.1h0c-0.3-4.1-3.9-7.2-8.1-6.9c-3.7,0.3-6.6,3.2-6.9,6.9h0 c-0.1,1-0.1,2.1,0,3.1c0.6,5.7-2.2,8-3.4,8.7c-0.4,0.2-0.6,0.6-0.6,1v1.8c0,0.2,0.2,0.4,0.4,0.4h22.2c0.2,0,0.4-0.2,0.4-0.4v-1.8 C36.5,22.4,36.3,22,35.9,21.8L35.9,21.8z" />
               </g>
             </svg>
-            
-              <div className="notification-amount">
-                <span>{notifications.length > 0 && <span className="notification-badge">{notifications.length}</span>}</span>
-              </div>
-         
+            <div className={`notification-amount ${unreadCount === 0 ? 'hidden' : ''}`}>
+              <span>{notifications.length > 0 && <span className="notification-badge">{notifications.length}</span>}</span>
+            </div>
           </div>
           <div className={`notifications-menu ${showNotifications ? 'open' : ''}`} ref={menuRef}>
             {notifications.length > 0 ? (
               notifications.map((notification, index) => (
-                <div key={index} className="notification-item" onClick={() => handleNotificationClick(index)}>
+                <div key={notifications[index].id} className="notification-item" onClick={() => markNotificationAsRead(notifications[index].id)}>
                   {notification.content}
                 </div>
               ))

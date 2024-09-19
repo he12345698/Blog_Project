@@ -39,7 +39,7 @@ const ChangePassword = () => {
         setIsSubmitting(true);
 
         try {
-            const response = await fetch(`http://localhost:8080/blog/api/userProfile/update-password/${user?.id}`, {
+            const response = await fetch(`http://niceblog.myvnc.com:8080/blog/api/userProfile/update-password/${user?.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

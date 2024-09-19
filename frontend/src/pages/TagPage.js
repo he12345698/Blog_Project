@@ -18,7 +18,7 @@ function TagPage() {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/blog/articlesByTag', {
+        const response = await axios.get('http://niceblog.myvnc.com:8080/blog/articlesByTag', {
           params: { tagId, page: currentPage, size: 10 }
         });
         setArticles(response.data.content);
@@ -30,7 +30,7 @@ function TagPage() {
 
     const fetchTags = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/blog/api/tags/all');
+        const response = await axios.get('http://niceblog.myvnc.com:8080/blog/api/tags/all');
         const sortedTags = response.data.sort((a, b) => a.tag_id - b.tag_id);
         setTags(sortedTags);
       } catch (error) {

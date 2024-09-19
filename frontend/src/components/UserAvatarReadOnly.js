@@ -19,7 +19,8 @@ const UserAvatarReadOnly = ({ id }) => {
     useEffect(() => {
         setLoading(true);
 
-        fetch(`http://localhost:8080/blog/api/userProfile/${id}`)
+        fetch(`http://niceblog.myvnc.com:8080/blog/api/userProfile/${id}`)
+        //fetch(`http://niceblog.myvnc.com:8080/blog/api/userProfile/${id}`)
             .then(response => {
                 // console.log('網頁回應:', response);
                 return response.json();

@@ -61,7 +61,8 @@ const UserProfile = ({ userId }) => {
             email: user?.email || '',
         });
 
-        fetch(`http://localhost:8080/blog/api/userProfile/${userId}`)
+        fetch(`http://niceblog.myvnc.com:8080/blog/api/userProfile/${userId}`)
+        //fetch(`http://niceblog.myvnc.com:8080/blog/api/userProfile/${userId}`)
             .then(response => response.json())
             .then(data => {
                 setUserData(data);
@@ -94,8 +95,8 @@ const UserProfile = ({ userId }) => {
     const handleSave = (field) => {
         setLoading(true);
 
-        // fetch(`http://niceblog.myvnc.com:8080/blog/api/userProfile/update-${field}/${userId}`, {
-        fetch(`http://localhost:8080/blog/api/userProfile/update-${field}/${userId}`, {
+        fetch(`http://niceblog.myvnc.com:8080/blog/api/userProfile/update-${field}/${userId}`, {
+        //fetch(`http://niceblog.myvnc.com:8080/blog/api/userProfile/update-${field}/${userId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -125,7 +126,7 @@ const UserProfile = ({ userId }) => {
                 setError(error.message || "保存數據失敗");
             });
     };
-
+    console.log('tempUser.email is ' ,tempUser)
     const handleClick = () => {
         navigate('/ChangePassword'); // 跳轉到修改密碼頁面
     };

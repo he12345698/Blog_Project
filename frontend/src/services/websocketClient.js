@@ -4,7 +4,7 @@ import SockJS from 'sockjs-client';
 let client = null;
 
 export const connectWebSocket = (userId, onMessage) => {
-  const socket = new SockJS('http://localhost:8080/blog/notifications');
+  const socket = new SockJS('http://niceblog.myvnc.com:8080/blog/notifications');
   client = new Client({
     webSocketFactory: () => socket,
     connectHeaders: {

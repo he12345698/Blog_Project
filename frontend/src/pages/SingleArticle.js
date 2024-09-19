@@ -29,17 +29,17 @@ const SingleArticle = () => {
         const fetchArticle = async () => {
 
             try {
-                const response = await axios.get(`http://localhost:8080/blog/api/articles/${articleId}`);
+                const response = await axios.get(`http://niceblog.myvnc.com:8080/blog/api/articles/${articleId}`);
                 setArticle(response.data);
                 setLikeCount(response.data.likes);
                 console.log('article is ', article);
                 // 獲取作者詳細資料
-                const authorResponse = await axios.get(`http://localhost:8080/blog/api/articles/authors/${response.data.authorId}`);
+                const authorResponse = await axios.get(`http://niceblog.myvnc.com:8080/blog/api/articles/authors/${response.data.authorId}`);
                 setAuthor(authorResponse.data);
 
                 const token = localStorage.getItem('token');
                 if (token) {
-                    const likeResponse = await axios.get(`http://localhost:8080/blog/api/articles/${articleId}/isLiked`, {
+                    const likeResponse = await axios.get(`http://niceblog.myvnc.com:8080/blog/api/articles/${articleId}/isLiked`, {
                         headers: {
                             'Authorization': 'Bearer ' + token
                         }
@@ -55,14 +55,14 @@ const SingleArticle = () => {
 
         const fetchComments = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/blog/api/comments/article/${articleId}`);
+                const response = await axios.get(`http://niceblog.myvnc.com:8080/blog/api/comments/article/${articleId}`);
                 const fetchedComments = response.data;
 
                 // 使用 token 檢查當前使用者對每條留言是否按讚
                 const token = localStorage.getItem('token');
                 if (token) {
                     const updatedComments = await Promise.all(fetchedComments.map(async (comment) => {
-                        const likeResponse = await axios.get(`http://localhost:8080/blog/api/comments/${comment.id}/isLiked`, {
+                        const likeResponse = await axios.get(`http://niceblog.myvnc.com:8080/blog/api/comments/${comment.id}/isLiked`, {
                             headers: {
                                 'Authorization': 'Bearer ' + token
                             }
@@ -99,7 +99,7 @@ const SingleArticle = () => {
                 throw new Error("未登入或 token 不存在");
             }
 
-            const response = await axios.post(`http://localhost:8080/blog/api/articles/${articleId}/like`, {}, {
+            const response = await axios.post(`http://niceblog.myvnc.com:8080/blog/api/articles/${articleId}/like`, {}, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             console.log('token at singarticle is ', token)
@@ -121,7 +121,7 @@ const SingleArticle = () => {
                 return;
             }
 
-            const response = await axios.post(`http://localhost:8080/blog/api/comments/${commentId}/like`, {}, {
+            const response = await axios.post(`http://niceblog.myvnc.com:8080/blog/api/comments/${commentId}/like`, {}, {
                 headers: { 'Authorization': 'Bearer ' + token }
             });
 
@@ -157,7 +157,7 @@ const SingleArticle = () => {
             // 調試：確認 articleId 是否正確
             console.log("Article ID being used for comment submission: ", articleId);
 
-            const response = await axios.post(`http://localhost:8080/blog/api/comments?articleId=${articleId}`, commentData, {
+            const response = await axios.post(`http://niceblog.myvnc.com:8080/blog/api/comments?articleId=${articleId}`, commentData, {
                 headers: { 'Authorization': 'Bearer ' + token }
             });
             setComments([...comments, { ...response.data, hasLiked: false }]);
@@ -179,7 +179,7 @@ const SingleArticle = () => {
 
             const updatedComment = { content: editedCommentText };
 
-            const response = await axios.put(`http://localhost:8080/blog/api/comments/${commentId}`, updatedComment, {
+            const response = await axios.put(`http://niceblog.myvnc.com:8080/blog/api/comments/${commentId}`, updatedComment, {
                 headers: { 'Authorization': 'Bearer ' + token }
             });
 
@@ -235,7 +235,7 @@ const SingleArticle = () => {
                         <div className="comment" key={comment.id}>
                             <div className="comment-header">
                                 <img src={comment.author.imagelink} width="40" height="40" alt="留言者頭像" className="commenter-avatar" />
-                                <a className="commenter-name" href={`http://localhost:81/UserData/${comment.author.id}`}>{comment.author ? comment.author.username : '匿名'}</a>
+                                <a className="commenter-name" href={`http://niceblog.myvnc.com:81/UserData/${comment.author.id}`}>{comment.author ? comment.author.username : '匿名'}</a>
                                 <p className="comment-date">{new Date(comment.createdAt).toLocaleString()}</p>
                             </div>
                             {editingComment === comment.id ? (

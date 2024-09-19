@@ -5,6 +5,7 @@
     background: #666464;
     border-radius: 50%;
     display: flex;
+    margin-left: -35%;
 
     svg {
         margin: auto;
@@ -98,6 +99,10 @@
         animation-fill-mode: both;
         animation-name: bounce;
         /* 绑定动画 */
+    }
+
+    &.hidden {
+        display: none;
     }
 
     /* 当收到新通知时触发动画 */

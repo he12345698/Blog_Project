@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-const BACKEND_URL = 'http://localhost:8080';//後端網址
+const BACKEND_URL = 'http://niceblog.myvnc.com:8080';//後端網址
 
-const API_BASE_URL = 'http://localhost:8080/blog/api/articles';
+const API_BASE_URL = 'http://niceblog.myvnc.com:8080/blog/api/articles';
 
 const getAllArticles = async () => {
     console.log("try to get all...");

@@ -33,8 +33,8 @@ function ImageUpload({ id, onClose }) {
         formData.append('file', croppedImage, '.jpg');
 
         try {
-            // const response = await fetch(`http://niceblog.myvnc.com:8080/blog/api/userProfile/upload-image/${id}`, {
-            const response = await fetch(`http://localhost:8080/blog/api/userProfile/upload-image/${id}`, {
+            const response = await fetch(`http://niceblog.myvnc.com:8080/blog/api/userProfile/upload-image/${id}`, {
+            //const response = await fetch(`http://niceblog.myvnc.com:8080/blog/api/userProfile/upload-image/${id}`, {
                 method: 'POST',
                 body: formData,
             });

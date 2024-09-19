@@ -18,7 +18,8 @@ function ArticlesPage() {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/blog/search?keyword', {
+        const response = await axios.get('http://niceblog.myvnc.com:8080/blog/search?keyword', {
+        //const response = await axios.get('http://niceblog.myvnc.com:8080/blog/search?keyword', {
           params: { page: currentPage }
         });
         console.log('獲取的文章:', response.data);
@@ -36,7 +37,7 @@ function ArticlesPage() {
 
     const fetchTags = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/blog/api/tags/all');
+        const response = await axios.get('http://niceblog.myvnc.com:8080/blog/api/tags/all');
         const sortedTags = response.data.sort((a, b) => a.tag_id - b.tag_id);
         setTags(sortedTags);
       } catch (error) {

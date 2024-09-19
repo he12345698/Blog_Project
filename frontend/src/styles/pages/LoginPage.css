@@ -339,3 +339,15 @@ img {
   width: auto;
   display: block;
 }
+
+.success-message {
+  color: green;
+  font-weight: bold; /* 你可以添加更多樣式來自定義外觀 */
+}
+
+.error-message {
+  margin-left: -67%;
+  color: red;
+  font-weight: bold; /* 你可以添加更多樣式來自定義外觀 */
+  animation: shake 0.5s ease;
+}

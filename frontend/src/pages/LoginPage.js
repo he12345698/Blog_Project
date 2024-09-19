@@ -21,8 +21,8 @@ const LoginPage = () => {
   const loadCaptcha = async () => {
     try {
 
-      //const response = await fetch('http://niceblog.myvnc.com:8080/blog/ac/captcha', {
-      const response = await fetch('http://localhost:8080/blog/ac/captcha', {
+      const response = await fetch('http://niceblog.myvnc.com:8080/blog/ac/captcha', {
+        //const response = await fetch('http://niceblog.myvnc.com:8080/blog/ac/captcha', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -56,8 +56,8 @@ const LoginPage = () => {
     e.preventDefault();
     setAnimationKey(Date.now());
     try {
-      //const response = await fetch('http://niceblog.myvnc.com:8080/blog/ac/login', {
-        const response = await fetch('http://localhost:8080/blog/ac/login', {
+      const response = await fetch('http://niceblog.myvnc.com:8080/blog/ac/login', {
+        //const response = await fetch('http://niceblog.myvnc.com:8080/blog/ac/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ const LoginPage = () => {
       loadCaptcha();
     };
   };
-/*  註冊  */ 
+  /*  註冊  */
   const handlePasswordChange = (e) => {
     const newPassword = e.target.value;
     setPassword(newPassword);
@@ -124,56 +124,56 @@ const LoginPage = () => {
     }, 750);
   };
 
-const handleSubmit = async (event) => {
-  event.preventDefault();
-  setAnimationKey(Date.now());
-  const missingFields = [];
-  if (!username) missingFields.push('用戶名');
-  if (!email) missingFields.push('電子郵件');
-  if (!password) missingFields.push('密碼');
-  //if (!rePassword) missingFields.push('確認密碼');
-  // 如果有任何字段沒填寫，顯示錯誤訊息
-  if (missingFields.length > 0) {
-    setErrorMessage(`請填寫：${missingFields.join('、')}`);
-    return;
-  }
-  
-  const userData = {
-    username,
-    email,
-    password,
-  };
-  try {
-    // const response = await fetch('http://niceblog.myvnc.com:8080/blog/ac/register', {
-    const response = await fetch('http://localhost:8080/blog/ac/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(userData),
-    });
-    if (response.ok) {
-      const message = await response.text(); 
-      console.log(message);
-      setSuccessMessage(message);
-      setErrorMessage('');
-
-      const timer = setInterval(() => {
-        setCountdown((prevCountdown) => {
-          if (prevCountdown <= 1) {
-            clearInterval(timer);
-            window.location.href = `/login?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
-          }
-          return prevCountdown - 1;
-        });
-      }, 1000);
-
-    } else {
-      const errorMessage = await response.text();
-      setSuccessMessage('');
-      setErrorMessage(errorMessage || '註冊失敗，請重試。');
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setAnimationKey(Date.now());
+    const missingFields = [];
+    if (!username) missingFields.push('用戶名');
+    if (!email) missingFields.push('電子郵件');
+    if (!password) missingFields.push('密碼');
+    //if (!rePassword) missingFields.push('確認密碼');
+    // 如果有任何字段沒填寫，顯示錯誤訊息
+    if (missingFields.length > 0) {
+      setErrorMessage(`請填寫：${missingFields.join('、')}`);
+      return;
     }
-  } catch (error) {
+
+    const userData = {
+      username,
+      email,
+      password,
+    };
+    try {
+      const response = await fetch('http://niceblog.myvnc.com:8080/blog/ac/register', {
+        //const response = await fetch('http://niceblog.myvnc.com:8080/blog/ac/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+      if (response.ok) {
+        const message = await response.text();
+        console.log(message);
+        setSuccessMessage(message);
+        setErrorMessage('');
+
+        const timer = setInterval(() => {
+          setCountdown((prevCountdown) => {
+            if (prevCountdown <= 1) {
+              clearInterval(timer);
+              window.location.href = `/login?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
+            }
+            return prevCountdown - 1;
+          });
+        }, 2000);
+
+      } else {
+        const errorMessage = await response.text();
+        setSuccessMessage('');
+        setErrorMessage(errorMessage || '註冊失敗，請重試。');
+      }
+    } catch (error) {
       console.error('Error:', error);
       setSuccessMessage('');
       setErrorMessage('註冊失敗，請重試。');
@@ -236,14 +236,19 @@ const handleSubmit = async (event) => {
                           <i class="input-icon uil uil-user"></i>
                         </div>
                         <div class="form-group mt-2">
-                          <input type="email" name="logemail" class="form-style" placeholder="Your Email" id="logemail" autocomplete="off" onChange={(e) => setEmail(e.target.value)}/>
+                          <input type="email" name="logemail" class="form-style" placeholder="Your Email" id="logemail" autocomplete="off" onChange={(e) => setEmail(e.target.value)} />
                           <i class="input-icon uil uil-at"></i>
                         </div>
                         <div class="form-group mt-2">
-                          <input type="password" name="logpass" class="form-style" placeholder="Your Password" id="logpass" autocomplete="off" onChange={handlePasswordChange}/>
+                          <input type="password" name="logpass" class="form-style" placeholder="Your Password" id="logpass" autocomplete="off" onChange={handlePasswordChange} />
                           <i class="input-icon uil uil-lock-alt"></i>
                         </div>
-                        <div className="error-placeholder">
+                        <div className="message-placeholder">
+                          {successMessage && (
+                            <p key={animationKey} className="success-message fade-in" style={{ whiteSpace: 'pre-line' }}>
+                              {successMessage}
+                            </p>
+                          )}
                           {errorMessage && (
                             <p key={animationKey} className="error-message shake" style={{ whiteSpace: 'pre-line' }}>
                               {errorMessage}

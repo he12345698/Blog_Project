@@ -40,7 +40,8 @@ const UserProfileReadOnly = ({ userId }) => {
 
         setLoading(true);
 
-        fetch(`http://localhost:8080/blog/api/userProfile/${userId}`)
+        fetch(`http://niceblog.myvnc.com:8080/blog/api/userProfile/${userId}`)
+        //fetch(`http://niceblog.myvnc.com:8080/blog/api/userProfile/${userId}`)
             .then(response => response.json())
             .then(data => {
                 setUserData(data);

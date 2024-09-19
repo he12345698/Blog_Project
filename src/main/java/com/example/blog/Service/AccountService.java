@@ -108,7 +108,7 @@ public class AccountService {
         // 插入新用戶資料
         try {       	
            if(insertUser(vo)) {        	   
-        	   return ResponseEntity.ok("註冊成功! 請檢查您的電子郵件以完成註冊。");
+        	   return ResponseEntity.ok("註冊成功! 請檢查您的電子郵件以完成註冊。 即將回登入頁面...");
            }
         } catch (Exception e) {       	
             return ResponseEntity.status(500).body("註冊失敗，請稍後重試。");

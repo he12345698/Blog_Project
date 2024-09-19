@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const API_BASE_URL = 'http://localhost:8080/blog/api/tags';
+const API_BASE_URL = 'http://niceblog.myvnc.com:8080/blog/api/tags';
 
 const getArticleTag = async (articleId) => {
-    const response = await axios.get(`http://localhost:8080/blog/api/articles/${articleId}/tag`);
+    const response = await axios.get(`http://niceblog.myvnc.com:8080/blog/api/articles/${articleId}/tag`);
     return response.data;
 }
 

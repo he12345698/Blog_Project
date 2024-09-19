@@ -22,7 +22,7 @@ const UserDataReadOnly = () => {
     
         const fetchData = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/blog/api/userProfile/${userId}`);
+                const response = await fetch(`http://niceblog.myvnc.com:8080/blog/api/userProfile/${userId}`);
                 if (!response.ok) {
                     throw new Error('發生錯誤');
                 }

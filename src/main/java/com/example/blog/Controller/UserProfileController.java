@@ -56,7 +56,7 @@ public class UserProfileController {
 
     // 使用相對路徑，上傳目錄將位於專案的根目錄中
     // private static final String UPLOAD_DIR = "D:\\Project_ex\\Blog_Project\\frontend\\public\\";
-    // private static final String UPLOAD_DIR = "E:\\Blog_Project\\frontend\\public\\";
+     private static final String UPLOAD_DIR = "E:\\Blog_Project\\frontend\\public\\";
 
     // 更新用戶名
     @PutMapping("update-username/{id}")
@@ -161,7 +161,7 @@ public class UserProfileController {
 
         try {
 
-            String uploadDir = new File(System.getProperty("user.dir")).getAbsolutePath() + File.separator + "frontend" + File.separator + "public";
+            //String UPLOAD_DIR = new File(System.getProperty("user.dir")).getAbsolutePath() + File.separator + "frontend" + File.separator + "public";
 
             // 查詢資料庫以獲取原有的圖片路徑
             AccountVo accountVo = userProfileService.getUserById(id);
@@ -170,7 +170,7 @@ public class UserProfileController {
                 try {
                     URL urlObj = new URL(url);
                     String path = urlObj.getPath();
-                    String localFilePath = uploadDir + path.replace('/', File.separatorChar);
+                    String localFilePath = UPLOAD_DIR + path.replace('/', File.separatorChar);
 
                     Path existingFilePath = Paths.get(localFilePath);
                     System.out.println("要刪除的檔案路徑: " + existingFilePath);
@@ -192,14 +192,14 @@ public class UserProfileController {
             }
 
             String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-            Path filePath = Paths.get(uploadDir, "UserImages/", fileName);
+            Path filePath = Paths.get(UPLOAD_DIR, "UserImages/", fileName);
             System.out.println("Saving new file to: " + filePath);
 
             Files.createDirectories(filePath.getParent());
             Files.write(filePath, file.getBytes());
             
-            String baseUrl = "http://localhost:3000/";
-            // String baseUrl = "http://localhost:81/";
+            //String baseUrl = "http://localhost:3000/";
+            String baseUrl = "http://niceblog.myvnc.com:81/";
             String relativeImagePath = "UserImages/" + fileName;
             String fullImageUrl = baseUrl + relativeImagePath;
 

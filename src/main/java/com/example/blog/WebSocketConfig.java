@@ -19,7 +19,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/notifications")
-        		.setAllowedOriginPatterns("http://localhost:81")
+        		.setAllowedOriginPatterns("http://niceblog.myvnc.com:81")
         		.withSockJS(); // 注册 STOMP 端点
     }
 }

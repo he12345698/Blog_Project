@@ -11,7 +11,7 @@ const ForgotPasswordPage = () => {
     // TODO: 添加密码重置逻辑
 
     try {
-      const response = await fetch('http://localhost:8080/blog/ac/forgot-password', {
+      const response = await fetch('http://niceblog.myvnc.com:8080/blog/ac/forgot-password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -63,7 +63,7 @@ const ForgotPasswordPage = () => {
               </p>
             )}
             {successMessage && (
-              <div className="succ-message">
+              <div className="success-message">
                 <p>{successMessage}</p>
               </div>
             )}

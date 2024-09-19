@@ -68,7 +68,7 @@ public class UserProfileService {
         Optional<AccountVo> optionalAccount = userProfileRepository.findById(id);
         if (optionalAccount.isPresent()) {
             AccountVo account = optionalAccount.get();
-            account.setEmail(newPassword);
+            account.setPassword(newPassword);
             userProfileRepository.save(account);
             return true;
         }

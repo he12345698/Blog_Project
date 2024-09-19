@@ -3,51 +3,64 @@ import axios from 'axios';
 import styles from '../styles/pages/ResetPasswordPage.module.css';
 
 const ResetPasswordPage = () => {
-    const [newPassword, setNewPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
-    const [successMessage, setSuccessMessage] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-    const [token, setToken] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [token, setToken] = useState('');
 
-    useEffect(() => {
-        // 提取 URL 中的 token 參數
-        const urlParams = new URLSearchParams(window.location.search);
-        const token = urlParams.get('token');
-        setToken(token);
-    }, []);
+  useEffect(() => {
+    // 提取 URL 中的 token 參數
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+    setToken(token);
+  }, []);
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-        if (newPassword !== confirmPassword) {
-            setErrorMessage('密碼不一致');
-            return;
+    if (newPassword !== confirmPassword) {
+      setErrorMessage('密碼不一致');
+      return;
+    }
+
+    setIsLoading(true);
+    setErrorMessage('');
+
+    try {
+      const response = await axios.post('http://niceblog.myvnc.com:8080/blog/ac/reset-password',
+        new URLSearchParams({
+          token,
+          newPassword
+        }),
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
         }
+      );
 
-        setIsLoading(true);
-        setErrorMessage('');
+      // 成功状态时，显示成功消息
+      setErrorMessage('');
+      setSuccessMessage(response.data);
+    } catch (error) {
+      // 如果后端返回的有响应数据（如错误消息），则使用 error.response.data 获取错误信息
+      if (error.response && error.response.data) {
+        setSuccessMessage('')
+        setErrorMessage(error.response.data);
+      } else {
+        // 否则显示 Axios 捕获的错误信息
+        setSuccessMessage('')
+        setErrorMessage(error.message);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-        try {
-            const response = await axios.post('http://localhost:8080/blog/ac/reset-password', new URLSearchParams({
-                token,
-                newPassword
-            }), {
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }
-            });
-
-            setSuccessMessage(response.data);
-        } catch (error) {
-            setErrorMessage('Failed to reset password');
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    return (
-        <div className={styles.resetPasswordContainer}>
+  return (
+    <div className={styles.resetPasswordContainer}>
       <h2 className={styles.title}>重設密碼</h2>
       <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.formGroup}>
@@ -77,7 +90,7 @@ const ResetPasswordPage = () => {
         </button>
       </form>
     </div>
-    );
+  );
 };
 
 export default ResetPasswordPage;

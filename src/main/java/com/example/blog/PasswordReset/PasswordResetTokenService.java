@@ -46,4 +46,8 @@ public class PasswordResetTokenService {
 
         return resetToken;
     }
+    
+    public void deleteToken(PasswordResetToken token) {
+    	tokenRepository.delete(token); // 假设你有一个 repository 来管理 token
+    }
 }
