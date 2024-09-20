@@ -21,6 +21,9 @@ public class NotificationService {
 
     @Autowired
     private NotificationRepository notificationRepository;
+    
+    @Autowired
+    private ArticleRepository articleRepository;
 
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
@@ -52,7 +55,8 @@ public class NotificationService {
         Notification notification = new Notification();
         notification.setUser(user);
         notification.setArticle(article);
-        String destination = "/topic/notifications/" + user.getId();
+        String destination = "/topic/notifications/" + articleRepository.findByAuthorId(article.getAuthorId()).get(0).getAuthorId();
+        System.out.printf("article is ",articleRepository.findByAuthorId(article.getAuthorId()).get(0).getAuthorId());
 	    String notificationMessage = "有人覺得你的文章 '" + article.getTitle() + "' 很讚！";
 	    notification.setContent(notificationMessage);
 	      // 發送實時通知

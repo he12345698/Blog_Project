@@ -111,7 +111,7 @@ const UserProfile = ({ userId }) => {
                         throw new Error(text); 
                     });
                 }
-                return response.json(); // 確保正常響應的處理
+                return response.text(); // 確保正常響應的處理
             })
             .then(data => {
                 // 更新 UserContext

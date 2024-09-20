@@ -3,6 +3,7 @@ import UserProfile from "../components/UserProfile";
 import UserAvatar from "../components/UserAvatar";
 import UserArticles from "../components/UserArticles";
 import styles from "../styles/pages/UserData.module.css"
+import "../styles/pages/UserData.module.css"
 import { UserContext } from '../components/UserContext';
 
 

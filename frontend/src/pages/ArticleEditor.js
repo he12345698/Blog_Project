@@ -62,7 +62,7 @@ const ArticleEditor = () => {
                 await articleService.createArticle(articleData);
             }
             alert("文章提交成功! 將返回文章列表");
-            navigate('/articlesPage');
+            navigate('/');
         } catch (error) {
             alert("文章提交失敗! 請稍後再嘗試");
             console.error('文章提交失敗:', error);

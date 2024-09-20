@@ -5,6 +5,7 @@ h1 {
     /* 增加標題與下方內容的間距 */
     text-align: center;
     font-weight: bold;
+    color: #ffffff;
 }
 
 p {
@@ -13,7 +14,6 @@ p {
     margin-bottom: 15px;
     /* 增加段落與下方內容的間距 */
 }
-
 
 /* 外部容器樣式，使用 Flexbox 進行排版 */
 .wrapper {

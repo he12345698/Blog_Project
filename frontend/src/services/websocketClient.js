@@ -17,9 +17,11 @@ export const connectWebSocket = (userId, onMessage) => {
       console.log('Connected:', frame);
       // Subscribe to user-specific topic
       client.subscribe(`/topic/notifications/${userId}`, (message) => {
-        console.log('Message received:', message.body);
+        console.log('userId at websocket is', userId);
         if (onMessage) {
           onMessage(message.body);
+        } else {
+          console.log('else is', userId);
         }
       });
     },

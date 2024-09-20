@@ -9,7 +9,7 @@ body {
   font-weight: 300;
   font-size: 15px;
   line-height: 1.7;
-  color: #c4c3ca;
+  
   /*background-color: #1f2029 !important;*/
   background-image: url("/public/BackgroundImages/6213209.jpg");
   overflow-x: hidden;
@@ -34,6 +34,10 @@ p {
 }
 h4 {
   font-weight: 600;
+  color: #c4c3ca;
+}
+.span-login{
+  color: #c4c3ca;
 }
 h6 span {
   padding: 0 20px;

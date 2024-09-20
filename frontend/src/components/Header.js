@@ -228,7 +228,7 @@ const Header = () => {
               </g>
             </svg>
             <div className={`notification-amount ${unreadCount === 0 ? 'hidden' : ''}`}>
-              <span>{notifications.length > 0 && <span className="notification-badge">{notifications.length}</span>}</span>
+              <span key={notifications.length}>{notifications.length > 0 && <span className="notification-badge">{notifications.length}</span>}</span>
             </div>
           </div>
           <div className={`notifications-menu ${showNotifications ? 'open' : ''}`} ref={menuRef}>

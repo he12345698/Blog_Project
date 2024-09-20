@@ -93,7 +93,7 @@ html, body {
 h2 {
     margin-top: 0; /* 去除上邊距 */
     text-align: center; /* 文字置中 */
-    color: #ffffff; /* 文字顏色 */
+    color: #000000; /* 文字顏色 */
 }
 
 .rsform-group {
